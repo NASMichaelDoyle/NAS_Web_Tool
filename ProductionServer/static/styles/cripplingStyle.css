@@ -6,13 +6,11 @@
 #cripForm #crippling {
 	width: 500px;
 	text-align: center;
-	background-color: lightgray;
 	padding: 10px;
 }
 #bCripForm #bendingCrippling {
 	width: 600px;
 	text-align: center;
-	background-color: lightgray;
 	padding: 10px;
 }
 #cripForm .container h2, #bCripForm .container h2 {
@@ -42,7 +40,7 @@
 	padding: 2px 5px;
 }
 #cripForm table thead th, #bCripForm table thead th {
-    border-bottom: 2px solid black;
-	color: #003366;
+    border-bottom: 2px solid white;
+	color: white;
 	text-align: center;
 }

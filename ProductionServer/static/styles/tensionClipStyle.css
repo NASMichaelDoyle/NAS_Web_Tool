@@ -6,7 +6,7 @@
 #TCForm .container #Inputs {
 	width: 400px;
 	text-align: right;
-	background-color: lightgray;
+
 	padding: 10px;
 }
 #TCForm .container h2 {
@@ -65,4 +65,5 @@
 }
 #TCForm #OutputBox {
 	background-color: #ccccff;
+	color: black;
 }

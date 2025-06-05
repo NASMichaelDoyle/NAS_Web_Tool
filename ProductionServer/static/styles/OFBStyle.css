@@ -6,7 +6,6 @@
 }
 #OFBForm #IO {
 	text-align: center;
-	background-color: lightgray;
 	padding: 10px;
 }
 #OFBForm .container h2 {
@@ -34,6 +33,7 @@
 #OFBForm td, #OFBForm th {
 	width: 80px;
 	border-bottom: 1px solid black;
+	color: black;
 }
 #OFBForm .container td select {
 	width: 100%;

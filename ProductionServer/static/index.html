@@ -36,7 +36,7 @@
 	</div>
 </div>
 </template>
-<header style="border-top: 0px; display: grid; grid-template-columns: 1fr 4fr; position: relative; z-index: 99; align-items: center;">
+<header id="mainHeader" style="border-top: 0px; display: grid; grid-template-columns: 1fr 4fr; position: relative; z-index: 99; align-items: center;">
 <img src="images/NAS.png" alt="NAS Logo" style="width: 100%;">
 <h1 style="text-align:center">Multi-Analysis</h1>
 </header>
@@ -56,8 +56,8 @@
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
 		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br><br>
 		<span style="display: flex;">
-			<button style="width: 45%;" onclick="frameDownIns()">Download Inputs</button>
-			<button style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Inputs</button>
+			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Inputs</button>
+			<button class="button" style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Inputs</button>
 			<input type="file" id="frameUpIns" accept=".csv" oninput="frameUpIns(this)" style="display:none;">
 		</span>
 		<h4 style="border-bottom: 1px solid gray; margin: 10px 5px; width: 95%;">Reports</h4>
@@ -75,13 +75,13 @@
 			<input id="approveIn" type="text" placeholder="Approved by"><br>
 		</div>
 		<h5 style="margin: 5px 5px;">Document Ordering</h5>
-		<div id="docOrderList" class="sortable-list">
+		<div id="docOrderList" class="sortable-list" style="margin-bottom: 3px;">
 
 		</div>
-		<button onclick="addPara()" style="margin: 0 0; width: 25px; display: inline-block;">&plus;</button>
+		<button class="button" onclick="addPara()" style="margin: 0 0; width: 25px; display: inline-block;">&plus;</button>
 		<span>Add Paragraph</span><br><br>
-		<button onclick="downloadTexFile()">Download TeX</button>
-		<button id="pdfButton" onclick="downloadPDF()">Download PDF</button>
+		<button class="button" style="margin-bottom: 3px;" onclick="downloadTexFile()">Download TeX</button>
+		<button class="button" id="pdfButton" onclick="downloadPDF()">Download PDF</button>
 	</div>
 	<div id="FormParent" class="formParent" style="margin-top: -1px;">
 		<div id="hiddenCharts">
@@ -96,7 +96,7 @@
 		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
 			<header><h2>Ellipse Analysis (BETA)</h2></header>
 			<div id="ellContainer">
-			<div id="Inputs">
+			<div id="Inputs" class="formIO">
 				<h2>Inputs</h2>
 				<span>Fx</span>
 				<input type="text" id="Fx" placeholder="Enter Fx"><br>
@@ -303,7 +303,7 @@
 		<div class="analForm" id="TCForm">
 			<header><h2>Tension Clip</h2></header>
 			<div class="container">
-				<div id="Inputs">
+				<div id="Inputs" class="formIO">
 
 					<h2 style="text-align: center;">Input</h2>
 					<span>Clip Type</span>
@@ -373,7 +373,7 @@
 		<div class="analForm" id="cripForm">
 			<header><h2>Crippling</h2></header>
 			<div class="container">
-				<div id="crippling">
+				<div id="crippling" class="formIO">
 					<h2>Input/Output</h2>
 					<span>Fcy =</span>
 					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)">
@@ -433,7 +433,7 @@
 		<div class="analForm" id="bCripForm">
 			<header><h2>Bending Crippling</h2></header>
 			<div class="container">
-				<div id="bendingCrippling">
+				<div id="bendingCrippling" class="formIO">
 					<h2>Input/Output</h2>
 					<span>Fcy =</span>
 					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)">
@@ -505,7 +505,7 @@
 		<div class="analForm" id="OFBForm">
 			<header><h2>Outstanding Flange Buckling</h2></header>
 <div class="container">
-	<div id="IO">
+	<div id="IO" class="formIO">
 	<h2>Outstanding Flange Buckling</h2>
 	<h3>Input</h3>
 	<table style="background-color: #ccffff;">

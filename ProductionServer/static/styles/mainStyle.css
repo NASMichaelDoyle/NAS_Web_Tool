@@ -5,14 +5,29 @@ body {
 
 }
 header {
-  background-color: lightblue;  /* Set the background color */
+  background-color: #0b4150;  /* Set the background color */
   padding: 20px;             /* Add some padding for better appearance */
   text-align: center;          /* Center the text within the header */
-  border-bottom: 1px solid gray;  /* Add the bottom border */
-  border-top: 1px solid gray;
+  color: white;
+}
+#mainHeader {
+  background-color: #a1e8f2;  /* Set the background color */
+  padding: 20px;             /* Add some padding for better appearance */
+  text-align: center;          /* Center the text within the header */
+  color: #116a75;
 }
 h1 {
-	color: #23606a;
+	color: #116a75;
+}
+select {
+	border-radius: 5px;
+}
+input[type="checkbox"] {
+	accent-color: #116a75;
+}
+.button:hover {
+	background-color: #116a75;
+	color: white;
 }
 .container {
 	display: grid;
@@ -21,9 +36,9 @@ h1 {
 }
 .sidebar {
 	text-align: left;
-	background-color: lightgray;
+	background-color: #e7f9fc;
+	color: #116a75;
 	padding: 10px;
-	border-right: 1px solid gray;
 	height: 81vh;
 	overflow: auto;
 }
@@ -31,6 +46,19 @@ h1 {
 	display: block;
 	width: 150px;
 	margin: 0 auto;
+	color: #116a75;
+	background-color: #ffffff80;
+	border: 1px solid #116a75;
+	border-radius: 5px;
+}
+.sidebar input {
+	color: #116a75;
+	border: 1px solid #116a75;
+	border-radius: 5px;
+}
+.formIO input {
+	border: 1px solid #116a75;
+	border-radius: 5px;
 }
 .formParent {
 	height: 81vh;
@@ -46,7 +74,8 @@ h1 {
 }
 .formIO {
 	text-align: center;
-	background-color: lightgray;
+	background-color: #116a75;
+	color: white;
 	padding: 10px;
 }
 table.outTable  {
