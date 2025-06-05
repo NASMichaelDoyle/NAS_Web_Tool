@@ -24,4 +24,4 @@ Ideas:
 - Replace checkboxes with buttons to add analyses, allowing for multiple iterations of a single analysis
 
 
-
+Test
