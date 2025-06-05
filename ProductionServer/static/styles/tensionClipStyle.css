@@ -1,0 +1,68 @@
+/* Tension Clip */
+#TCForm .container {
+	display:flex;
+	align-items:flex-start;
+}
+#TCForm .container #Inputs {
+	width: 400px;
+	text-align: right;
+	background-color: lightgray;
+	padding: 10px;
+}
+#TCForm .container h2 {
+	text-align: center;
+}
+#TCForm #Inputs select {
+	width: 152px;
+}
+#TCForm #Inputs input {
+	width:120px;
+}
+#TCForm #units {
+	display: inline-block;
+	text-align:left;
+	width:20px;
+}
+#TCForm #Inputs button {
+	display: block;
+	width: 150px;
+	margin: 0 auto;
+}
+#TCForm #clipTypes {
+	background-color: white;
+	flex-grow: 1;
+}
+#TCForm #CTGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: auto;
+}
+#TCForm .gridItem {
+	text-align: center;
+}
+#TCForm .gridItem img {
+	width:100%;
+}
+#TCForm #dataParent {
+	justify-content: center; /* Center horizontally */
+	flex: 1; /* Tells this div to grow and take up available space */
+	width: 30%;
+}
+#TCForm .container #Data {
+	text-align: center;
+}
+/* Table Jazz */
+#TCForm table {
+	display: inline-table;
+  border-collapse: collapse;
+}
+
+#TCForm th, #TCForm td {
+  text-align: right;
+  width: 100px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+#TCForm #OutputBox {
+	background-color: #ccccff;
+}

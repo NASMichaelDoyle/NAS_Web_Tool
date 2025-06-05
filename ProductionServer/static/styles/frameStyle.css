@@ -1,0 +1,26 @@
+#frameSTAForm #locLoadTable {
+	border-collapse: collapse;
+	margin: 0 auto;
+}
+#frameSTAForm .formIO input {
+	width: 100px;
+}
+#frameSTAForm #locLoadTable input {
+	width: 55px;
+	background-color: #c6e0b4;
+}
+#frameSTAForm #locLoadTable td {
+	padding: 0px;
+	border: 1px solid black;
+}
+#frameSTAForm #locLoadTable th {
+	padding: 1px;
+	border: 1px solid black;
+}
+#frameDiagTensForm .formIO input {
+	width: 92%;
+}
+#frameDiagTensForm .outTable input {
+	width: 55px;
+	background-color: #c6e0b4;
+}

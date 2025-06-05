@@ -1,0 +1,34 @@
+.sortable-list {
+    list-style: none;
+    padding: 0;
+    width: 95%;
+	margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sortable-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    cursor: grab; /* Indicate it's draggable */
+}
+
+.sortable-item:last-child {
+    border-bottom: none;
+}
+
+.sortable-item:hover {
+    background-color: #f9f9f9;
+}
+.closebtn {
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.closebtn:hover {
+  color: #ff5555;
+}

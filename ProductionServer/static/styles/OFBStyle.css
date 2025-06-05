@@ -1,0 +1,40 @@
+#OFBForm .container {
+	display:flex;
+	align-items:flex-start;
+
+	width: 70vw;
+}
+#OFBForm #IO {
+	text-align: center;
+	background-color: lightgray;
+	padding: 10px;
+}
+#OFBForm .container h2 {
+	text-align: center;
+}
+#OFBForm .container input {
+	width:60px;
+}
+#OFBForm #units {
+	display: inline-block;
+	text-align:left;
+	width:20px;
+}
+#OFBForm .container button {
+	display: block;
+	width: 150px;
+	margin: 0 auto;
+}
+#OFBForm table {
+  text-align: center;
+  border: 1px solid #000000;
+  border-collapse: collapse;
+  background-color: white;
+}
+#OFBForm td, #OFBForm th {
+	width: 80px;
+	border-bottom: 1px solid black;
+}
+#OFBForm .container td select {
+	width: 100%;
+}
