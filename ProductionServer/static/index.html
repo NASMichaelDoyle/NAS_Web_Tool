@@ -36,21 +36,21 @@
 	</div>
 </div>
 </template>
-<header id="mainHeader" style="border-top: 0px; display: grid; grid-template-columns: 1fr 4fr; position: relative; z-index: 99; align-items: center;">
-<img src="images/NAS.png" alt="NAS Logo" style="width: 100%;">
-<h1 style="text-align:center">Multi-Analysis</h1>
+<header id="mainHeader" style="border-top: 0px; display: grid; grid-template-columns: 1fr 4fr; position: relative; z-index: 99; align-items: center; height: 10vh;">
+	<img src="images/NAS.png" alt="NAS Logo" style="width: 100%;">
+	<h1 style="text-align:center">Multi-Analysis</h1>
 </header>
-<div class="container">
+<div class="container" style="height: 80vh;">
 	<div class="sidebar">
-		<h2 style="text-align: center;">Analyses</h2>
-		<h4 style="border-bottom: 1px solid gray; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
+		<h2 style="text-align: center; margin-top: 40px">Analyses</h2>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
 		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
 		<input id="TCBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('TCForm'))"> Tension Clip <br>
 		<input id="cripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('cripForm'))"> Crippling <br>
 		<input id="bCripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('bCripForm'))"> Bending Crippling <br>
 		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
 		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
-		<h4 style="border-bottom: 1px solid gray; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
@@ -60,7 +60,7 @@
 			<button class="button" style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Inputs</button>
 			<input type="file" id="frameUpIns" accept=".csv" oninput="frameUpIns(this)" style="display:none;">
 		</span>
-		<h4 style="border-bottom: 1px solid gray; margin: 10px 5px; width: 95%;">Reports</h4>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Reports</h4>
 		<span>
 			<h5 style="margin: 5px 5px; display: inline-block;">Cover Page</h5>
 			<button style="padding: 0 0; margin: 0 0; width: 20px; display: inline-block; text-align: center;" onclick="toggleCP()">&#9660;</button>

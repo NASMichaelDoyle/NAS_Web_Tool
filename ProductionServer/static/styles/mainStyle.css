@@ -39,7 +39,8 @@ input[type="checkbox"] {
 	background-color: #e7f9fc;
 	color: #116a75;
 	padding: 10px;
-	height: 81vh;
+	margin-top: -20px;
+	height: 100%;
 	overflow: auto;
 }
 .sidebar button {
@@ -61,7 +62,7 @@ input[type="checkbox"] {
 	border-radius: 5px;
 }
 .formParent {
-	height: 81vh;
+	height: 100%;
 	overflow: auto;
 }
 .analForm { /* analysis form, ya dirty minded fool */
