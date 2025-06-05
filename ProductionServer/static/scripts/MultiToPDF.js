@@ -470,7 +470,6 @@ function texFrameSTA() {
 
 	return tex;
 }
-// Undone:
 function texFrameWDT() {
 	let tex = frameWDTTemplate;
 	let dummy = [];
@@ -517,6 +516,7 @@ function texFrameWDT() {
 
 	return tex;
 }
+// Undone:
 function texFrameCC() {
 
 }
@@ -597,7 +597,7 @@ function downloadTexFile() {
 	element.click();
 	document.body.removeChild(element);
 }
-function downloadPDF() { // Requires a server to convert .tex to .pdf
+function downloadPDF(debugMode = false) { // Requires a server to convert .tex to .pdf
 	const pdfButton = document.getElementById("pdfButton");
 	pdfButton.disabled = true; // Disable button
 	pdfButton.innerHTML = "Processing Request...";
@@ -619,7 +619,7 @@ function downloadPDF() { // Requires a server to convert .tex to .pdf
 		formData.append("FPB_chart2_b64png", FPBC2);
 		formData.append("FPB_chart3_b64png", FPBC3);
 	}
-	fetch('/get_multi_latex', { // Server address (localhost for development)
+	fetch((debugMode ? 'http://localhost:5000': '') + '/get_multi_latex', { // Server address (localhost for development)
 		method: 'POST',
 		body: formData
 	})
