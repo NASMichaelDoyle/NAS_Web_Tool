@@ -80,3 +80,6 @@ def get_multi_latex():
             if os.path.exists(f"{filename_base}.aux"): os.remove(f"{filename_base}.aux")
             if os.path.exists(f"{filename_base}.out"): os.remove(f"{filename_base}.out")
             if os.path.exists("temp"): shutil.rmtree("temp")
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0') # Make it accessible on your network for testing
