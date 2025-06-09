@@ -37,6 +37,8 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "Cap Compression";
 		case "frameCapTens":
 			return "Cap Tension";
+		case "lug":
+			return "Lug Analysis";
 		default:
 			return "Unknown";
 	}
@@ -83,8 +85,8 @@ function addPara() {
 	// Sortable item
 	const paraSort = GEBID("paraTemplate").content.cloneNode(true).firstElementChild;
 	paraSort.id += numPara;
-	paraSort.children[0].innerHTML += " " + numPara;
-	paraSort.children[1].id += numPara;
+	paraSort.children[1].innerHTML += " " + numPara;
+	paraSort.children[0].id += numPara;
 	GEBID("docOrderList").appendChild(paraSort);
 	
 	// Form
@@ -103,4 +105,13 @@ function rmPara(paraSort) {
 			return;
 		}
 	GEBID("nullForm").style.display = 'block'
+}
+
+// Material Library
+function addMatSel() {
+	/* for (const form of []) {
+		
+	} */
+	const matTemplate = GEBID("matSelectTemplate").content.cloneNode(true);
+	GEBID("ellForm", "Inputs").prepend(matTemplate);
 }

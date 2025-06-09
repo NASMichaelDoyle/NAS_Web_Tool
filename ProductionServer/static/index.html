@@ -17,9 +17,9 @@
 </head>
 <body>
 <template id="paraTemplate">
-<div id="paraSort" class="sortable-item" style="display: grid; grid-template-columns: 70% 15% 15%; text-align: center; align-items: center;">
-	<span style="justify-self: start; text-align: left;">Paragraph</span>
+<div id="paraSort" class="sortable-item" style="display: grid; grid-template-columns: 15% 70% 15%; text-align: center; align-items: center;">
 	<input id="paraBox" class="ParaBox analBox" type="checkbox" onchange="toggleForm(this)">
+	<span style="justify-self: start; text-align: left;">Paragraph</span>
 	<span onclick="rmPara(this.parentNode)" class="closebtn">&times;</span>
 </div>
 </template>
@@ -36,6 +36,21 @@
 	</div>
 </div>
 </template>
+<template id="matSelectTemplate">
+	<h2>Material</h2>
+	<select id="matTypeIn" name="matTypeIn" onchange="">
+		<option value="2024-T3S">2024-T3 Sheet</option>
+		<option value="2024-T3P">2024-T3 Plate</option>
+		<option value="2024-T42E">2024-T42 Extrusion</option>
+		<option value="7075-T6S">7075-T6 Sheet</option>
+		<option value="7075-T6P">7075-T6 Plate</option>
+		<option value="7075-T6E">7075-T6 Extrusion</option>
+		<option value="7075-T7351P">7075-T7351 Plate</option>
+		<option value="7050-T7541P">7050-T7541 Plate</option>
+		<option value="C1">Custom Material 1</option>
+		<option value="C2">Custom Material 2</option>
+	</select><br>
+</template>
 <header id="mainHeader" style="border-top: 0px; display: grid; grid-template-columns: 1fr 4fr; position: relative; z-index: 99; align-items: center; height: 10vh;">
 	<img src="images/NAS.png" alt="NAS Logo" style="width: 100%;">
 	<h1 style="text-align:center">Multi-Analysis</h1>
@@ -50,6 +65,7 @@
 		<input id="bCripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('bCripForm'))"> Bending Crippling <br>
 		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
 		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
+		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -1867,6 +1883,312 @@
 		<div class="analForm" id="frameCapTensForm">
 			<header><h2>Cap Tension</h2></header>
 			<h3 style="text-align: center;">wip</h3>
+		</div>
+		<div class="analForm" id="lugForm">
+			<header><h2>Lug Analysis</h2></header>
+			<div class="formContainer" id="FPBContainer">
+				<div class="formIO" style="width: 300px;">
+					<h2>Input</h2>
+					<select style="margin-left: auto;">
+						<option value="lug">Lug</option>
+						<option value="clevis">Clevis</option>
+					</select>
+					<table style="margin-left: 5px;">
+						<!-- <colgroup>
+							<col span="1" style="text-align: right;">
+							<col span="1" style="">
+							<col span="1" style="text-align: left">
+						</colgroup> -->
+						<tr title="">
+							<td style="text-align: right;">D<sub>hole</sub></td>
+							<td><input id="DholeIn" type="number" placeholder="Enter Dhole" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">D<sub>pin</sub></td>
+							<td><input id="DpinIn" type="number" placeholder="Enter Dpin" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">D<sub>I bushing</sub></td>
+							<td><input id="DIbushIn" type="number" placeholder="Enter DIbushing" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">D<sub>O bushing</sub></td>
+							<td><input id="DObushIn" type="number" placeholder="Enter DObushing" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">W</td>
+							<td><input id="WIn" type="number" placeholder="Enter W" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">to</td>
+							<td><input id="toIn" type="number" placeholder="Enter to" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">g</td>
+							<td><input id="gIn" type="number" placeholder="Enter g" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr><td><br></td></tr>
+						<tr title="">
+							<td style="text-align: right;">Load ID</td>
+							<td><input id="loadIDIn" type="number" placeholder="Enter Load ID" onchange="lugCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Ultimate Factor</td>
+							<td><input id="UFacIn" type="number" placeholder="Enter Factor" onchange="lugCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fitting Factor</td>
+							<td><input id="FFacIn" type="number" placeholder="Enter Factor" onchange="lugCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">P<sub>axial</sub></td>
+							<td><input id="PaxialIn" type="number" placeholder="Enter P" onchange="lugCalcs()"></td>
+							<td style="text-align: left">lb</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">P<sub>transverse</sub></td>
+							<td><input id="PtransIn" type="number" placeholder="Enter P" onchange="lugCalcs()"></td>
+							<td style="text-align: left">lb</td>
+						</tr>
+						<tr><td><br></td></tr>
+						<tr title="">
+							<td style="text-align: right;">t<sub>lug</sub></td>
+							<td><input id="tlugIn" type="number" placeholder="Enter t" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">t<sub>i</sub></td>
+							<td><input id="tiIn" type="number" placeholder="Enter t" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">t<sub>contact</sub></td>
+							<td><input id="tcontactIn" type="number" placeholder="Enter t" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">a</td>
+							<td><input id="aIn" type="number" placeholder="Enter a" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">c</td>
+							<td><input id="cIn" type="number" placeholder="Enter c" onchange="lugCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">ß<sub>1</sub></td>
+							<td><input id="s1In" type="number" placeholder="Enter ß1" onchange="lugCalcs()"></td>
+							<td style="text-align: left">deg</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">ß<sub>2</sub></td>
+							<td><input id="s2In" type="number" placeholder="Enter ß2" onchange="lugCalcs()"></td>
+							<td style="text-align: left">deg</td>
+						</tr>
+					</table>
+					<h4 style="">Lug</h4>
+					<table style="margin-left: 5px;">
+						<tr title="">
+							<td style="text-align: right;">Alloy</td>
+							<td><select id="alloyIn" style="width: 100%;">
+								<option value="aluminum">Aluminum</option>
+								<option value="steel">Steel</option>
+								<option value="titanium">Titanium</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Material</td>
+							<td><select id="lugMatIn" style="width: 100%;">
+								<option value="7076-T7651">7076-T7651</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr><td><br></td></tr>
+						<tr title="">
+							<td style="text-align: right;">Ftu<sub>L</sub></td>
+							<td><input id="FtuLIn" type="number" placeholder="Enter Ftu" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Ftu<sub>LT</sub></td>
+							<td><input id="FtuLTIn" type="number" placeholder="Enter Ftu" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Ftu<sub>ST</sub></td>
+							<td><input id="FtuSTIn" type="number" placeholder="Enter Ftu" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fty<sub>L</sub></td>
+							<td><input id="FtyLIn" type="number" placeholder="Enter Fty" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fty<sub>LT</sub></td>
+							<td><input id="FtyLTIn" type="number" placeholder="Enter Fty" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fty<sub>ST</sub></td>
+							<td><input id="FtySTIn" type="number" placeholder="Enter Fty" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr><td><br></td></tr>
+						<tr title="">
+							<td style="text-align: right;">Fbry<sub>1.5</sub></td>
+							<td><input id="Fbry15In" type="number" placeholder="Enter Fbry" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fbry<sub>2.0</sub></td>
+							<td><input id="Fbry20In" type="number" placeholder="Enter Fbry" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fbru<sub>1.5</sub></td>
+							<td><input id="Fbru15In" type="number" placeholder="Enter Fbru" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fbru<sub>2.0</sub></td>
+							<td><input id="Fbru20In" type="number" placeholder="Enter Fbru" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">F<sub>corrosion</sub></td>
+							<td><input id="FcorroIn" type="number" placeholder="Enter Fcorrosion" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr><td><br></td></tr>
+						<tr title="">
+							<td style="text-align: right;">E</td>
+							<td><input id="EIn" type="number" placeholder="Enter E" onchange="lugCalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">μ</td>
+							<td><input id="muIn" type="number" placeholder="Enter μ" onchange="lugCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">e</td>
+							<td><input id="eIn" type="number" placeholder="Enter e" onchange="lugCalcs()"></td>
+							<td style="text-align: left">%</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">t<sub>stock</sub></td>
+							<td><input id="tstockIn" type="number" placeholder="Enter tstock" onchange="lugCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Direction of axial load</td>
+							<td><select id="ALDirIn" style="width: 100%;">
+								<option value="st">ST</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Lug's plane</td>
+							<td><select id="lugPlaneIn" style="width: 100%;">
+								<option value="ltst">LT-ST</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+					</table>
+					<h4 style="">Pin</h4>
+					<table style="margin-left: 5px;">
+						<tr title="">
+							<td style="text-align: right;">Spec</td>
+							<td><select id="specPinIn" style="width: 100%;">
+								<option value="NAS6606">NAS6606</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Material</td>
+							<td><select id="matPinIn" style="width: 100%;">
+								<option value="A286-160ksi">A286 - 160 ksi</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">M<sub>allow</sub></td>
+							<td><input id="MallowIn" type="number" placeholder="Enter " onchange="lugCalcs()"></td>
+							<td style="text-align: left">in*lbs</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">E</td>
+							<td><input id="E2In" type="number" placeholder="Enter " onchange="lugCalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+					</table>
+					<h4 style="">Bushing</h4>
+					<table style="margin-left: 5px;">
+						<tr title="">
+							<td style="text-align: right;">Spec</td>
+							<td><select id="specBushIn" style="width: 100%;">
+								<option value="NAS75C6">NAS75C6</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Material</td>
+							<td><select id="matBushIn" style="width: 100%;">
+								<option value="AMS4640">AMS 4640</option>
+							</select></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr><td><br></td></tr>
+						<tr title="">
+							<td style="text-align: right;">P<sub>rad</sub></td>
+							<td><input id="PradIn" type="number" placeholder="Enter Prad" onchange="lugCalcs()"></td>
+							<td style="text-align: left">lbs</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fbry</td>
+							<td><input id="FbryIn" type="number" placeholder="Enter Fbry" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">Fbru</td>
+							<td><input id="FbruIn" type="number" placeholder="Enter Fbru" onchange="lugCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">E</td>
+							<td><input id="EBushIn" type="number" placeholder="Enter E" onchange="lugCalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">μ</td>
+							<td><input id="muBushIn" type="number" placeholder="Enter μ" onchange="lugCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+					</table>
+					<h4>Diagrams</h4>
+					<img src="images/lug/lugDia1.png" alt="Lug diagram" style="width: 100%; background-color: white;"><br>
+					<img src="images/lug/lugDia2.png" alt="Lug diagram" style="width: 100%; background-color: white;">
+				</div>
+				<div style="flex-grow: 1; text-align: center;">
+					<h2>Output</h2>
+					<div style="">
+						
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
