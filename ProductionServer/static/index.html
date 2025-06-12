@@ -1,4 +1,5 @@
 <!DOCTYPE html> <!-- blacksun comment -->
+<!-- MAIN BRANCH COMMENT -->
 <html>
 <head>
 <title>Multi-Analysis</title>
@@ -791,20 +792,23 @@
 			</div>
 		</div>
 		<div class="analForm" id="lugForm">
-			<header><h2>Lug Analysis</h2></header>
+			<header><h2>Lug Analysis (WIP)</h2></header>
 			<div class="formContainer" id="FPBContainer">
 				<div class="formIO" style="width: 300px;">
 					<h2>Input</h2>
-					<select style="margin-left: auto;">
-						<option value="lug">Lug</option>
-						<option value="clevis">Clevis</option>
-					</select>
 					<table style="margin-left: 5px;">
 						<!-- <colgroup>
 							<col span="1" style="text-align: right;">
 							<col span="1" style="">
 							<col span="1" style="text-align: left">
 						</colgroup> -->
+						<tr>
+							<td></td>
+							<td><select id="LorCIn" style="width: 100%;">
+								<option value="lug">Lug</option>
+								<option value="clevis">Clevis</option>
+							</select></td>
+						</tr>
 						<tr title="">
 							<td style="text-align: right;">D<sub>hole</sub></td>
 							<td><input id="DholeIn" type="number" placeholder="Enter Dhole" onchange="lugCalcs()"></td>
