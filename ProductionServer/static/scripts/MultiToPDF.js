@@ -619,7 +619,7 @@ function downloadPDF(debugMode = false) { // Requires a server to convert .tex t
 		formData.append("FPB_chart2_b64png", FPBC2);
 		formData.append("FPB_chart3_b64png", FPBC3);
 	}
-	fetch((debugMode ? 'http://localhost:5000': 'tools') + '/get_multi_latex', { // Server address (localhost for development)
+	fetch((debugMode ? 'http://localhost:5000': '') + '/get_multi_latex', { // Server address (localhost for development)
 		method: 'POST',
 		body: formData
 	})
