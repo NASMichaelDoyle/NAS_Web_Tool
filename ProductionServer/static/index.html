@@ -1,5 +1,4 @@
 <!DOCTYPE html> <!-- blacksun comment -->
-<!-- MAIN BRANCH COMMENT -->
 <html>
 <head>
 <title>Multi-Analysis</title>
@@ -59,6 +58,7 @@
 <div class="container" style="height: 80vh;">
 	<div class="sidebar">
 		<h2 style="text-align: center; margin-top: 40px">Analyses</h2>
+		<div style="display: none;"> <!-- DLC -->
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
 		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
 		<input id="TCBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('TCForm'))"> Tension Clip <br>
@@ -67,11 +67,15 @@
 		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
 		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
 		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
+		</div>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
+		<div style="display: none;"> <!-- DLC -->
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
-		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br><br>
+		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br>
+		</div>
+		<br>
 		<span style="display: flex;">
 			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Inputs</button>
 			<button class="button" style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Inputs</button>
@@ -98,7 +102,9 @@
 		<button class="button" onclick="addPara()" style="margin: 0 0; width: 25px; display: inline-block;">&plus;</button>
 		<span>Add Paragraph</span><br><br>
 		<button class="button" style="margin-bottom: 3px;" onclick="downloadTexFile()">Download TeX</button>
+		<div style="display: none;"> <!-- DLC -->
 		<button class="button" id="pdfButton" onclick="downloadPDF()">Download PDF</button>
+		</div>
 	</div>
 	<div id="FormParent" class="formParent" style="margin-top: -1px;">
 		<div id="hiddenCharts">

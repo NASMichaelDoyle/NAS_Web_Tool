@@ -1,0 +1,23 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/nasltdca/public_html/web_tool"
+PassengerBaseURI "/tools"
+PassengerPython "/home/nasltdca/virtualenv/public_html/web_tool/3.9/bin/python"
+PassengerAppLogFile "/home/nasltdca/logs/web_tool.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# Flask app rules:
+#RewriteEngine On
+#RewriteBase /tools/
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^images/(.*)$ /home/nasltdca/web_tool/static/images/$1 [L]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^scripts/(.*)$ /home/nasltdca/web_tool/static/scripts/$1 [L]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^styles/(.*)$ /home/nasltdca/web_tool/static/styles/$1 [L]
+# END Flask
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END
