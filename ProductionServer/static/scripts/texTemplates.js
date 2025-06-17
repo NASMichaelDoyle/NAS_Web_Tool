@@ -331,6 +331,11 @@ Flat plate buckling analysis within. Input data in Table \\ref{tab:FPB1}, output
 \\end{figure}
 `
 
+// Lug --------------------------------------------------------------------------------------------------------------
+const lugTemplate = `
+
+`
+
 // FRAME STA --------------------------------------------------------------------------------------------------------
 const frameSTATemplate = `
 \\clearpage

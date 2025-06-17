@@ -403,6 +403,9 @@ function chartsFPB() {
 		options: options3
 	});
 }
+function texLug() {
+	let tex = lugTemplate;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -558,6 +561,9 @@ function writeTeX() { // Build TeX document in order from inputs
 				break;
 			case "FPB":
 				tex += texFPB(FPBTemplate);
+				break;
+			case "lug":
+				tex += texLug();
 				break;
 			case "frameSTA":
 				tex += texFrameSTA();
