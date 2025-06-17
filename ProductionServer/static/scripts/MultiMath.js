@@ -49,6 +49,14 @@ function childSeq(elem, seq) { // Returns an element based on a parent and a seq
 	for (i=0; i<seq.length; i++) elem = elem.children[seq[i]];
 	return elem;
 }
+function sRound(num, sig) { // "Smart Round": Rounds a number if it is a number
+	//console.log(num + ", type: " + typeof(num) + ", isNaN: " + isNaN(num) + ", is ES: " + (num === ""));
+	if (!isNaN(Number(num))) num = Number(num);
+	return (num === "" || isNaN(num)) ? num : +num.toFixed(sig);
+}
+function formMS(MS) {
+	return MS > 2 ? "HIGH" : MS;
+}
 
 // Ellipse funcs 
 let massPopChart;
@@ -1026,6 +1034,637 @@ function FPBSetCharts(ET) {
 	
 }
 
+// Lug funcs
+function lugCalcs() {
+	// Acquisition
+	let dummy = [];
+	let ids = ["LorCIn", "DholeIn", "DpinIn", "DIbushIn", "DObushIn", "WIn", "toIn", "gIn", "loadIDIn", "UFacIn", "FFacIn", "PaxialIn", "PtransIn", "tlugIn", "tiIn", "tcontactIn", "aIn", "cIn", "s1In", "s2In", "alloyIn", "lugMatIn", "FtuLIn", "FtuLTIn", "FtuSTIn", "FtyLIn", "FtyLTIn", "FtySTIn", "Fbry15In", "Fbry20In", "Fbru15In", "Fbru20In", "FcorroIn", "EIn", "muIn", "eIn", "tstockIn", "ALDirIn", "lugPlaneIn", "specPinIn", "matPinIn", "MallowIn", "E2In", "specBushIn", "matBushIn", "PradIn", "FbryIn", "FbruIn", "EBushIn", "muBushIn"];
+	for (let i=0; i < ids.length; i++)
+		dummy[i] = GEBID("lugForm", ids[i]).value;
+	let [LorC, Dhole, Dpin, DIbush, DObush, W, to, g, loadID, UFac, FFac, Paxial, Ptrans, tlug, ti, tcontact, a, c, s1, s2, alloy, lugMat, FtuL, FtuLT, FtuST, FtyL, FtyLT, FtyST, Fbry15, Fbry20, Fbru15, Fbru20, Fcorro, Elug, mu, e, tstock, ALDir, lugPlane, specPin, matPin, Mallow, Epin, specBush, matBush, Prad, Fbry, Fbru, EBush, muBush] = dummy;
+	to = +to;
+	ti = +ti;
+	
+	// Calcululminationtion
+	let PlugA = LorC == "lug" ? Paxial : Paxial/2;
+	let PlugT = LorC == "lug" ? Ptrans : Ptrans/2;
+	let K02 = sRound(k_02(a/W, Dhole/W), 3);
+	let K100 = sRound(k_100(a/W, Dhole/W), 3);
+	let clearance = Math.max(0.002, (DIbush-Dpin)/DIbush);
+	let etae = sRound(ne(clearance*100), 3);
+	//console.log(sRound(ne(clearance*100), 3) + ", " + typeof(sRound(ne(clearance*100), 3)));
+	let Ke1 = sRound((K02 + etae*(K100-K02)), 3);
+	let Ke2_Ke1 = sRound(kee_ke(tlug/Dhole, Epin/Elug), 3);
+	let Ke2 = sRound((Ke2_Ke1 * Ke1), 3);
+	let Ftux = ALDir == "L" ? FtuL : (ALDir == "LT" ? FtuLT : (ALDir == "ST" ? FtuST : "Error"));
+	const a9108 = A9108();
+	let Ktux = /* 0.904; */ sRound(a9108.ESDU_Ktux(Ke2, Elug*1000000, Ftux*1000, (ALDir=="L" ? FtyL : (ALDir=="LT" ? FtyLT : (ALDir=="ST" ? FtyST : "ERROR")))*1000, (e/100 + FtuL/Elug/1000), (Math.log((e/100 + FtuL/Elug/1000 - FtuL/Elug/1000)/0.002)/Math.log(FtuL/FtyL))), 3);
+	// ^^^ Good lord this one sucks
+	let Ptux = sRound((Ktux*Ftux*1000*(W-Dhole)*tlug), 0);
+	let Kqux = sRound(isNaN(_Kqux(a/Dhole, Dhole/tlug, ALDir, lugPlane)) ? _Kqux(a/Dhole, Dhole/tlug, ALDir, lugPlane) : _Kqux(a/Dhole, Dhole/tlug, ALDir, lugPlane), 3);
+	let Ftum = lugPlane == "L-LT" ? Math.min(FtuL, FtuLT) : (lugPlane == "L-ST" ? Math.min(FtuL, FtuST) : (lugPlane == "LT-ST" ? Math.min(FtuLT, FtuST) : "Error"));
+	let Pqux = sRound((Kqux*Ftum*1000*Dhole*tlug), 0);
+	let Ftpm = lugPlane == "L-LT" ? Math.min(FtyL, FtyLT) : (lugPlane == "L-ST" ? Math.min(FtyL, FtyT) : (lugPlane == "LT-ST" ? Math.min(FtyLT, FtyST) : "Error"));
+	let Puxmin = sRound(Math.min(Ptux, Pqux), 0);
+	let null1 = sRound((Puxmin/(Dhole*tlug*Ftum*1000)), 3);
+	let Kpx = kpx(null1);
+	let Ppx = sRound((Kpx*(Ftpm/Ftum)*Puxmin), 0);
+	let A1 = sRound(((W/2-Dhole/2*Math.cos(Math.PI/4) + Dhole/2*Math.sin(Math.PI/4)*Math.tan(degToRad(Math.min(s1, s2))))*tlug), 3);
+	let A2 = sRound(((W/2-Dhole/2)*tlug), 3);
+	let A3 = sRound((c*tlug), 3);
+	let AE = sRound((6/(3/A1+1/A2+1/A3+1/A1)), 3);
+	let Kuy = sRound(kuy(AE/(Dhole*tlug), alloy), 3);
+	let Puy = sRound(Kuy*Ftum*1000*Dhole*tlug, 0);
+	let Kpy = sRound(kpy(AE/(Dhole*tlug)), 3);
+	let Ppy = sRound(Kpy*Ftpm*1000*Dhole*tlug, 0);
+	let FbruOut = sRound(a/Dhole<0.5?"ERROR":(a/Dhole<1.5?(a/Dhole-0.5)*Fbru15:(a/Dhole<2?Fbru15+2*(a/Dhole-1.5)*(Fbru20-Fbru15):Fbru20)), 1);
+	let Pbru = sRound(FbruOut*1000*Dhole*tcontact, 0);
+	let FbryOut = sRound(a/Dhole<0.5?"ERROR":(a/Dhole<1.5?(a/Dhole-0.5)*Fbry15:(a/Dhole<2?Fbry15+2*(a/Dhole-1.5)*(Fbry20-Fbry15):Fbry20)), 1);
+	let Pbry = sRound(FbryOut*1000*Dhole*tcontact, 0);
+	
+	let Rx1 = sRound(Math.abs(PlugA)/Math.min(Ptux, Pqux), 3);
+	let Ry1 = sRound(Math.abs(PlugT)/Puy, 3);
+	let MS1 = formMS(1/(FFac*(Rx1**1.6+Ry1**1.6)**0.625)-1);
+	let Rx2 = sRound(Math.abs(PlugA)/UFac/Ppx, 3);
+	let Ry2 = sRound(Math.abs(PlugT)/UFac/Ppy, 3);
+	let MS2 = formMS(1/(FFac*(Rx2**1.6+Ry2**1.6)**0.625)-1);
+	let Papp3 = sRound(Math.sqrt(PlugA**2+PlugT**2), 0);
+	let Pbru3 = Pbru;
+	let MS3 = formMS(Pbru/(FFac*Papp3)-1);
+	let Plapp4 = sRound(Math.sqrt(PlugA**2+PlugT**2)/UFac, 0);
+	let Pbry4 = Pbry;
+	let MS4 = formMS(Pbry/(FFac*Plapp4)-1);
+	let Papp5 = Papp3;
+	let Pbru5 = Fbry=="N/A"?Prad:sRound(Fbru*1000*DIbush*tcontact, 0);
+	let MS5 = formMS(Pbru5/(FFac*Papp5)-1);
+	let Plapp6 = Plapp4;
+	let Pbry6 = Fbry=="N/A"?"N/A":sRound(Fbry*1000*DIbush*tcontact, 0);
+	let MS6 = Fbry=="N/A"?"N/A":formMS(Pbry6/(FFac*Plapp6)-1);
+	
+	let interference = (DObush-Dhole)/2<0?Number(0):(DObush-Dhole)/2;
+	let efit = sRound((DObush-Dhole)/Dhole<0?Number(0):(DObush-Dhole)/Dhole, 5);
+	let null2 = sRound(Dhole/W, 3);
+	let K = sRound(KDhole_W(null2), 3);
+	let A = sRound((1+(K*null2)**2)/(1-(K*null2)**2) + (+mu), 3);
+	let B = sRound(Elug/EBush*((1+(DIbush/Dhole)**2)/(1-(DIbush/Dhole)**2)-muBush), 3);
+	let p = sRound(Elug*1000000*efit/(A+B), 0);
+	let fmax = Math.max(1, sRound(0*(1+(Dhole/W)**2)/(1-(Dhole/W)**2), 0));
+	let FcorroOut = Fcorro*1000;
+	let MS7 = formMS(sRound(FcorroOut/fmax-1, 2));
+	let Ppin = sRound(Math.sqrt(Paxial**2 + Ptrans**2), 0);
+	let null3 = sRound(Ppin/(Dpin*ti*Ftum*1000), 2);
+	let null4 = sRound(c/ti, 2);
+	let gamma = sRound(gamma_fctn(null4, null3), 2);
+	let b = (g==0)?sRound((to+ti)*0.5, 3):sRound(to*0.5+g+ti*0.25*gamma, 3);
+	//console.log();
+	let M = sRound(Ppin*b/2, 0);
+	let MS8 = to==0?"N/A":formMS(Mallow/(FFac*M)-1);
+	
+	// Distribution
+	GEBID("lugForm", "PlugAOut").innerHTML = sRound(PlugA, 0);
+	GEBID("lugForm", "PlugTOut").innerHTML = sRound(PlugT, 0);
+	dummy = [
+		[Dhole/W, a/W, tlug/Dhole, K02, K100],
+		[clearance*100, etae],
+		[Ke1, Epin/Elug, Ke2_Ke1, Ke2, Ktux, Ftux, Ptux],
+		[a/Dhole, Dhole/tlug, Kqux, Ftum, Pqux],
+		[Ftpm, Ftum, Puxmin, null1, Kpx, Ppx],
+		[A1, A2, A3, "skip", AE, AE/Dhole/tlug, Kuy, Ftum, Puy],
+		[AE/Dhole/tlug, Kpy, Ftpm, Ppy],
+		[a/Dhole, Fbru15, Fbru20, FbruOut, "skip", Pbru],
+		[a/Dhole, Fbry15, Fbry20, FbryOut, "skip", Pbry],
+		[Rx1, Ry1, "skip", MS1],
+		[Rx2, Ry2, "skip", MS2],
+		[Papp3, Pbru3, "skip", MS3],
+		[Plapp4, Pbry4, "skip", MS4],
+		[Papp5, Pbru5, "skip", MS5],
+		[Plapp6, Pbry6, "skip", MS6],
+		[interference, efit, null2, K, A, "skip", B],
+		[p, fmax, FcorroOut, "skip", MS7],
+		[Ppin, null3, null4, gamma, b, M, Mallow, "skip", MS8]
+	];
+	let sig = [
+		[3, 3, 3, 3, 3],
+		[3, 3],
+		[3, 3, 3, 3, 3, 0, 0],
+		[3, 3, 3, 0, 0],
+		[0, 0, 0, 3, 3, 0],
+		[3, 3, 3, "skip", 3, 3, 3, 0, 0],
+		[3, 3, 0, 0],
+		[3, 0, 0, 1, "skip", 0],
+		[3, 0, 0, 1, "skip", 0],
+		[3, 3, "skip", 2],
+		[3, 3, "skip", 2],
+		[0, 0, "skip", 2],
+		[0, 0, "skip", 2],
+		[0, 0, "skip", 2],
+		[0, 0, "skip", 2],
+		[4, 3, 3, 3, 3, "skip", 3],
+		[0, 0, 0, "skip", 2],
+		[0, 1, 2, 2, 3, 0, 0, "skip", 2]
+	];
+	for (let j=0; j<dummy.length; j++)
+		for (let i=0; i<dummy[j].length; i++)
+			try {if (dummy[j][i] != "skip") childSeq(GEBID("lugForm", "outTab" + (j+1)), [0, i, 1]).innerHTML = sRound(dummy[j][i], sig[j][i]);}
+			catch(err) {console.log("Loop broke at: "+j + ", " + i);}
+	for (let i=1; i<=8; i++)
+		if (GEBID("lugForm", "MSOut" + i).innerHTML > 0 || GEBID("lugForm", "MSOut" + i).innerHTML == "HIGH") GEBID("lugForm", "MSOut" + i).style.backgroundColor = "lightgreen";
+		else GEBID("lugForm", "MSOut" + i).style.backgroundColor = "red";
+}
+function k_02(a_over_W, Dhole_over_W) {
+	// See ESDU 81006 Figure 2
+	
+	if (a_over_W < 0.4)
+		return "Out of graph";
+	else if (a_over_W < 0.5)
+		if (Dhole_over_W < 0.3 || Dhole_over_W > 0.56)
+			return "Out of graph";
+	else if (a_over_W <= 0.6)
+		if (Dhole_over_W < 0.21 || Dhole_over_W > 0.7)
+			return "Out of graph";
+	else
+		return "Out of graph";
+	let k02tmp1 = 238.698347031 * Dhole_over_W ** 4 + -465.064358664 * Dhole_over_W ** 3 + 339.779141641 * Dhole_over_W ** 2 + -112.726857863 * Dhole_over_W + 18.125825247;
+	let k02tmp2 = 50.833970157 * Dhole_over_W ** 4 + -129.141827769 * Dhole_over_W ** 3 + 120.140095706 * Dhole_over_W ** 2 + -50.740446394 * Dhole_over_W + 11.370946764;
+	let k02tmp3 = 18.10958033 * Dhole_over_W ** 4 + -63.115069249 * Dhole_over_W ** 3 + 73.991898279 * Dhole_over_W ** 2 + -37.932462978 * Dhole_over_W + 9.936163195;
+	if (a_over_W < 0.5)
+		return lerp(a_over_W, 0.4, 0.5, k02tmp1, k02tmp2);
+	return lerp(a_over_W, 0.5, 0.6, k02tmp2, k02tmp3);
+}
+function k_100(a_over_W, Dhole_over_W) {
+	// See ESDU 81006 Figure 2
+	
+	if (a_over_W < 0.4)
+		return "Out of graph";
+	else if (a_over_W < 0.5)
+		if (Dhole_over_W < 0.37 || Dhole_over_W > 0.55)
+			return "Out of graph";
+	else if (a_over_W <= 0.6)
+		if (Dhole_over_W < 0.3 || Dhole_over_W > 0.7)
+			return "Out of graph";
+	else
+		return "See graph";
+	let k100tmp1 = 312.906153417 * Dhole_over_W ** 4 + -618.304124135 * Dhole_over_W ** 3 + 449.22582084 * Dhole_over_W ** 2 + -144.883527774 * Dhole_over_W + 22.557430157;
+	let k100tmp2 = 16.015803436 * Dhole_over_W ** 4 + -62.359557194 * Dhole_over_W ** 3 + 76.077413194 * Dhole_over_W ** 2 + -37.992925654 * Dhole_over_W + 10.858561299;
+	let k100tmp3 = 7.929643181 * Dhole_over_W ** 4 + -49.843535947 * Dhole_over_W ** 3 + 67.796129693 * Dhole_over_W ** 2 + -35.326147894 * Dhole_over_W + 10.070588502;
+	if (a_over_W < 0.5)
+		return lerp(a_over_W, 0.4, 0.5, k100tmp1, k100tmp2);
+	return lerp(a_over_W, 0.5, 0.6, k100tmp2, k100tmp3);
+}
+function lerp(x, x1, x2, y1, y2) { // Useful general-purpose LERP function
+	let m = (y1-y2)/(x1-x2);
+	return y1 + m * (x - x1);
+}
+function ne(clrnc) {
+	// See ESDU 81006 Figure 3
+	if (clrnc < 0.1 || clrnc > 20)
+		return "Out of graph";
+	if (clrnc == 0.2)
+		return 0;
+	return 0.223332234 * Math.log(clrnc) + 0.370080685;
+}
+function kee_ke(t_over_D, Epin_over_Elug) { // <------------------------ I Think this has a Typo, it's effectively "if(true)"
+	// See ESDU 81006 Figure 4
+	if (Epin_over_Elug < 1 || Epin_over_Elug > 3)
+		return "Out of Graph";
+	if (t_over_D > 0 || t_over_D < 0.45) // <------------------------ I Think this is a Typo, it's effectively "if(true)"
+		return 1;
+	else if (t_over_D < 0 || t_over_D > 2.25)
+		return "Out of Graph";
+	let tmp1 = -0.018499867 * t_over_D ** 3 + 0.024836661 * t_over_D ** 2 + 0.329203163 * t_over_D ** 1 + -0.176316307 * t_over_D + 1.002719252;
+	let tmp2 = -0.021902641 * t_over_D ** 3 + 0.057598142 * t_over_D ** 2 + 0.152424668 * t_over_D ** 1 + -0.091466709 * t_over_D + 1.000599492;
+	return lerp(Epin_over_Elug, 1, 3, tmp1, tmp2);
+}
+function A9108() {
+	let RUN, FAIL = new Array(4).fill(false), FAILIN = new Array(3).fill(false), FAILO; // Params for A9108 funcs
+	let AM, fn, E, FUX, EUX, AK,
+	AKT, a, b, TOL, HMAX, RESULT, ILEVEL,
+	f, KOUNT, NOTE1;
+	function ESDU_Ktux(LUG_Ke, Lug_E, Lug_Ftu, Lug_Fty, Lug_EPu, Lug_m) { // <------------------------ Probably very broken due to lack of PBR
+		
+		let AKUX;
+//      ReDim AK(20), AKUX(20)
+      
+		E = Lug_E;
+		FUX = Lug_Ftu;
+		AM = Lug_m;
+		fn = MAT_RAMBERG_FN((Lug_Fty), (Lug_m));
+//      EUX = Lug_EPu + (FUX / E)
+		EUX = Lug_EPu;
+//      	JM = 1
+		AK = LUG_Ke;
+      
+//C     Initialise variables
+		RUN = true;
+		for (let i = 0; i<4; i++)
+			FAIL[i] = false;
+//10    	Next I
+		for (let k = 0; k<3; k++)
+			FAILIN[k] = false;
+//15    	Next k
+		FAILO = false;
+		a = 0;
+		b = 1;
+		ILEVEL = 20;
+		TOL = 0.1;
+		HMAX = 0.05;
+
+//C     Call subroutine to read in all the data.
+
+//      For J = 0 To JM - 1 Step 1
+        AKT = AK;
+        if (RUN) 
+//C            Call subroutine to perform the integration of stress.
+            C9108A();
+
+		
+        if (RUN)
+            AKUX = (1 / FUX) * RESULT;
+//C
+        if (AKUX > 1) {
+			RUN = false;
+			FAILO = true;
+		}
+//50    Next J
+		//console.log((1 / FUX) * RESULT);
+//C     ..................................................................
+//C     Print results and warning messages.
+//C
+/*20*/  if (RUN)
+			return AKUX;
+//          For J = 0 To JM - 1 Step 1
+//             WRITE(IOUT,3020) AK(J),AKUX(J)
+//3005      Next J
+        if (FAIL[2]) return "Stop : Too many iterations > 99";
+        if (FAILO) return "Warning : Ktux > 1.0";
+	}
+	function C9108A() {
+
+
+		let skipto60=false;
+		let TOL1, pos, H,
+		HS, VO = new Array(3), SO , VN = Array.from({ length: 2 }, () => new Array(3)),
+		SN = new Array(2), STV = Array.from({ length: 21 }, () => new Array(3)), STTOL = new Array(21),
+		STS = new Array(21), STH = new Array(21), STPOS = new Array(21);
+      
+		let SP, STLEV = new Array(21), ILEV1, IBLOCK, IARRAY, IARR2;
+
+//C----------------------------------------------------------------------
+//'C     Initialize flags.
+		FAIL[0] = false;
+		FAIL[1] = false;
+		ILEV1 = 1;
+
+//'C     Initialize quantities.
+		TOL1 = 2 * TOL * 10;
+		RESULT = 0;
+		SP = 0;
+
+//'C Simpson    's rule for complete interval.
+		pos = a;
+		H = (b - a) / 2;
+		HS = H / 3;
+		VO[0] = F1(a);
+		if (!RUN) return;
+		VO[1] = F1(a + H);
+		if (!RUN) return;
+		VO[2] = F1(b);
+		if (!RUN) return;
+		SO = HS * (VO[0] + 4 * VO[1] + VO[2]);
+
+//'C     Double number of sub-divisions and halve step length & tolerance.
+		while (true) {
+/*10*/		H = H / 2;
+			HS = H / 3;
+			TOL1 = TOL1 / 2;
+
+//'C     Check on number of sub-levels.
+			ILEV1 = ILEV1 + 1;
+
+			if (ILEV1 > ILEVEL) {
+				RUN = false;
+				FAIL[0] = true;
+				RESULT = 0;
+				return; //GoTo 80
+			}
+
+//'C     Put old function values in new array.
+			for (IBLOCK = 0; IBLOCK<2; IBLOCK++)
+				for (IARRAY = 0; IARRAY<2; IARRAY++){
+					IARR2 = (IARRAY === 0) ? 0 : 2;
+					VN[IBLOCK][IARR2] = VO[IARRAY + IBLOCK];
+				}
+/* 20 */
+
+//C     Calculate mid-division new function values and new Simpson values.
+			VN[0][1] = F1(pos + H);
+			if (!RUN) return;
+			VN[1][1] = F1(pos + 3 * H);
+			if (!RUN) return;
+			for (IBLOCK = 0; IBLOCK<2; IBLOCK++)
+				SN[IBLOCK] = HS * (VN[IBLOCK][0] + 4 * VN[IBLOCK][1] + VN[IBLOCK][2]);
+/* 30 */ 
+
+//'C     Compare old and new Simpson integral values.
+			if (Math.abs(SN[0] + SN[1] - SO) <= Math.abs(TOL1) && H < HMAX) skipto60=true; // GoTo 60
+
+//'C     Approximation outside tolerance.
+			if (!skipto60) {
+//'C     Copy new into old.
+				for (IARRAY = 0; IARRAY<3; IARRAY++)
+					VO[IARRAY] = VN[0][IARRAY];
+/* 40 */
+				SO = SN[0];
+
+//'C     Push other approximation onto stack.
+				if (SP == 20) {
+					RUN = false;
+					FAIL[1] = true;
+					RESULT = 0;
+					return; // GoTo 80
+				}
+//'C
+				SP++;
+//'C
+				for (IARRAY = 0; IARRAY<3; IARRAY++) {
+					STV[SP][IARRAY] = VN[1][IARRAY];
+				}
+				
+				
+/* 50 */
+//'C
+				STS[SP] = SN[1];
+				STLEV[SP] = ILEV1;
+				STH[SP] = H;
+				STPOS[SP] = pos + 2 * H;
+				STTOL[SP] = TOL1;
+//'C
+				continue; //GoTo 10
+			}
+			skipto60=false;
+//'C
+//'C     Approximation within tolerance.
+/* 60 */    RESULT = RESULT + SN[0] + SN[1]
+//'C
+//'C     Remove item from stack.
+			if (SP == 0) return; //Then GoTo 80
+				for (IARRAY = 0; IARRAY<3; IARRAY++)
+					VO[IARRAY] = STV[SP][IARRAY];
+/* 70 */
+			SO = STS[SP];
+			ILEV1 = STLEV[SP];
+			H = STH[SP];
+			pos = STPOS[SP];
+			TOL1 = STTOL[SP];
+			SP = SP - 1;
+//'C
+			continue; //GoTo 10
+		}
+/* 80 */
+	}
+	function F1(x) {
+
+		let EPSIX;
+//C
+		RUN = true;
+//C
+		EPSIX = EUX / AKT ** 2 + EUX * (1 - 1 / AKT ** 2) * (1 - x) ** AKT;
+//C
+//C
+//C     Call subroutine to calculate stress at a given strain.
+		B7616A(EPSIX);
+//C
+//C     The function for integration takes the following form.
+      //F1 = f;
+//C
+		if (KOUNT >= 100) {
+			RUN = false;
+			FAIL[2] = true;
+			return f;
+		}
+//C
+		if (NOTE1 == 1) {
+			RUN = false;
+			FAIL[3] = true;
+			return f;
+		}
+//C
+		return f;
+}
+	function B7616A(EPSI){
+
+		let IFLAG1;
+		let H, AN, BETA, a, x,
+		FFNEST, Error, CORRF, XX;
+//C
+//C     Check that m is within range, that E is positive and real,that fn
+//C     is not zero and that strain*E/fn is within range. F is set to a
+//C     a default value.
+		f = 9999.9;
+		NOTE1 = 0;
+		if (AM < 2.00001 || AM > 100000 || (Math.abs(fn)) < 0.0001 || E < 0.0001 || (Math.abs(EPSI * E / fn)) > 100) {
+			NOTE1 = 1;
+			return;
+		}
+//C
+//C     If the strain is very small the elastic relationship is used.
+		if ((Math.abs(EPSI * E / fn)) < 0.000001) {
+			f = EPSI * E;
+			return;
+		}
+//C
+//C     Set starting values for iteration.
+		H = 37;
+		KOUNT = 0;
+//C
+//C     Calculation of estimated stress, FFNEST, using Equation (5.1).
+//C     First set the flag used for recording exceedence of number limit.
+//C     Exceedence is checked at every stage of the calculation.
+		IFLAG1 = 1;
+		x = Math.abs(EPSI * E / fn);
+		AK = -0.86977 + 0.79044 * AM;
+		AN = 1 + 1 / AM;
+//C
+		if (((AM - 1 - AK) * (Math.log10(AN))) > H) IFLAG1 = 2;
+		if ((AK * Math.log10(AN)) > H) IFLAG1 = 2;
+		if ((AK * Math.log10(x)) > H) IFLAG1 = 2;
+		if (((AM - 1) * Math.log10(x)) > H) IFLAG1 = 2;
+//C
+		if (IFLAG1 == 1) {
+			BETA = (AN ** (AM - 1 - AK)) - AN ** (-AK);
+			a = 1 + (BETA * x ** AK) + (x ** (AM - 1)) / AM;
+			if (((1 / AM) * Math.log10(a)) < -H) IFLAG1 = 2;
+			if (IFLAG1 == 1) FFNEST = x * a ** (-1 / AM);
+		}
+//C
+//C     If solution of Equation (5.1) fails owing to exceeding the
+//C     number allowed (of exponent H) then a solution is obtained for
+//C     the asymptote by using logarithms.
+		if (IFLAG1 == 2) {
+			FFNEST = Math.log10(x) - (1 / AM) * (Math.log10(1 / AM) + (AM - 1) * (Math.log10(x)));
+			FFNEST = 10 ** FFNEST;
+		}
+//C
+//C     Estimated value of stress, FFNEST, now computed.
+//C
+//C     Commence refinement of estimated stress using Newton-Raphson
+//C     method using logarithms to avoid exceeding machine number limit.
+//C     Set tolerance limit on the iteration.
+		Error = FFNEST * 0.000001;
+		do {
+/*10*/	    KOUNT = KOUNT + 1;
+			XX = FFNEST + 10 ** (Math.log10(1 / AM) + AM * (Math.log10(FFNEST)));
+			CORRF = (XX - x) / (1 + (10 ** ((AM - 1) * Math.log10(FFNEST))));
+			FFNEST = FFNEST - CORRF;
+//C
+//C     Limit number of iterations and set default value of stress.
+			if (KOUNT > 99) {
+				f = 9999.9;
+				return;
+			}
+//C
+		} while (Math.abs(CORRF) > Error) // GoTo 10
+//C
+//C     Stress ratio f/fn is calculated therefore the stress can now be
+//C     calculated and the sign adjusted to that of the input strain.
+		f = FFNEST * fn;
+		let SIGN_epsi = EPSI >= 0 ? 1 : -1;
+		f = SIGN_epsi * f;
+
+	}
+	function MAT_RAMBERG_FN(Fy, M) {
+
+		let epsil1;
+		let epsil2;
+		let fac1;
+	
+		epsil1 = 0.001;
+		epsil2 = 0.002;
+	
+		fac1 = -1 / (M - 1);
+
+		//return (Fy * (M * epsil2 * E / Fy) ** (fac1)).toFixed(1);
+		return parseFloat((Fy * (M * epsil2 * E / Fy) ** (fac1)).toFixed(1));
+}
+	return {ESDU_Ktux: ESDU_Ktux};
+}
+function _Kqux(a_over_Dhole, Dhole_over_t, direction_axial, lugs_plane) {
+	// See ESDU 91008 Figure 2
+	if (a_over_Dhole < 0.55 || a_over_Dhole > 4)
+		return "Out of Graph";
+
+	if (lugs_plane == "L-ST" || lugs_plane == "LT-ST")
+		if (direction_axial == "L" || direction_axial == "LT")
+			return -0.020686644 * a_over_Dhole ** 7 + 0.343924632 * a_over_Dhole ** 6 + -2.329038377 * a_over_Dhole ** 5 + 8.188767467 * a_over_Dhole ** 4 + -15.635152884 * a_over_Dhole ** 3 + 15.002455203 * a_over_Dhole ** 2 + -4.893741525 * a_over_Dhole + 0.10949317;
+
+	if (Dhole_over_t < 1 || Dhole_over_t > 10)
+		return "Out of Graph";
+
+	tmp1 = -0.016651476 * a_over_Dhole ** 4 + 0.215673996 * a_over_Dhole ** 3 + -1.109922491 * a_over_Dhole ** 2 + 3.164652812 * a_over_Dhole + -1.459182226;
+	tmp2 = -0.014618343 * a_over_Dhole ** 4 + 0.202562094 * a_over_Dhole ** 3 + -1.094277539 * a_over_Dhole ** 2 + 3.170083983 * a_over_Dhole + -1.468723642;
+	tmp3 = -0.014703836 * a_over_Dhole ** 4 + 0.203159811 * a_over_Dhole ** 3 + -1.103786743 * a_over_Dhole ** 2 + 3.177713657 * a_over_Dhole + -1.468538376;
+	tmp4 = -0.018233914 * a_over_Dhole ** 4 + 0.241507935 * a_over_Dhole ** 3 + -1.262210923 * a_over_Dhole ** 2 + 3.387653019 * a_over_Dhole + -1.546659624;
+	tmp5 = -0.012157044 * a_over_Dhole ** 4 + 0.192977312 * a_over_Dhole ** 3 + -1.163193517 * a_over_Dhole ** 2 + 3.318040901 * a_over_Dhole + -1.533972705;
+	tmp6 = -0.014751864 * a_over_Dhole ** 4 + 0.226961711 * a_over_Dhole ** 3 + -1.315246374 * a_over_Dhole ** 2 + 3.493128779 * a_over_Dhole + -1.592740804;
+	tmp7 = -0.026641119 * a_over_Dhole ** 4 + 0.346189148 * a_over_Dhole ** 3 + -1.720629272 * a_over_Dhole ** 2 + 3.942742652 * a_over_Dhole + -1.743019468;
+	tmp8 = -0.034966163 * a_over_Dhole ** 4 + 0.430961504 * a_over_Dhole ** 3 + -2.00484828 * a_over_Dhole ** 2 + 4.214879575 * a_over_Dhole + -1.816870693;
+	tmp9 = -0.04184438 * a_over_Dhole ** 4 + 0.492862586 * a_over_Dhole ** 3 + -2.173903383 * a_over_Dhole ** 2 + 4.29602549 * a_over_Dhole + -1.804560213;
+	tmp10 = -0.021030676 * a_over_Dhole ** 7 + 0.340663114 * a_over_Dhole ** 6 + -2.241478852 * a_over_Dhole ** 5 + 7.637726687 * a_over_Dhole ** 4 + -14.094064916 * a_over_Dhole ** 3 + 12.942297359 * a_over_Dhole ** 2 + -3.583335901 * a_over_Dhole + -0.207030603;
+
+	if (Dhole_over_t >= 1 || Dhole_over_t < 2)
+		return lerp(Dhole_over_t, 1, 2, tmp1, tmp2);
+	if (Dhole_over_t >= 2 || Dhole_over_t < 3)
+		return lerp(Dhole_over_t, 2, 3, tmp2, tmp3);
+	if (Dhole_over_t >= 3 || Dhole_over_t < 4)
+		return lerp(Dhole_over_t, 3, 4, tmp3, tmp4);
+	if (Dhole_over_t >= 4 || Dhole_over_t < 5)
+		return lerp(Dhole_over_t, 4, 5, tmp4, tmp5);
+	if (Dhole_over_t >= 5 || Dhole_over_t < 6)
+		return lerp(Dhole_over_t, 5, 6, tmp5, tmp6);
+	if (Dhole_over_t >= 6 || Dhole_over_t < 7)
+		return lerp(Dhole_over_t, 6, 7, tmp6, tmp7);
+	if (Dhole_over_t >= 7 || Dhole_over_t < 8)
+		return lerp(Dhole_over_t, 7, 8, tmp7, tmp8);
+	if (Dhole_over_t >= 8 || Dhole_over_t < 9)
+		return lerp(Dhole_over_t, 8, 9, tmp8, tmp9);
+	if (Dhole_over_t >= 9 || Dhole_over_t <= 10)
+		return lerp(Dhole_over_t, 9, 10, tmp9, tmp10);
+}
+function kpx(x) {
+// See ESDU 91008 Figure 3
+    if (x < 0 || x > 3)
+        return "Out of graph";
+    if (x <= 1.5)
+        return 1.1;
+	return 0.017524 * x ^ 7 + -0.198421 * x ^ 6 + 0.877876 * x ^ 5 + -1.889439 * x ^ 4 + 1.993416 * x ^ 3 + -0.96519 * x ^ 2 + 0.176297 * x + 1.095193;
+}
+function kuy(x, mat) {
+// See ESDU 91008 Figure 4
+    if (x < 0 || x > 1.4)
+        return "Out of graph";
+    if (mat == "steel")
+        return -0.103339641 * x ** 4 + 0.019478908 * x ** 3 + 0.132119432 * x ** 2 + 1.260455811 * x + 0.005419517;
+    if (mat == "aluminum" || mat == "titanium")
+        return 0.003092467 * x ** 4 + -0.168642187 * x ** 3 + 0.13426057 * x ** 2 + 1.154580866 * x + 0.000257365;   
+    return "Wrong Material";
+}
+function kpy(x) {
+// See ESDU 91008 Figure 5
+    if (x < 0 || x > 1.4)
+        return "Out of graph";
+	return 0.080888763 * x ** 4 + -0.305581748 * x ** 3 + 0.030373882 * x ** 2 + 1.270997983 * x + -0.003552377;
+}
+function KDhole_W(Dhole_over_W) {
+// See ESDU 71011 Figure 4
+    if (Dhole_over_W < 0 || Dhole_over_W > 0.8)
+		return "Out of graph";
+	return 0.053718732 * Dhole_over_W ** 2 + 0.901252783 * Dhole_over_W + 0.003894126;
+}
+function gamma_fctn(ct, bottom) {
+	let x = bottom, y;
+	if (ct >= 0.55)
+		if (x > 2)
+			y = 1;
+		else
+			y = 0.5014 * x;
+	else if (ct >= 0.5)
+		if (x >= 0.725792 && x <= 1.27595)
+			y = 0.9878 * x ** 3 - 3.6078 * x ** 2 + 4.6888 * x - 1.5167;
+		else
+			y = 0.5014 * x - 0.0028;
+	else if (ct >= 0.4)
+		if (x > 0.51237 && x < 0.955197)
+			y = -14.064 * x ** 4 + 45.639 * x ** 3 - 55.865 * x ** 2 + 31.104 * x - 6.1851;
+		else if (x >= 0.955197 && x < 1.50957)
+			y = -0.2567 * x ** 2 + 0.8724 * x + 0.0223;
+		else
+			y = 0.5014 * x - 0.0028;
+	else if (ct >= 0.3)
+		if (x > 0.334314 && x < 0.887426)
+			y = 2.8538 * x ** 3 - 6.9149 * x ** 2 + 5.9885 * x - 1.1716;
+		else if (x >= 0.887426 && x < 1.69436)
+			y = 0.1846 * x ** 3 - 0.8266 * x ** 2 + 1.3767 * x - 0.0098;
+		else
+			y = 0.5014 * x - 0.0028;
+	else if (ct >= 0.2)
+		if (x > 0.209295 && x < 0.855435)
+			y = -11.908 * x ** 4 + 30.416 * x ** 3 - 29.073 * x ** 2 + 12.808 * x - 1.5579;
+		else if (x >= 0.855435 && x < 1.79034)
+			y = -0.0893 * x ** 2 + 0.3494 * x + 0.5583;
+		else
+			y = 0.5014 * x - 0.0028;
+	else if (ct >= 0.1)
+		if (x > 0.109533 && x < 0.83102)
+			y = 29.869 * x ** 5 - 81.717 * x ** 4 + 87.847 * x ** 3 - 47.076 * x ** 2 + 13.132 * x - 0.7866;
+		else if (x >= 0.83102 && x < 1.87663)
+			y = -0.035 * x ** 2 + 0.144 * x + 0.8024;
+		else
+			y = 0.5014 * x - 0.0028;
+	else
+		y = 0.5014 * x - 0.0028;
+return y;
+}
+
 // Frame funcs
 // STA
 function frameSTACalcs() {
@@ -1393,6 +2032,7 @@ function WDTSPCalcs(table, table2) {
 }
 
 function dbgSetAll() {
+	let dummy = [];
 	// Set Ellipse
 	document.getElementById("ellForm").querySelector("#Fx").value = 1000;
 	document.getElementById("ellForm").querySelector("#Fy").value = 0;
@@ -1466,6 +2106,21 @@ function dbgSetAll() {
 	GEBID("FPBForm", "f2In").value = -1.2;
 	FPBCalcs();
 	
+	// Set lug
+	dummy = ["lug", 0.5015, 0.374, 0.375, 0.501, 1.25, 0.375, 0, "skip", 0, 1.5, 1.15, 2295, 1541, "skip", 0.375, 0.375, 0.375, 0.63, 0.37, 45, 45];
+	for (let i=0; i<dummy.length; i++)
+		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab1"), [0, i, 1, 0]).value = dummy[i];
+	dummy = ["aluminum", "7076-T7651", "skip", 71, 72, 66, 63, 61, 56, "skip", 94, 109, 108, 134, 22.05, "skip", 10.6, 0.33, 10.6, 3, "ST", "LT-ST"];
+	for (let i=0; i<dummy.length; i++)
+		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab2"), [0, i, 1, 0]).value = dummy[i];
+	dummy = ["skip", "skip", 1261, 29];
+	for (let i=0; i<dummy.length; i++)
+		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab3"), [0, i, 1, 0]).value = dummy[i];
+	dummy = ["skip", "skip", "skip", "N/A", 104, 198, 29, 0.33];
+	for (let i=0; i<dummy.length; i++)
+		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab4"), [0, i, 1, 0]).value = dummy[i];
+	lugCalcs();
+	
 	// Set frame STA
 	GEBID("frameSTAForm", "FcyIn").value = 65000;
 	GEBID("frameSTAForm", "tfIn").value = 0.043;
@@ -1508,7 +2163,7 @@ function dbgSetAll() {
 	frameSTACalcs();
 	
 	// Set frame WDT
-	let dummy = [[0.063, 0.297, 0.212], [1.126, 0.063, 0.032], [0.063, 0.729, 0.427]]
+	dummy = [[0.063, 0.297, 0.212], [1.126, 0.063, 0.032], [0.063, 0.729, 0.427]]
 	let table = GEBID("frameDiagTensForm", "SPICTab");
 	for (let i=0; i<3; i++) [childSeq(table, [0, i+1, 1, 0]).value, childSeq(table, [0, i+1, 2, 0]).value, childSeq(table, [0, i+1, 4, 0]).value] = dummy[i];
 	dummy = [[1, 0.04, 0.02], [0.04, 0.38, 0.23], [0.04, 0.38, 0.23]]
@@ -1535,4 +2190,5 @@ function dbgSetAll() {
 	frameWDTCalcs();
 	
 	console.log("values set");
+	return;
 }

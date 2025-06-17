@@ -466,7 +466,7 @@ function texFrameSTA() {
 	.replace("<CBRow1>", CBRow1[0] + " & " + CBRow1[1] + " & " + CBRow1[2])
 	.replace("<CBRow2>", CBRow2[0] + " & " + CBRow2[1] + " & " + CBRow2[2] + " & " + CBRow2[3] + " & " + CBRow2[4] + " & " + CBRow2[5] + " & " + CBRow2[6] + " & " + CBRow2[7] + " & " + CBRow2[8] + " & " + CBRow2[9])
 	.replace("<SBRow1>", SBRow1[0] + " & " + SBRow1[1] + " & " + SBRow1[2] + " & " + SBRow1[3] + " & " + SBRow1[4] + " & " + SBRow1[5])
-	.replace("<SBRow2>", SBRow2[0] + " & " + SBRow2[1] + " & " + SBRow2[2] + " & " + SBRow2[3] + " & " + SBRow2[4] + " & " + SBRow2[5] + " & " + "cellcolor{" + ((SBRow2[6] == "HIGH" || SBRow2[6] > 0) ? "gudgreen" : "red") + "}{" + SBRow2[6] + "}");
+	.replace("<SBRow2>", SBRow2[0] + " & " + SBRow2[1] + " & " + SBRow2[2] + " & " + SBRow2[3] + " & " + SBRow2[4] + " & " + SBRow2[5] + " & " + "\\cellcolor{" + ((SBRow2[6] == "HIGH" || SBRow2[6] > 0) ? "gudgreen" : "red") + "}{" + SBRow2[6] + "}");
 
 	return tex;
 }

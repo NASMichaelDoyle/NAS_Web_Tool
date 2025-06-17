@@ -73,8 +73,8 @@
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
 		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br><br>
 		<span style="display: flex;">
-			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Inputs</button>
-			<button class="button" style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Inputs</button>
+			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Loads</button>
+			<button class="button" style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Loads</button>
 			<input type="file" id="frameUpIns" accept=".csv" oninput="frameUpIns(this)" style="display:none;">
 		</span>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Reports</h4>
@@ -796,7 +796,7 @@
 			<div class="formContainer" id="FPBContainer">
 				<div class="formIO" style="width: 300px;">
 					<h2>Input</h2>
-					<table style="margin-left: 5px;">
+					<table id="inTab1" style="margin-left: 5px;">
 						<!-- <colgroup>
 							<col span="1" style="text-align: right;">
 							<col span="1" style="">
@@ -908,17 +908,17 @@
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">P<sub>lug A</sub> =</td>
-							<td style="background-color: #d9d9d9; border: 1px solid black;"></td>
+							<td id="PlugAOut" style="background-color: #d9d9d9; border: 1px solid black;"></td>
 							<td style="text-align: left">lb</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">P<sub>lug T</sub> =</td>
-							<td style="background-color: #d9d9d9; border: 1px solid black;"></td>
+							<td id="PlugTOut" style="background-color: #d9d9d9; border: 1px solid black;"></td>
 							<td style="text-align: left">lb</td>
 						</tr>
 					</table>
 					<h4 style="">Lug</h4>
-					<table style="margin-left: 5px;">
+					<table id="inTab2" style="margin-left: 5px;">
 						<tr title="">
 							<td style="text-align: right;">Alloy</td>
 							<td><select id="alloyIn" style="width: 100%;">
@@ -1016,20 +1016,24 @@
 						<tr title="">
 							<td style="text-align: right;">Direction of axial load</td>
 							<td><select id="ALDirIn" style="width: 100%;">
-								<option value="st">ST</option>
+								<option value="L">L</option>
+								<option value="LT">LT</option>
+								<option selected="1" value="ST">ST</option>
 							</select></td>
 							<td style="text-align: left"></td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">Lug's plane</td>
 							<td><select id="lugPlaneIn" style="width: 100%;">
-								<option value="ltst">LT-ST</option>
+								<option value="L-LT">L-LT</option>
+								<option value="L-ST">L-ST</option>
+								<option selected="1" value="LT-ST">LT-ST</option>
 							</select></td>
 							<td style="text-align: left"></td>
 						</tr>
 					</table>
 					<h4 style="">Pin</h4>
-					<table style="margin-left: 5px;">
+					<table id="inTab3" style="margin-left: 5px;">
 						<tr title="">
 							<td style="text-align: right;">Spec</td>
 							<td><select id="specPinIn" style="width: 100%;">
@@ -1056,7 +1060,7 @@
 						</tr>
 					</table>
 					<h4 style="">Bushing</h4>
-					<table style="margin-left: 5px;">
+					<table id="inTab4" style="margin-left: 5px;">
 						<tr title="">
 							<td style="text-align: right;">Spec</td>
 							<td><select id="specBushIn" style="width: 100%;">
@@ -1074,17 +1078,17 @@
 						<tr><td><br></td></tr>
 						<tr title="">
 							<td style="text-align: right;">P<sub>rad</sub></td>
-							<td><input id="PradIn" type="number" placeholder="Enter Prad" onchange="lugCalcs()"></td>
+							<td><input id="PradIn" placeholder="Enter Prad" onchange="lugCalcs()"></td>
 							<td style="text-align: left">lbs</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">Fbry</td>
-							<td><input id="FbryIn" type="number" placeholder="Enter Fbry" onchange="lugCalcs()"></td>
+							<td><input id="FbryIn" placeholder="Enter Fbry" onchange="lugCalcs()"></td>
 							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">Fbru</td>
-							<td><input id="FbruIn" type="number" placeholder="Enter Fbru" onchange="lugCalcs()"></td>
+							<td><input id="FbruIn" placeholder="Enter Fbru" onchange="lugCalcs()"></td>
 							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
@@ -1184,11 +1188,11 @@
 					<div style="display: grid; grid-template-columns: 20% 80%;">
 						<table id="outTab4" style="border-collapse: collapse; margin: auto auto;">
 							<tr style="height: 20px;">
-								<td>Ka/D<sub>hole</sub> =</td>
+								<td>a/D<sub>hole</sub> =</td>
 								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 							<tr style="height: 20px;">
-								<td>E<sub>hole</sub>/t =</td>
+								<td>D<sub>hole</sub>/t =</td>
 								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 							<tr style="height: 20px;">
@@ -1392,7 +1396,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut1" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1412,7 +1416,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut2" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1432,7 +1436,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut3" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1450,7 +1454,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut4" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1470,7 +1474,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut5" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1490,7 +1494,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut6" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1549,7 +1553,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut7" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
@@ -1591,7 +1595,7 @@
 							<tr><td><br></td></tr>
 							<tr style="height: 20px;">
 								<td>MS =</td>
-								<td style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
+								<td id="MSOut8" style="background-color: #d9d9d9; border: 1px solid black; width: 100px;"></td>
 							</tr>
 						</table>
 					</div>
