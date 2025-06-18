@@ -12,6 +12,8 @@ const coverTemplate = `\\documentclass[11pt]{article}
 \\usepackage{gensymb}
 \\usepackage{multirow}
 \\usepackage{float}
+\\usepackage{amsmath}
+\\usepackage{subcaption}
 
 
 % Colors
@@ -333,7 +335,256 @@ Flat plate buckling analysis within. Input data in Table \\ref{tab:FPB1}, output
 
 // Lug --------------------------------------------------------------------------------------------------------------
 const lugTemplate = `
+\\clearpage
+\\section{Lug Analysis}
+%paratop%
 
+\\subsection{Properties}
+\\label{sect:fWDT1}
+
+Inputted properties are summarized in table \\ref{tab:lug1}. Note the $P_{LUG}$ values are calculated for a <LorC>.
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|}
+      \\hline $D_{hole}$ (in) & $D_{pin}$ (in) & $D_{I\\ bushing}$ (in) & $D_{O\\ bushing}$ (in) & $W$ (in) & $t_o$ (in) & $g$ (in)\\\\\\hline
+      <inRow1>\\\\\\hline
+    \\end{tabular}}}
+     \\hfill \\break
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|}
+      \\hline$t_{lug}$ (in) & $t_{i}$ (in) & $t_{contact}$ (in) & $a$ (in) & $c$ (in) & $\\text{\\ss}_{1}$ ($\\degree$) & $\\text{\\ss}_{2}$ ($\\degree$)\\\\\\hline
+      <inRow2>\\\\\\hline
+     \\end{tabular}}}
+     \\hfill \\break
+      \\makebox[\\textwidth]{
+    \\scalebox{0.9}{
+     \\begin{tabular}{|c|c|c|c|c|c|c|}
+      \\hline Load ID & Ultimate Factor & Fitting Factor & $P_{axial}$ (lb) & $P_{transverse}$ (lb) & $P_{LUG\\_A}$ (lb) & $P_{LUG\\_T}$ (lb)\\\\\\hline
+      <inRow3>\\\\\\hline
+    \\end{tabular}}}
+	\\caption{Inputted properties}
+	\\label{tab:lug1}
+\\end{table}
+
+\\begin{figure}[htbp!]
+    \\centering
+    \\begin{subfigure}[b]{0.45\\textwidth}
+       \\includegraphics[width=1\\linewidth]{images/lug/lugDia1.png}
+%        \\caption{Caption for image 1}
+%        \\label{fig:image1}
+    \\end{subfigure}
+    %\\hfill % Puts space between the subfigures
+    \\begin{subfigure}[b]{0.35\\textwidth}
+        \\includegraphics[width=1\\linewidth]{images/lug/lugDia2.png}
+    \\end{subfigure}
+    \\caption{Lug diagrams}
+    \\label{fig:lug1}
+\\end{figure}
+
+\\subsubsection{Lug Loading \\& Properties}
+
+Lug loading and properties defined in table \\ref{tab:lug2}.
+
+\\begin{table}[h]
+    \\begin{tabular}{|c|c|}
+      \\hline Alloy & Material\\\\\\hline
+      <inRow4>\\\\\\hline
+    \\end{tabular}
+      \\hfill \\break
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline $Ftu_L$ (ksi) & $Ftu_{LT}$ (ksi) & $Ftu_{ST}$ (ksi) & $Fty_L$ (ksi) & $Fty_{LT}$ (ksi) & $Fty_{ST}$ (ksi)\\\\\\hline
+      <inRow5>\\\\\\hline
+    \\end{tabular}
+     \\hfill \\break
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline$Fbry_{1.5}$ (ksi) & $Fbry_{2.0}$ (ksi) & $Fbru_{1.5}$ (ksi) & $Fbru_{2.0}$ (ksi) & $F_{corrosion}$ (ksi)\\\\\\hline
+      <inRow6>\\\\\\hline
+     \\end{tabular}
+     \\hfill \\break
+     \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline $E$ (Msi) & $\\mu$ & $e$ (\\%) & $t_{stock}$ (lb) & Axial load direction & Lug's plane\\\\\\hline
+      <inRow7>\\\\\\hline
+    \\end{tabular}
+	\\caption{Lug loading \\& properties}
+	\\label{tab:lug2}
+\\end{table}
+
+\\subsubsection{Pin \\& Bushing Properties}
+
+\\begin{table}[ht]
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline Spec & Material & $M_{allow}$ (in$\\cdot$lbs) & $E$ (Msi)\\\\\\hline
+      <inRow8>\\\\\\hline
+    \\end{tabular}
+    \\caption{Pin properties}
+    \\label{tab:lug3}
+\\end{table}
+
+\\begin{table}[ht]
+    \\begin{tabular}{|c|c|c|c|c|c|c|}
+      \\hline Spec & Material & $P_{rad}$ (lbs) & $Fbry$ (ksi) & $Fbru$ (ksi) & $E$ (Msi) & $\\mu$\\\\\\hline
+      <inRow9>\\\\\\hline
+    \\end{tabular}
+    \\caption{Bushing properties}
+    \\label{tab:lug4}
+\\end{table}
+
+\\subsection{Data and Calculations}
+
+  The value of the axial tensile rupture factor, Ktux , for a particular lug is dependent on the lug material properties and its geometry. ESDU 91008 provides a Fortran computer program for calculating Ktux from and the material properties. This section calculates the stress concentration factor (Ke') from ESDU 81006 for a clearance pin in a hole. This differs from traditional lug analysis which assumes a generic clearance, as a result the Ktux will be different from this reference and traditional references, with the difference approaching zero as the assumed clearance matches the actual clearance.
+Note:The Ultimate Lug Failure due to tensile rupture is also based on W and Diameter. If W become to large the there will be some curves for which there are no data-points. Thus conservatively W can be fictitiously reduced to compensate.
+
+\\begin{figure}[htbp!]
+    \\centering
+       \\includegraphics[width=0.8\\linewidth]{images/lug/lugDia3.png}
+    \\caption{Lug geometrical assumptions}
+    \\label{fig:lug2}
+\\end{figure}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline $D_{hole}/W$ & $a/W$ & $t/D_{hole}$ & $K'0.2$  & $K'100$ \\\\\\hline
+      <outRow1>\\\\\\hline
+    \\end{tabular}
+     \\hfill \\break
+    \\begin{tabular}{|c|c|}
+      \\hline Clearance (\\%) & $\\eta_e$\\\\\\hline
+      <outRow2>\\\\\\hline
+    \\end{tabular}
+     \\hfill \\break
+    \\begin{tabular}{|c|c|c|c|c|c|c|}
+      \\hline $Ke'$ & $E_{pin}/E_{lug}$ & $Ke''/Ke'$ & $Ke''$  & $K_{tux}$ & $F_{tux}$ (ksi) & $P_{tux}$ (lb)\\\\\\hline
+      <outRow3>\\\\\\hline
+    \\end{tabular}
+    \\caption{Axial - Lug failure due to tensile rupture}
+    \\label{tab:lug5}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline $a/D_{hole}$ & $D_{hole}/t$ & $K_{qux}$ & $F_{tum}$  & $P_{qux}$ \\\\\\hline
+      <outRow4>\\\\\\hline
+    \\end{tabular}
+    \\caption{Axial - Lug failure due to shear-bearing rupture}
+    \\label{tab:lug6}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline $F_{tpm}$ & $F_{tum}$ & $Pux_{min}$ &  & $K_{px}$ & $P_{px}$\\\\\\hline
+      <outRow5>\\\\\\hline
+    \\end{tabular}
+    \\caption{Axial - Lug failure due to overall permanent deformation}
+    \\label{tab:lug7}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|}
+      \\hline $A_1=A_4$ (\\%) & $A_2$ & $A_3$\\\\\\hline
+      <outRow6>\\\\\\hline
+    \\end{tabular}
+     \\hfill \\break
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline $A_E$ & $A_E/(D_{hole}*t)$ & $K_{uy}$ & $F_{tum}$  & $P_{uy}$\\\\\\hline
+      <outRow7>\\\\\\hline
+    \\end{tabular}
+    \\caption{Transverse - Lug failure due to rupture}
+    \\label{tab:lug8}
+\\end{table}
+
+\\begin{figure}[htbp!]
+    \\centering
+       \\includegraphics[width=0.6\\linewidth]{images/lug/lugDia9.png}
+    \\caption{Lug area A1-A4}
+    \\label{fig:lug3}
+\\end{figure}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline  & $K_{py}$ & $F_{tpm}$ & $P_{py}$\\\\\\hline
+      <outRow8>\\\\\\hline
+    \\end{tabular}
+    \\caption{Transverse - Lug failure due to overall permanent deformation}
+    \\label{tab:lug9}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline $a/D_{hole}$ & $Fbru_{1.5}$ & $Fbru_{2.0}$ & $F_{bru}$  & $P_{bru}$\\\\\\hline
+      <outRow9>\\\\\\hline
+    \\end{tabular}
+    \\caption{Failure due to bearing rupture}
+    \\label{tab:lug10}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline $a/D_{hole}$ & $Fbry_{1.5}$ & $Fbry_{2.0}$ & $F_{bry}$  & $P_{bry}$\\\\\\hline
+      <outRow10>\\\\\\hline
+    \\end{tabular}
+    \\caption{Failure due to bearing permanent deformation}
+    \\label{tab:lug11}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\centering
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline\\multicolumn{3}{|c|}{Ultimate Load} & \\multicolumn{3}{c|}{Limit Load}\\\\\\hline
+      $R_x$ & $R_y$ & MS & $R_x$ & $R_y$ & MS\\\\\\hline
+      <outRow11>\\\\\\hline
+    \\end{tabular}
+    \\caption{Margin of safety - Lug's section}
+    \\label{tab:lug12}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\centering
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline\\multicolumn{3}{|c|}{Ultimate Load} & \\multicolumn{3}{c|}{Limit Load}\\\\\\hline
+      $P_{applied}$ & $P_{bru}$ & MS & $P_{LIM\\ applied}$ & $P_{bry}$ & MS\\\\\\hline
+      <outRow12>\\\\\\hline
+    \\end{tabular}
+    \\caption{Margin of safety - Lug's bearing strength}
+    \\label{tab:lug13}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\centering
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline\\multicolumn{3}{|c|}{Ultimate Load} & \\multicolumn{3}{c|}{Limit Load}\\\\\\hline
+      $P_{applied}$ & $P_{bru}$ & MS & $P_{LIM\\ applied}$ & $P_{bry}$ & MS\\\\\\hline
+      <outRow13>\\\\\\hline
+    \\end{tabular}
+    \\caption{Margin of safety - Bushing's bearing strength}
+    \\label{tab:lug14}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline Interference & $e_{fit}$ &  & $K$ & $A$ & $B$\\\\\\hline
+      <outRow14>\\\\\\hline
+    \\end{tabular}
+     \\break\\break Lug interface pressure, and residual stress\\hfill\\break
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline $p$ & $f_{max}$ & $F_{corrosion}$ & MS\\\\\\hline
+      <outRow15>\\\\\\hline
+    \\end{tabular}
+    \\caption{Interface fit bushing}
+    \\label{tab:lug15}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \\hline $P_{pin}$ &  &  & $\\gamma$ & $b$ & $M$ & $M_{allow}$ & MS \\\\\\hline
+      <outRow16>\\\\\\hline
+    \\end{tabular}
+    \\caption{Pin failure}
+    \\label{tab:lug15}
+\\end{table}
 `
 
 // FRAME STA --------------------------------------------------------------------------------------------------------
