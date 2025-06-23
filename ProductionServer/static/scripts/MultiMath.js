@@ -4,6 +4,7 @@ let globalI = 0;
 let US_C;
 let BCT_C;
 let CBS_C;
+let boltgroupChart;
 let CBS_C_set = false;
 let hiddenChart1 = null;
 let hiddenChart2 = null;
@@ -36,19 +37,8 @@ function startup() {
 	FPBSetCharts(document.getElementById("FPBForm").querySelector("#ETIn").value);
 	//console.log("dbgSet() to set valid values for testing")
 }
-function GEBID(id, qs) {
-	 if (arguments.length === 1) {
-		return document.getElementById(id);
-	} else {
-		return document.getElementById(id).querySelector("#"+qs);
-	}
-}
 function degToRad(degs) {return Math.PI * degs / 180;}
 function radToDeg(rads) {return 180 * rads / Math.PI;}
-function childSeq(elem, seq) { // Returns an element based on a parent and a sequence of children
-	for (i=0; i<seq.length; i++) elem = elem.children[seq[i]];
-	return elem;
-}
 function sRound(num, sig) { // "Smart Round": Rounds a number if it is a number
 	//console.log(num + ", type: " + typeof(num) + ", isNaN: " + isNaN(num) + ", is ES: " + (num === ""));
 	if (!isNaN(Number(num))) num = Number(num);
@@ -1665,6 +1655,141 @@ function gamma_fctn(ct, bottom) {
 return y;
 }
 
+// boltgroup funcs
+function boltgroupCalcs() {
+	// Get
+	let locY = +GEBID("boltgroupForm", "locyIn").value;
+	let locZ = +GEBID("boltgroupForm", "loczIn").value;
+	let Fy = +GEBID("boltgroupForm", "FyIn").value;
+	let Fz = +GEBID("boltgroupForm", "FzIn").value;
+	let Mx = +GEBID("boltgroupForm", "MxIn").value;
+	let loadCase = +GEBID("boltgroupForm", "loadCaseIn").value;
+	let fastProps = [];
+	for (let i=0; childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1]) !== undefined; i++) {
+		fastProps[i] = [];
+		for (let j=0; j<4; j++) fastProps[i][j] = +childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1, j+1, 0]).value;
+	}
+	// Let
+	let temp = array2Transpose(fastProps);
+	let Ycg = SUMPRODUCT([temp[0], temp[3]])/SUM(temp[3]);
+	let Zcg = SUMPRODUCT([temp[1], temp[2]])/SUM(temp[2]);
+	let Mxcg = Mx+Fy*(Zcg-locZ)-Fz*(Ycg-locY);
+	let Ix = SUMPRODUCT([temp[2], temp[1], temp[1]]) + SUMPRODUCT([temp[3], temp[0], temp[0]]) - Ycg**2*SUM(temp[3]) - Zcg**2*SUM(temp[2]);
+	//console.log(Mxcg + ", " + Mx);
+	outs = [];
+	for (let i=0; i<fastProps.length; i++) {
+		outs[i] = [];
+		outs[i][0] = fastProps[i][0]==""?"":fastProps[i][0]-Ycg;
+		outs[i][1] = fastProps[i][0]==""?"":fastProps[i][1]-Zcg;
+		outs[i][2] = fastProps[i][0]==""?"":Fy*fastProps[i][2]/SUM(temp[2]);
+		outs[i][3] = fastProps[i][1]==""?"":Fz*fastProps[i][3]/SUM(temp[3]);
+		outs[i][4] = fastProps[i][0]==""?"":-fastProps[i][2]*(fastProps[i][1]-Zcg)*Mxcg/Ix;
+		outs[i][5] = fastProps[i][0]==""?"":fastProps[i][3]*(fastProps[i][0]-Ycg)*Mxcg/Ix;
+		outs[i][6] = fastProps[i][0]==""?"":outs[i][2]+outs[i][4];
+		outs[i][7] = fastProps[i][0]==""?"":outs[i][3]+outs[i][5];
+		outs[i][8] = fastProps[i][0]==""?"":Math.sqrt(outs[i][6]**2 + outs[i][7]**2);
+	}
+	//console.log(outs);
+	let PyTot = SUM(array2Transpose(outs)[6]);
+	let PzTot = SUM(array2Transpose(outs)[7]);
+	let MxTot = mxtotal(array2Transpose(outs)[6],array2Transpose(outs)[7],temp[0],temp[1],Ycg,Zcg);
+	//console.log(MxTot);
+	// Set
+	GEBID("boltgroupForm", "YcgOut").innerHTML = sRound(Ycg, 3);
+	GEBID("boltgroupForm", "ZcgOut").innerHTML = sRound(Zcg, 3);
+	GEBID("boltgroupForm", "MxcgOut").innerHTML = sRound(Mxcg, 0);
+	GEBID("boltgroupForm", "IxOut").innerHTML = sRound(Ix, 4);
+	GEBID("boltgroupForm", "PyTotOut").innerHTML = sRound(PyTot, 0);
+	GEBID("boltgroupForm", "PzTotOut").innerHTML = sRound(PzTot, 0);
+	GEBID("boltgroupForm", "MxTotOut").innerHTML = sRound(MxTot, 0);
+	let sig = [3,3,0,0,0,0,0,0,0];
+	for (let i=0; i<outs.length; i++) 
+		for (let j=0; j<outs[i].length; j++) 
+			childSeq(GEBID("boltgroupForm", "outTab"), [0, i+1, j+1]).innerHTML = sRound(outs[i][j], sig[j]);
+	// Met (sur le graphique)
+	let chartData = [];
+	for (let i=0; i<temp[0].length; i++) chartData[i] = {x: temp[0][i], y: temp[1][i]};
+	if (boltgroupChart) boltgroupChart.destroy();
+	boltgroupChart = new Chart(GEBID("boltgroupForm", "bgChart"), {
+		type: "scatter",
+		data: {
+			datasets: [{
+				label: "Fasteners",
+				data: chartData,
+				backgroundColor: 'rgba(00, 00, 80, 0.8)', // Color of the points
+                borderColor: 'rgba(00, 00, 80, 1)', // Border color of the points
+                borderWidth: 1,
+                pointRadius: 3, // Size of the points
+                pointHoverRadius: 5 // Size of the points on hover
+			},
+			{
+				label: "CG",
+				data: [{x: Ycg, y: Zcg}],
+				backgroundColor: 'rgba(255, 00, 255, 0.8)', // Color of the points
+                borderColor: 'rgba(255, 00, 255, 1)', // Border color of the points
+                borderWidth: 1,
+                pointRadius: 3, // Size of the points
+                pointHoverRadius: 5 // Size of the points on hover
+			}]
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: true,
+			aspectRatio: 1.5,
+            scales: {
+                x: {
+                    type: 'linear', // Scatter plots usually use linear scales for both axes
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Y-Axis'
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    title: {
+                        display: true,
+                        text: 'Z-Axis'
+                    }
+                }
+            }
+		}
+	});
+}
+function SUMPRODUCT(ARR) { // Excel array sumproduct
+	let result = 0;
+	for (i=0; i<ARR[0].length; i++) {
+		let dummy = 1;
+		for (j=0; j<ARR.length; j++) dummy*=ARR[j][i];
+		result += dummy;
+	}
+	return +result;
+}
+function SUM(ARR) { // Excel array sum
+	let result = 0;
+	for (let i=0; i<ARR.length; i++) result += ARR[i];
+	return +result;
+}
+function array2Transpose(ARR) { // Matrix shit lol
+	let result = [];
+	for (let i=0; i< ARR[0].length; i++) {
+		result[i] = [];
+		for (let j=0; j<ARR.length; j++) result[i][j] = ARR[j][i];
+	}
+	return result;
+}
+function mxtotal(Py,Pz,y,z,Ycg,Zcg) {
+	let result = 0, Pyy, Pzz;
+	for (let i = 0; i<30; i++) {
+		if (Py[i] == "") Pyy = 0;
+		else Pyy = Py[i];
+		if (Pz[i] == "") Pzz = 0;
+		else Pzz = Pz[i];
+		result += -Pyy * (z[i] - Zcg) + Pzz * (y[i] - Ycg);
+	}
+	return result;
+}
+
 // Frame funcs
 // STA
 function frameSTACalcs() {
@@ -2120,6 +2245,53 @@ function dbgSetAll() {
 	for (let i=0; i<dummy.length; i++)
 		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab4"), [0, i, 1, 0]).value = dummy[i];
 	lugCalcs();
+	
+	// Set bg
+	dummy = [-52.95, 147.1, 1143.7, 710.51, -7790.8255, 40];
+	let ids = ["locyIn", "loczIn", "FyIn", "FzIn", "MxIn", "loadCaseIn"];
+	for (let i=0; i<dummy.length; i++) GEBID("boltgroupForm", ids[i]).value = dummy[i];
+	while (BGNumFast < 30) BGAddFast();
+	dummy = [
+		[-53.5, 148.29, 1, 1],
+		[-54.55, 148.29, 1, 1],
+		[-55.6, 148.29, 1, 1],
+		[-53.5, 147.1, 1, 1],
+		[-54.55, 147.1, 1, 1],
+		[-55.6, 147.1, 1, 1],
+		[-53.5, 146.06, 1, 1],
+		[-54.55, 146.06, 1, 1],
+		[-55.6, 146.06, 1, 1],
+		[-53.95, 145.39, 1, 1],
+		[-55, 145.39, 1, 1],
+		[-56.05, 145.39, 1, 1],
+		[-56.5, 146.48, 1, 1],
+		[-56.5, 147.72, 1, 1],
+		[-57.4, 147.1, 1, 1],
+		[-73.5, 148.29, 1, 1],
+		[-74.55, 148.29, 1, 1],
+		[-75.6, 148.29, 1, 1],
+		[-73.5, 147.1, 1, 1],
+		[-74.55, 147.1, 1, 1],
+		[-75.6, 147.1, 1, 1],
+		[-73.5, 146.06, 1, 1],
+		[-74.55, 146.06, 1, 1],
+		[-75.6, 146.06, 1, 1],
+		[-73.95, 145.39, 1, 1],
+		[-75, 145.39, 1, 1],
+		[-76.05, 145.39, 1, 1],
+		[-76.5, 146.48, 1, 1],
+		[-76.5, 147.72, 1, 1],
+		[-77.4, 147.1, 1, 1]
+	];
+	for (let i=0; i<dummy.length; i++) 
+		for (let j=0; j<dummy[i].length; j++) 
+			childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1, j+1, 0]).value = dummy[i][j];
+	dummy = [0,0,0,0];
+	for (let i=30; childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1]) !== undefined; i++)
+		for (let j=0; j<dummy.length; j++) 
+			childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1, j+1, 0]).value = dummy[j];
+	boltgroupCalcs();
+	
 	
 	// Set frame STA
 	GEBID("frameSTAForm", "FcyIn").value = 65000;

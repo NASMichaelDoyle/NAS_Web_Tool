@@ -39,6 +39,8 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "Cap Tension";
 		case "lug":
 			return "Lug Analysis";
+		case "boltgroup":
+			return "Boltgroup";
 		default:
 			return "Unknown";
 	}

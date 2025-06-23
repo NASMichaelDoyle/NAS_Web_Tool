@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="styles/FPBStyle.css">
 <link rel="stylesheet" href="styles/frameStyle.css">
 <link rel="stylesheet" href="styles/sortableStyle.css">
+<link rel="stylesheet" href="styles/boltgroupStyle.css">
 <style></style>
+<script src="scripts/MultiUtilities.js"></script>
 <!-- Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
@@ -67,6 +69,7 @@
 		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
 		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
 		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
+		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -1605,6 +1608,134 @@
 					
 				</div>
 			</div>
+		</div>
+		<div class="analForm" id="boltgroupForm">
+			<header><h2>Boltgroup 2D</h2></header>
+			<div style="display: grid; grid-template-columns: 30% 70%;">
+			<div class="formIO">
+				<h3>Applied Load</h3>
+				<table>
+					<tr>
+						<td>Location Y</td>
+						<td>Location Z</td>
+						<td>Fy (lb)</td>
+						<td>Fz (lb)</td>
+					</tr>
+					<tr>
+						<td><input id="locyIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input id="loczIn" type="number" placeholder="Enter Z" onchange="boltgroupCalcs()"></td>
+						<td><input id="FyIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
+						<td><input id="FzIn" type="number" placeholder="Enter Fz" onchange="boltgroupCalcs()"></td>
+					</tr>
+					<tr>
+						<td>Mx (in*lb)</td>
+						<td>Load Case</td>
+					</tr>
+					<tr>
+						<td><input id="MxIn" type="number" placeholder="Enter Mx" onchange="boltgroupCalcs()"></td>
+						<td><input id="loadCaseIn" type="number" placeholder="Enter Case" onchange="boltgroupCalcs()"></td>
+					</tr>
+				</table>
+				<template id="bgInRowTemplate">
+					<tr>
+						<td></td>
+						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Z" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Yeff" value="1" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Zeff" value="1" onchange="boltgroupCalcs()"></td>
+					</tr>
+				</template>
+				<template id="bgOutRowTemplate">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</template>
+				<table id="inTab">
+					<tr>
+						<td>Fastener</td>
+						<td>Y (in)</td>
+						<td>Z (in)</td>
+						<td title="Y efficiency">Y<sub>eff</sub></td>
+						<td title="Z efficiency">Z<sub>eff</sub></td>
+					</tr>
+				</table>
+				<br>
+				<button onclick="BGAddFast()" style="margin-left: 0px;">Add Fastener</button>
+			</div>
+			<div style="text-align: center;">
+				<h2>Output</h2>
+				<table style="margin: 0 auto; border-collapse: collapse;">
+					<tr>
+						<td style="border: 1px solid black;">Ycg</td>
+						<td style="border: 1px solid black;">Zcg</td>
+						<td style="border: 1px solid black;">Mx_cg</td>
+						<td style="border: 1px solid black;">Ix</td>
+					</tr>
+					<tr>
+						<td id="YcgOut" style="border: 1px solid black;"></td>
+						<td id="ZcgOut" style="border: 1px solid black;"></td>
+						<td id="MxcgOut" style="border: 1px solid black;"></td>
+						<td id="IxOut" style="border: 1px solid black;"></td>
+					</tr>
+				</table>
+				<br>
+				<canvas id="bgChart" style="width: 85%; margin: 0 auto;"></canvas>
+				<br>
+				<table id="outTab" class="outTable">
+					<tr>
+						<td>Fastener</td>
+						<td>Y - Ycg (in)</td>
+						<td>Z - Zcg (in)</td>
+						<td>Py_Fy (lb)</td>
+						<td>Pz_Fz (lb)</td>
+						<td>Py_Mx (lb)</td>
+						<td>Pz_Mx (lb)</td>
+						<td>Py (lb)</td>
+						<td>Pz (lb)</td>
+						<td>P (lb)</td>
+					</tr>
+				</table>
+				<table style="margin: 0 auto;">
+					<tr>
+						<td>Balance:</td>
+						<td style="text-align: right;">Py<sub>total</sub> =</td>
+						<td id="PyTotOut"></td>
+						<td style="text-align: left;">(lb)</td>
+						<td style="text-align: right;">Pz<sub>total</sub> =</td>
+						<td id="PzTotOut"></td>
+						<td style="text-align: left;">(lb)</td>
+						<td style="text-align: right;">Mx<sub>total</sub> =</td>
+						<td id="MxTotOut"></td>
+						<td style="text-align: left;">(in-lb)</td>
+					</tr>
+				</table>
+			</div>
+			</div>
+			<script>
+					let BGNumFast = 0;
+					function BGAddFast() {
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
+						inTab.appendChild(tRow);
+						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
+						outTab.appendChild(tRowOut);
+					}
+					for (let i=0; i<10; i++) {
+						BGAddFast();
+					}
+			</script>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
