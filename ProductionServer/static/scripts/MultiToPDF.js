@@ -446,6 +446,50 @@ function texLug() {
 	for (let i=15; i<18; i++) tex = tex.replace("<outRow"+(i-1)+">", dumRow[i]);
 	return tex;
 }
+function texBoltgroup() {
+	let tex = boltgroupTemplate;
+	let locY = +GEBID("boltgroupForm", "locyIn").value;
+	let locZ = +GEBID("boltgroupForm", "loczIn").value;
+	let Fy = +GEBID("boltgroupForm", "FyIn").value;
+	let Fz = +GEBID("boltgroupForm", "FzIn").value;
+	let Mx = +GEBID("boltgroupForm", "MxIn").value;
+	let loadCase = +GEBID("boltgroupForm", "loadCaseIn").value;
+	let Ycg = GEBID("boltgroupForm", "YcgOut").innerHTML;
+	let Zcg = GEBID("boltgroupForm", "ZcgOut").innerHTML;
+	let Mxcg = GEBID("boltgroupForm", "MxcgOut").innerHTML;
+	let Ix = GEBID("boltgroupForm", "IxOut").innerHTML;
+	let PyTot = GEBID("boltgroupForm", "PyTotOut").innerHTML;
+	let PzTot = GEBID("boltgroupForm", "PzTotOut").innerHTML;
+	let MxTot = GEBID("boltgroupForm", "MxTotOut").innerHTML;
+	tex = tex
+	.replace("<locy>", locY)
+	.replace("<locz>", locZ)
+	.replace("<Fy>", Fy)
+	.replace("<Fz>", Fz)
+	.replace("<Mx>", Mx)
+	.replace("<loadCase>", loadCase)
+	.replace("<Ycg>", Ycg)
+	.replace("<Zcg>", Zcg)
+	.replace("<Mxcg>", Mxcg)
+	.replace("<Ix>", Ix)
+	.replace("<PyTot>", PyTot)
+	.replace("<PzTot>", PzTot)
+	.replace("<MxTot>", MxTot);
+	
+	let inTab = GEBID("boltgroupForm", "inTab");
+	let dumRow = "";
+	for (let i=0; childSeq(inTab, [0, i+1]) !== undefined; i++) 
+		for (let j=0; j<5; j++)
+			dumRow += (j==0 ? childSeq(inTab, [0,i+1,j]).innerHTML : childSeq(inTab, [0,i+1,j,0]).value) + (j<4?"&":"\\\\\\hline\n");
+	tex = tex.replace("<inRow>", dumRow);
+	let outTab = GEBID("boltgroupForm", "outTab");
+	dumRow = "";
+	for (let i=0; childSeq(outTab, [0, i+1]) !== undefined; i++) 
+		for (let j=0; j<10; j++)
+			dumRow += childSeq(outTab, [0,i+1,j]).innerHTML + (j<9?"&":"\\\\\\hline\n");
+	tex = tex.replace("<outRow>", dumRow);
+	return tex;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -617,6 +661,9 @@ function writeTeX() { // Build TeX document in order from inputs
 			case "frameCapTens":
 				tex += texFrameCT();
 				break;
+			case "boltgroup":
+				tex += texBoltgroup();
+				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));
 				else tex = replaceFromEnd(tex, "%paratop%", texPara(step.replace("paraSort", "")) + "\n\n%paratop%");
@@ -664,6 +711,9 @@ function downloadPDF(debugMode = false) { // Requires a server to convert .tex t
 		formData.append("FPB_chart1_b64png", FPBC1);
 		formData.append("FPB_chart2_b64png", FPBC2);
 		formData.append("FPB_chart3_b64png", FPBC3);
+	}
+	if (GEBID("boltgroupBox").checked) {
+		formData.append("boltgroup_chart_b64png", GEBID("boltgroupForm", "bgChart").toDataURL("image/png"));
 	}
 	fetch((debugMode ? 'http://localhost:5000': '') + '/get_multi_latex', { // Server address (localhost for development)
 		method: 'POST',

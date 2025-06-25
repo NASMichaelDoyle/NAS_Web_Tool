@@ -340,7 +340,6 @@ const lugTemplate = `
 %paratop%
 
 \\subsection{Properties}
-\\label{sect:fWDT1}
 
 Inputted properties are summarized in table \\ref{tab:lug1}. Note the $P_{LUG}$ values are calculated for a <LorC>.
 
@@ -584,6 +583,86 @@ Note:The Ultimate Lug Failure due to tensile rupture is also based on W and Diam
     \\end{tabular}
     \\caption{Pin failure}
     \\label{tab:lug15}
+\\end{table}
+`
+
+// Boltgroup
+const boltgroupTemplate = `
+\\clearpage
+\\section{Boltgroup 2D}
+%paratop%
+
+\\subsection{Properties}
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline $Y$ (in) & $Z$ (in) & $F_Y$ (lb) & $F_Z$ (lb) & $M_X$ (in$\\cdot$lb) & Load Case\\\\\\hline
+      <locy> & <locz> & <Fy> & <Fz> & <Mx> & <loadCase>\\\\\\hline
+    \\end{tabular}}}
+	\\caption{Applied Load}
+	\\label{tab:bg1}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline Fastener & $Y$ (in) & $Z$ (in) & $Y_{efficiency}$ & $Z_{efficiency}$\\\\\\hline
+      <inRow>
+    \\end{tabular}}}
+	\\caption{Fastener locations and efficiencies}
+	\\label{tab:bg2}
+\\end{table}
+
+From the above properties, the following can be calculated in table \\ref{tab:bg3}:
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline $Y_{cg}$ (in) & $Z_{cg}$ (in) & $M_{X\\ cg}$ (in$\\cdot$lb) & $I_X$ (in$^4$)\\\\\\hline
+      <Ycg> & <Zcg> & <Mxcg> & <Ix>\\\\\\hline
+    \\end{tabular}}}
+	\\caption{Center of Gravity}
+	\\label{tab:bg3}
+\\end{table}
+
+\\begin{figure}[htbp!]
+    \\centering
+       \\includegraphics[width=1\\linewidth]{temp/boltgroup_chart_b64png.png}
+    \\caption{Boltgroup diagram}
+    \\label{fig:bg1}
+\\end{figure}
+
+\\subsection{Output}
+
+\\begin{table}[htbp!]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{0.9}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+      \\hline Fastener & $Y-Y_{cg}$ (in) & $Z-Z_{cg}$ (in) & $P_Y\\_F_Y$ (lb) & $P_Z\\_F_Z$ (lb) & $P_Y\\_M_X$ (lb) & $P_Z\\_M_X$ (lb) & $P_Y$ (lb) & $P_Z$ (lb) & $P$ (lb) \\\\\\hline
+      <outRow>
+    \\end{tabular}}}
+	\\caption{Output}
+	\\label{tab:bg4}
+\\end{table}
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|}
+      \\hline $P_{Y\\ total}$ (lb) & $P_{Z\\ total}$ (lb) & $M_{X\\ total}$ (in$\\cdot$lb)\\\\\\hline
+      <PyTot> & <PzTot> & <MxTot>\\\\\\hline
+    \\end{tabular}}}
+	\\caption{Balance}
+	\\label{tab:bg5}
 \\end{table}
 `
 

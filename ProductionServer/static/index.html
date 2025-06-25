@@ -1670,6 +1670,7 @@
 				</table>
 				<br>
 				<button onclick="BGAddFast()" style="margin-left: 0px;">Add Fastener</button>
+				<button onclick="BGRmFast()" style="margin-left: 0px;">Remove Fastener</button>
 			</div>
 			<div style="text-align: center;">
 				<h2>Output</h2>
@@ -1731,6 +1732,15 @@
 						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
 						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
 						outTab.appendChild(tRowOut);
+					}
+					function BGRmFast() {
+						if (BGNumFast < 2) return;
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						inTab.lastElementChild.remove();
+						outTab.lastElementChild.remove();
+						BGNumFast--;
+						boltgroupCalcs();
 					}
 					for (let i=0; i<10; i++) {
 						BGAddFast();
@@ -2839,5 +2849,6 @@
 <script src="scripts/texTemplates.js"></script>
 <script src="scripts/MultiToPDF.js"></script>
 <script src="scripts/frameCSV.js"></script>
+<script src="scripts/inputsCSV.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 // Michael Doyle 2025/05/26
 
-let csvTemplate = `STA Loads
+let csvTemplateF = `STA Loads
 Inputs
 Fcy,tframe,hframe,Yframe,Eframe,Aframe,Iframe,r,L,Eskin,tskin,Astr,Istr,bstr,a,b
 <Fcy>,<tframe>,<hframe>,<Yframe>,<Eframe>,<Aframe>,<Iframe>,<r>,<L>,<Eskin>,<tskin>,<Astr>,<Istr>,<bstr>,<a>,<b>
@@ -11,11 +11,11 @@ P,<P1>,<P2>,<P3>,<P4>,<P5>,<P6>,<P7>,<P8>,<P9>
 S,<S1>,<S2>,<S3>,<S4>,<S5>,<S6>,<S7>,<S8>,<S9>
 M,<M1>,<M2>,<M3>,<M4>,<M5>,<M6>,<M7>,<M8>,<M9>
 Phi,<Phi1>,<Phi2>,<Phi3>,<Phi4>,<Phi5>,<Phi6>,<Phi7>,<Phi8>,<Phi9>
-`
+`;
 
 function frameDownIns() {
 	
-	csv = csvTemplate
+	csv = csvTemplateF
 	.replace("<Fcy>", GEBID("frameSTAForm", "FcyIn").value)
 	.replace("<tframe>", GEBID("frameSTAForm", "tfIn").value)
 	.replace("<hframe>", GEBID("frameSTAForm", "hfIn").value)
