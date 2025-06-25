@@ -22,7 +22,16 @@ frame WDT
 `;
 
 function downloadInput() {
-	
+	let ellData = [];
+	let TCData = [];
+	let cripData = [];
+	let bCripData = [];
+	let OFBData = [];
+	let FPBData = [];
+	let lugData = [];
+	let boltgroupData = [];
+	let fSTAData = [];
+	let fWDTData = [];
 }
 function uploadInput(ins) {
 	let ellData = ins.split("\n")[1].split(",");
