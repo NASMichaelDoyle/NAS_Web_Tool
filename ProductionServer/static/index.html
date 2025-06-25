@@ -76,9 +76,9 @@
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
 		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br><br>
 		<span style="display: flex;">
-			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Loads</button>
-			<button class="button" style="width: 45%;" onclick="GEBID('frameUpIns').click()">Upload Loads</button>
-			<input type="file" id="frameUpIns" accept=".csv" oninput="frameUpIns(this)" style="display:none;">
+			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Inputs</button>
+			<button class="button" style="width: 45%;" onclick="GEBID('UpIns').click()">Upload Inputs</button>
+			<input type="file" id="UpIns" accept=".csv" oninput="const reader = new FileReader(); reader.onload = function(event) {const csv = event.target.result; uploadInput(csv);}; reader.readAsText(this.files[0]);" style="display:none;">
 		</span>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Reports</h4>
 		<span>
