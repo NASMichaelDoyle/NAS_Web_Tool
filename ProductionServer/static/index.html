@@ -76,7 +76,7 @@
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
 		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br><br>
 		<span style="display: flex;">
-			<button class="button" style="width: 45%;" onclick="frameDownIns()">Download Inputs</button>
+			<button class="button" style="width: 45%;" onclick="downloadInput()">Download Inputs</button>
 			<button class="button" style="width: 45%;" onclick="GEBID('UpIns').click()">Upload Inputs</button>
 			<input type="file" id="UpIns" accept=".csv" oninput="const reader = new FileReader(); reader.onload = function(event) {const csv = event.target.result; uploadInput(csv);}; reader.readAsText(this.files[0]);" style="display:none;">
 		</span>
@@ -102,6 +102,8 @@
 		<span>Add Paragraph</span><br><br>
 		<button class="button" style="margin-bottom: 3px;" onclick="downloadTexFile()">Download TeX</button>
 		<button class="button" id="pdfButton" onclick="downloadPDF()">Download PDF</button>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Disclaimer</h4>
+		These tools are to be used at the discretion of a professional engineer, Nova Aerospace Structures does not hold any responsibility for any resulting effects from use of these tools.
 	</div>
 	<div id="FormParent" class="formParent" style="margin-top: -1px;">
 		<div id="hiddenCharts">

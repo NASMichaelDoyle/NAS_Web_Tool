@@ -32,6 +32,63 @@ function downloadInput() {
 	let boltgroupData = [];
 	let fSTAData = [];
 	let fWDTData = [];
+	// Ellipse
+	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
+	for (let i=0; i<ids.length; i++) ellData[i] = GEBID("ellForm", ids[i]).value;
+	// Tension Clip
+	ids = ["tIn", "cIn", "FcyIn", "PSIn", "AWIn", "PCIn"];
+	for (let i=0; i<ids.length; i++) TCData[i] = GEBID("TCForm", ids[i]).value;
+	// Crippling
+	ids = ["FcyIn", "EcIn", "b1In", "b2In", "t1In", "t2In", "E1In", "E2In"];
+	for (let i=0; i<ids.length; i++) cripData[i] = GEBID("cripForm", ids[i]).value;
+	// Bending Crippling
+	ids = ["FcyIn", "EcIn", "b1In", "b2In", "t1In", "t2In", "E1In", "E2In", "TypeIn1", "TypeIn2", "Ybar1In", "Ybar2In"];
+	for (let i=0; i<ids.length; i++) bCripData[i] = GEBID("bCripForm", ids[i]).value;
+	// OFB
+	OFBData[0] = GEBID("OFBForm", "ASSIn").checked;
+	ids = ["materialIn", "EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
+	for (let i=1; i<ids.length+1; i++) OFBData[i] = GEBID("OFBForm", ids[i-1]).value;
+	// FPB
+	ids = ["ETIn", "fsIn", "aIn", "bIn", "tIn", "EcIn", "nuIn", "f1In", "f2In"];
+	for (let i=0; i<ids.length; i++) FPBData[i] = GEBID("FPBForm", ids[i]).value;
+	// Lug
+	for (let i=0; i<22; i++)
+		if (childSeq(GEBID("lugForm", "inTab1"), [0, i, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab1"), [0, i, 1, 0]).value;// console.log(lugData);}
+		else lugData[i] = "skip";
+	for (let i=22; i<44; i++)
+		if (childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1, 0]).value;
+		else lugData[i] = "skip";
+	for (let i=44; i<48; i++)
+		if (childSeq(GEBID("lugForm", "inTab3"), [0, i-44, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab3"), [0, i-44, 1, 0]).value;
+		else lugData[i] = "skip";
+	for (let i=48; i<56; i++)
+		if (childSeq(GEBID("lugForm", "inTab4"), [0, i-48, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab4"), [0, i-48, 1, 0]).value;
+		else lugData[i] = "skip";
+	// Boltgroup
+	ids = ["locyIn", "loczIn", "FyIn", "FzIn", "MxIn", "loadCaseIn"];
+	for (let i=0; i<6; i++) boltgroupData[i] = GEBID("boltgroupForm", ids[i]).value;
+	for (let i=6; childSeq(GEBID("boltgroupForm", "inTab"), [0, parseInt((i-6)/4+1)]) !== undefined; i++) boltgroupData[i] = childSeq(GEBID("boltgroupForm", "inTab"), [0, parseInt((i-6)/4+1), (i-6)%4+1, 0]).value;
+	// frame STA
+	ids = ["FcyIn", "tfIn", "hfIn", "YfIn", "EfIn", "AfIn", "IfIn", "rIn", "LIn", "EskIn", "tskIn", "AstrIn", "IstrIn", "bstrIn", "aIn", "bIn"];
+	for (let i=0; i<16; i++) fSTAData[i] = GEBID("frameSTAForm", ids[i]).value;
+	for (let i=16; i<52; i++) fSTAData[i] = childSeq(GEBID("frameSTAForm", "locLoadTable"), [0, parseInt((i-16)/9+1), (i-16)%9+1, 0]).value;
+	// frame WDT
+	for (let i=0; i<9; i++) fWDTData[i] = childSeq(GEBID("frameDiagTensForm", "SPICTab"), [0, parseInt(i/3+1), i%3+(i%3==2?2:1), 0]).value;
+	for (let i=9; i<18; i++) fWDTData[i] = childSeq(GEBID("frameDiagTensForm", "SPSCTab"), [0, parseInt((i-9)/3+1), (i-9)%3+((i-9)%3==2?2:1), 0]).value;
+	ids = ["EIn", "EcIn", "FtuIn", "FcyIn", "FsuIn", "bIn", "hIn", "tstiffIn", "twebIn", "tchordIn", "vIn", "KssIn", "RhIn", "RdIn", "FscrIn", "kIn", "alphaIn", "FsallIn"];
+	for (let i=18; i<ids.length+18; i++) fWDTData[i] = GEBID("frameDiagTensForm", ids[i-18]).value;
+	
+	let csv = "";
+	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT"];
+	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData];
+	for (let i=0; i<ids.length; i++) csv += ids[i] + "\n" + allData[i] + "\n";
+	const element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csv));
+	element.setAttribute('download', "nas_inputs.csv");
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
 }
 function uploadInput(ins) {
 	let ellData = ins.split("\n")[1].split(",");
@@ -63,7 +120,7 @@ function uploadInput(ins) {
 	// OFB
 	GEBID("OFBForm", "ASSIn").checked = OFBData[0];
 	ids = ["materialIn", "EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
-	for (let i=1; i<OFBData.length-1; i++) GEBID("OFBForm", ids[i]).value = OFBData[i];
+	for (let i=1; i<OFBData.length-1; i++) GEBID("OFBForm", ids[i-1]).value = OFBData[i];
 	OFBcalcs();
 	// FPB
 	ids = ["ETIn", "fsIn", "aIn", "bIn", "tIn", "EcIn", "nuIn", "f1In", "f2In"];
