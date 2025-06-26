@@ -2086,6 +2086,7 @@ function getfc_cr(a, b, t, E, nc, mu_e, Fcy, ff) {
 	if (f > Fcy) f = Fcy;
 	return [k, Et, Es, mu, N, fc_cre, f];
 }
+
 // WDT
 function frameWDTCalcs() {
 	let [dum, IchInit, AchInit] = WDTSPCalcs(GEBID("frameDiagTensForm", "SPICTab"), GEBID("frameDiagTensForm", "SPICOut"));
