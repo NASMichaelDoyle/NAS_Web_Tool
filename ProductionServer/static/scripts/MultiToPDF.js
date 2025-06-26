@@ -403,6 +403,93 @@ function chartsFPB() {
 		options: options3
 	});
 }
+function texLug() {
+	let tex = lugTemplate;
+	let dumRow = [];
+	// Inputs
+	let dummy = [];
+	let ids = ["LorCIn", "DholeIn", "DpinIn", "DIbushIn", "DObushIn", "WIn", "toIn", "gIn", "loadIDIn", "UFacIn", "FFacIn", "PaxialIn", "PtransIn", "tlugIn", "tiIn", "tcontactIn", "aIn", "cIn", "s1In", "s2In", "alloyIn", "lugMatIn", "FtuLIn", "FtuLTIn", "FtuSTIn", "FtyLIn", "FtyLTIn", "FtySTIn", "Fbry15In", "Fbry20In", "Fbru15In", "Fbru20In", "FcorroIn", "EIn", "muIn", "eIn", "tstockIn", "ALDirIn", "lugPlaneIn", "specPinIn", "matPinIn", "MallowIn", "E2In", "specBushIn", "matBushIn", "PradIn", "FbryIn", "FbruIn", "EBushIn", "muBushIn"];
+	for (let i=0; i < ids.length; i++)
+		dummy[i] = GEBID("lugForm", ids[i]).value;
+	let [LorC, Dhole, Dpin, DIbush, DObush, W, to, g, loadID, UFac, FFac, Paxial, Ptrans, tlug, ti, tcontact, a, c, s1, s2, alloy, lugMat, FtuL, FtuLT, FtuST, FtyL, FtyLT, FtyST, Fbry15, Fbry20, Fbru15, Fbru20, Fcorro, Elug, mu, e, tstock, ALDir, lugPlane, specPin, matPin, Mallow, Epin, specBush, matBush, Prad, Fbry, Fbru, EBush, muBush] = dummy;
+	let PlugA = GEBID("lugForm", "PlugAOut").innerHTML, PlugT = GEBID("lugForm", "PlugTOut").innerHTML;
+	tex = tex.replace("<LorC>", LorC);
+	// Build row
+	dumRow[0] = Dhole+"&"+Dpin+"&"+DIbush+"&"+DObush+"&"+W+"&"+to+"&"+g;
+	dumRow[1] = tlug+"&"+ti+"&"+tcontact+"&"+a+"&"+c+"&"+s1+"&"+s2;
+	dumRow[2] = loadID+"&"+UFac+"&"+FFac+"&"+Paxial+"&"+Ptrans+"&"+PlugA+"&"+PlugT;
+	dumRow[3] = alloy+"&"+lugMat;
+	dumRow[4] = FtuL+"&"+FtuLT+"&"+FtuST+"&"+FtyL+"&"+FtyLT+"&"+FtyST;
+	dumRow[5] = Fbry15+"&"+Fbry20+"&"+Fbru15+"&"+Fbru20+"&"+Fcorro;
+	dumRow[6] = Elug+"&"+mu+"&"+e+"&"+tstock+"&"+ALDir+"&"+lugPlane;
+	dumRow[7] = specPin+"&"+matPin+"&"+Mallow+"&"+Epin;
+	dumRow[8] = specBush+"&"+matBush+"&"+Prad+"&"+Fbry+"&"+Fbru+"&"+EBush+"&"+muBush;
+	
+	for (let i=0; i< dumRow.length; i++) tex = tex.replace("<inRow"+(i+1)+">", dumRow[i]);
+	dumRow = [];
+	for (let i=0; i<18; i++) {
+		dumRow[i] = childSeq(GEBID("lugForm", "outTab"+(i+1)), [0, 0, 1]).innerHTML;
+		for (let j=1; j<GEBID("lugForm", "outTab"+(i+1)).children[0].children.length; j++) {
+			if (childSeq(GEBID("lugForm", "outTab"+(i+1)), [0, j]).children.length < 2) continue;
+			if (childSeq(GEBID("lugForm", "outTab"+(i+1)), [0, j, 0]).innerHTML.search("MS") != -1) 
+				dumRow[i] += "&" + "\\cellcolor{" + (+childSeq(GEBID("lugForm", "outTab"+(i+1)), [0, j, 1]).innerHTML <= 0 ? "red":"gudgreen") + "}{" + childSeq(GEBID("lugForm", "outTab"+(i+1)), [0, j, 1]).innerHTML + "}";
+			else dumRow[i] += "&" + childSeq(GEBID("lugForm", "outTab"+(i+1)), [0, j, 1]).innerHTML;
+		}
+	}
+	for (let i=0; i<5; i++) tex = tex.replace("<outRow"+(i+1)+">", dumRow[i]);
+	let specialRow = dumRow[5].split("&");
+	tex = tex
+	.replace("<outRow6>", specialRow[0]+"&"+specialRow[1]+"&"+specialRow[2])
+	.replace("<outRow7>", specialRow[3]+"&"+specialRow[4]+"&"+specialRow[5]+"&"+specialRow[6]+"&"+specialRow[7]);
+	for (let i=6; i<9; i++) tex = tex.replace("<outRow"+(i+2)+">", dumRow[i]);
+	for (let i=9; i<15; i+=2) tex = tex.replace("<outRow"+(11+(i-9)/2)+">", dumRow[i]+"&"+dumRow[i+1]);
+	for (let i=15; i<18; i++) tex = tex.replace("<outRow"+(i-1)+">", dumRow[i]);
+	return tex;
+}
+function texBoltgroup() {
+	let tex = boltgroupTemplate;
+	let locY = +GEBID("boltgroupForm", "locyIn").value;
+	let locZ = +GEBID("boltgroupForm", "loczIn").value;
+	let Fy = +GEBID("boltgroupForm", "FyIn").value;
+	let Fz = +GEBID("boltgroupForm", "FzIn").value;
+	let Mx = +GEBID("boltgroupForm", "MxIn").value;
+	let loadCase = +GEBID("boltgroupForm", "loadCaseIn").value;
+	let Ycg = GEBID("boltgroupForm", "YcgOut").innerHTML;
+	let Zcg = GEBID("boltgroupForm", "ZcgOut").innerHTML;
+	let Mxcg = GEBID("boltgroupForm", "MxcgOut").innerHTML;
+	let Ix = GEBID("boltgroupForm", "IxOut").innerHTML;
+	let PyTot = GEBID("boltgroupForm", "PyTotOut").innerHTML;
+	let PzTot = GEBID("boltgroupForm", "PzTotOut").innerHTML;
+	let MxTot = GEBID("boltgroupForm", "MxTotOut").innerHTML;
+	tex = tex
+	.replace("<locy>", locY)
+	.replace("<locz>", locZ)
+	.replace("<Fy>", Fy)
+	.replace("<Fz>", Fz)
+	.replace("<Mx>", Mx)
+	.replace("<loadCase>", loadCase)
+	.replace("<Ycg>", Ycg)
+	.replace("<Zcg>", Zcg)
+	.replace("<Mxcg>", Mxcg)
+	.replace("<Ix>", Ix)
+	.replace("<PyTot>", PyTot)
+	.replace("<PzTot>", PzTot)
+	.replace("<MxTot>", MxTot);
+	
+	let inTab = GEBID("boltgroupForm", "inTab");
+	let dumRow = "";
+	for (let i=0; childSeq(inTab, [0, i+1]) !== undefined; i++) 
+		for (let j=0; j<5; j++)
+			dumRow += (j==0 ? childSeq(inTab, [0,i+1,j]).innerHTML : childSeq(inTab, [0,i+1,j,0]).value) + (j<4?"&":"\\\\\\hline\n");
+	tex = tex.replace("<inRow>", dumRow);
+	let outTab = GEBID("boltgroupForm", "outTab");
+	dumRow = "";
+	for (let i=0; childSeq(outTab, [0, i+1]) !== undefined; i++) 
+		for (let j=0; j<10; j++)
+			dumRow += childSeq(outTab, [0,i+1,j]).innerHTML + (j<9?"&":"\\\\\\hline\n");
+	tex = tex.replace("<outRow>", dumRow);
+	return tex;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -559,6 +646,9 @@ function writeTeX() { // Build TeX document in order from inputs
 			case "FPB":
 				tex += texFPB(FPBTemplate);
 				break;
+			case "lug":
+				tex += texLug();
+				break;
 			case "frameSTA":
 				tex += texFrameSTA();
 				break;
@@ -570,6 +660,9 @@ function writeTeX() { // Build TeX document in order from inputs
 				break;
 			case "frameCapTens":
 				tex += texFrameCT();
+				break;
+			case "boltgroup":
+				tex += texBoltgroup();
 				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));
@@ -618,6 +711,9 @@ function downloadPDF(debugMode = false) { // Requires a server to convert .tex t
 		formData.append("FPB_chart1_b64png", FPBC1);
 		formData.append("FPB_chart2_b64png", FPBC2);
 		formData.append("FPB_chart3_b64png", FPBC3);
+	}
+	if (GEBID("boltgroupBox").checked) {
+		formData.append("boltgroup_chart_b64png", GEBID("boltgroupForm", "bgChart").toDataURL("image/png"));
 	}
 	fetch((debugMode ? 'http://localhost:5000': '') + '/get_multi_latex', { // Server address (localhost for development)
 		method: 'POST',
