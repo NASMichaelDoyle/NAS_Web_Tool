@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="styles/frameStyle.css">
 <link rel="stylesheet" href="styles/sortableStyle.css">
 <link rel="stylesheet" href="styles/boltgroupStyle.css">
+<link rel="stylesheet" href="styles/LJD.css">
 <style></style>
 <script src="scripts/MultiUtilities.js"></script>
 <!-- Libraries -->
@@ -70,6 +71,7 @@
 		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
 		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
 		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
+		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -1748,6 +1750,75 @@
 						BGAddFast();
 					}
 			</script>
+		</div>
+		<div class="analForm" id="LJDForm">
+			<template id="LJDinTabInTemplate">
+				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
+			</template>
+			<template id="LJDinTabBorRTemplate">
+				<select style="width: 100%; background-color: transparent;">
+					<option value="bolt">Bolt</option>
+					<option value="rivet">Rivet</option>
+				</select>
+			</template>
+			<template id="LJDinTabFastTypeTemplate">
+			<div class="CSContainer">
+				<select style="width: 100%; background-color: transparent;">
+					<option value="1">Single</option>
+					<option value="2">Double</option>
+					<option value="N">N-group</option>
+					<option value="SW">Spot Weld</option>
+					<option value="0">None</option>
+				</select>
+				<dialog>
+					<h2>Enter number of Fasteners</h2>
+					<input type="number" autofocus>
+					<div class="dialog-buttons">
+						<button id="cnlBtn">Cancel</button>
+						<button id="okBtn">OK</button>
+					</div>
+				</dialog>
+			</div>
+			</template>
+			<header><h2>Lap Joint Doubler</h2></header>
+			<div class="formIO">
+			<h3>Instructions</h3>
+			<p>Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+				<br>Then press "Prepare" to generate the input tables</p>
+			<h3>Setup</h3>
+			<table class="inTab">
+				<tr>
+					<td># of Plates High</td>
+					<td># of Plates Long</td>
+					<td style="width: 15%;"></td>
+					<td>Fast Flex H - Huth</td>
+					<td>Spotweld K</td>
+					<td>Total Applied Load</td>
+					<td>Matrix Output</td>
+				</tr>
+				<tr>
+					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
+					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
+					<td></td>
+					<td><input id="FastFlexIn" type="number" placeholder="Enter"></td>
+					<td><input id="SWKIn" type="number" placeholder="Enter K"></td>
+					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
+					<td><select id="matrixIn" name="matrixIn" onchange="">
+						<option value="1">True</option>
+						<option value="0" selected="1">False</option>
+					</select></td>
+				</tr>
+			</table>
+			<br>
+			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
+			<button style="width: 15%;" onclick="LJDSketch()">Sketch</button>
+			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
+			<br>
+			</div>
+			<h2 style="text-align: center;">Input</h2>
+			<table class="inTab2" id="inTab1"></table>
+			<br>
+			<table class="inTab2" id="inTab2"></table>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
