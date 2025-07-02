@@ -1770,7 +1770,7 @@ function SUM(ARR) { // Excel array sum
 	for (let i=0; i<ARR.length; i++) result += ARR[i];
 	return +result;
 }
-function array2Transpose(ARR) { // Matrix shit lol
+function array2Transpose(ARR) { // Matrix shtuff lol
 	let result = [];
 	for (let i=0; i< ARR[0].length; i++) {
 		result[i] = [];
@@ -2156,8 +2156,8 @@ function WDTSPCalcs(table, table2) {
 	
 	return [Azt/At, Iyot+Az2t-Math.pow(Azt/At, 2)*At, At];
 }
-
 function dbgSetAll() {
+
 	let dummy = [];
 	// Set Ellipse
 	document.getElementById("ellForm").querySelector("#Fx").value = 1000;

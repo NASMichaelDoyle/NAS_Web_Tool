@@ -1643,8 +1643,8 @@
 						<td></td>
 						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
 						<td><input type="number" placeholder="Enter Z" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Yeff" value="1" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Zeff" value="1" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Yeff" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Zeff" onchange="boltgroupCalcs()"></td>
 					</tr>
 				</template>
 				<template id="bgOutRowTemplate">
@@ -1744,7 +1744,7 @@
 						BGNumFast--;
 						boltgroupCalcs();
 					}
-					for (let i=0; i<10; i++) {
+					for (let i=0; i<4; i++) {
 						BGAddFast();
 					}
 			</script>
