@@ -1759,8 +1759,8 @@
 			</template>
 			<template id="LJDinTabBorRTemplate">
 				<select style="width: 100%; background-color: transparent;">
-					<option value="bolt">Bolt</option>
-					<option value="rivet">Rivet</option>
+					<option value="B">Bolt</option>
+					<option value="R">Rivet</option>
 				</select>
 			</template>
 			<template id="LJDinTabFastTypeTemplate">
@@ -1815,7 +1815,6 @@
 			</table>
 			<br>
 			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
-			<button style="width: 15%;" onclick="LJDSketch()">Sketch</button>
 			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
 			<br>
 			</div>
@@ -1823,6 +1822,10 @@
 			<table class="inTab2" id="inTab1"></table>
 			<br>
 			<table class="inTab2" id="inTab2"></table>
+			<h2 style="text-align: center;">Output</h2>
+			<table class="outTab" id="outTab"></table>
+			<br>
+			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
