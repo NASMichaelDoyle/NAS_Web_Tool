@@ -1,6 +1,7 @@
 <!DOCTYPE html> <!-- blacksun comment -->
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multi-Analysis</title>
 <link rel="stylesheet" href="styles/mainStyle.css">
 <link rel="stylesheet" href="styles/ellipseStyle.css">
@@ -11,6 +12,7 @@
 <link rel="stylesheet" href="styles/frameStyle.css">
 <link rel="stylesheet" href="styles/sortableStyle.css">
 <link rel="stylesheet" href="styles/boltgroupStyle.css">
+<link rel="stylesheet" href="styles/LJD.css">
 <style></style>
 <script src="scripts/MultiUtilities.js"></script>
 <!-- Libraries -->
@@ -74,6 +76,7 @@
 		</div>
 		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
 		<div style="display: none;"> <!-- DLC -->
+		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -111,7 +114,7 @@
 		<button class="button" id="pdfButton" onclick="downloadPDF()">Download PDF</button>
 		</div>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Disclaimer</h4>
-		These tools are to be used at the discretion of a professional engineer, Nova Aerospace Structures does not hold any responsibility for any resulting effects from use of these tools.
+		Not every tool fits every application, inputs and results need to be verified by a qualified engineer.
 	</div>
 	<div id="FormParent" class="formParent" style="margin-top: -1px;">
 		<div id="hiddenCharts">
@@ -1621,38 +1624,37 @@
 		</div>
 		<div class="analForm" id="boltgroupForm">
 			<header><h2>Boltgroup 2D</h2></header>
-			<div style="display: grid; grid-template-columns: 30% 70%;">
-			<div class="formIO">
+			<div class="formIO" style="float: left; width: 270px;">
 				<h3>Applied Load</h3>
 				<table>
 					<tr>
+						<td>Location X</td>
 						<td>Location Y</td>
-						<td>Location Z</td>
+						<td>Fx (lb)</td>
 						<td>Fy (lb)</td>
-						<td>Fz (lb)</td>
 					</tr>
 					<tr>
-						<td><input id="locyIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
-						<td><input id="loczIn" type="number" placeholder="Enter Z" onchange="boltgroupCalcs()"></td>
-						<td><input id="FyIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
-						<td><input id="FzIn" type="number" placeholder="Enter Fz" onchange="boltgroupCalcs()"></td>
+						<td><input id="locyIn" type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
+						<td><input id="loczIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input id="FyIn" type="number" placeholder="Enter Fx" onchange="boltgroupCalcs()"></td>
+						<td><input id="FzIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
 					</tr>
 					<tr>
-						<td>Mx (in*lb)</td>
+						<td>Mz (in*lb)</td>
 						<td>Load Case</td>
 					</tr>
 					<tr>
-						<td><input id="MxIn" type="number" placeholder="Enter Mx" onchange="boltgroupCalcs()"></td>
+						<td><input id="MxIn" type="number" placeholder="Enter Mz" onchange="boltgroupCalcs()"></td>
 						<td><input id="loadCaseIn" type="number" placeholder="Enter Case" onchange="boltgroupCalcs()"></td>
 					</tr>
 				</table>
 				<template id="bgInRowTemplate">
 					<tr>
 						<td></td>
+						<td><input type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
 						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Z" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Yeff" value="1" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Zeff" value="1" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Xeff" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Yeff" onchange="boltgroupCalcs()"></td>
 					</tr>
 				</template>
 				<template id="bgOutRowTemplate">
@@ -1672,10 +1674,10 @@
 				<table id="inTab">
 					<tr>
 						<td>Fastener</td>
+						<td>X (in)</td>
 						<td>Y (in)</td>
-						<td>Z (in)</td>
+						<td title="X efficiency">X<sub>eff</sub></td>
 						<td title="Y efficiency">Y<sub>eff</sub></td>
-						<td title="Z efficiency">Z<sub>eff</sub></td>
 					</tr>
 				</table>
 				<br>
@@ -1686,10 +1688,10 @@
 				<h2>Output</h2>
 				<table style="margin: 0 auto; border-collapse: collapse;">
 					<tr>
+						<td style="border: 1px solid black;">Xcg</td>
 						<td style="border: 1px solid black;">Ycg</td>
-						<td style="border: 1px solid black;">Zcg</td>
-						<td style="border: 1px solid black;">Mx_cg</td>
-						<td style="border: 1px solid black;">Ix</td>
+						<td style="border: 1px solid black;">Mz_cg</td>
+						<td style="border: 1px solid black;">Iz</td>
 					</tr>
 					<tr>
 						<td id="YcgOut" style="border: 1px solid black;"></td>
@@ -1699,37 +1701,36 @@
 					</tr>
 				</table>
 				<br>
-				<canvas id="bgChart" style="width: 85%; margin: 0 auto;"></canvas>
+				<canvas id="bgChart" style="margin: 0 auto; width: 500px;"></canvas>
 				<br>
 				<table id="outTab" class="outTable">
 					<tr>
 						<td>Fastener</td>
-						<td>Y - Ycg (in)</td>
-						<td>Z - Zcg (in)</td>
+						<td>X (in)</td>
+						<td>Y (in)</td>
+						<td>Px_Fx (lb)</td>
 						<td>Py_Fy (lb)</td>
-						<td>Pz_Fz (lb)</td>
-						<td>Py_Mx (lb)</td>
-						<td>Pz_Mx (lb)</td>
+						<td>Px_Mz (lb)</td>
+						<td>Py_Mz (lb)</td>
+						<td>Px (lb)</td>
 						<td>Py (lb)</td>
-						<td>Pz (lb)</td>
 						<td>P (lb)</td>
 					</tr>
 				</table>
 				<table style="margin: 0 auto;">
 					<tr>
 						<td>Balance:</td>
-						<td style="text-align: right;">Py<sub>total</sub> =</td>
+						<td style="text-align: right;">Px<sub>total</sub> =</td>
 						<td id="PyTotOut"></td>
 						<td style="text-align: left;">(lb)</td>
-						<td style="text-align: right;">Pz<sub>total</sub> =</td>
+						<td style="text-align: right;">Py<sub>total</sub> =</td>
 						<td id="PzTotOut"></td>
 						<td style="text-align: left;">(lb)</td>
-						<td style="text-align: right;">Mx<sub>total</sub> =</td>
+						<td style="text-align: right;">Mz<sub>total</sub> =</td>
 						<td id="MxTotOut"></td>
 						<td style="text-align: left;">(in-lb)</td>
 					</tr>
 				</table>
-			</div>
 			</div>
 			<script>
 					let BGNumFast = 0;
@@ -1752,10 +1753,79 @@
 						BGNumFast--;
 						boltgroupCalcs();
 					}
-					for (let i=0; i<10; i++) {
+					for (let i=0; i<4; i++) {
 						BGAddFast();
 					}
 			</script>
+		</div>
+		<div class="analForm" id="LJDForm">
+			<template id="LJDinTabInTemplate">
+				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
+			</template>
+			<template id="LJDinTabBorRTemplate">
+				<select style="width: 100%; background-color: transparent;">
+					<option value="bolt">Bolt</option>
+					<option value="rivet">Rivet</option>
+				</select>
+			</template>
+			<template id="LJDinTabFastTypeTemplate">
+			<div class="CSContainer">
+				<select style="width: 100%; background-color: transparent;">
+					<option value="1">Single</option>
+					<option value="2">Double</option>
+					<option value="N">N-group</option>
+					<option value="SW">Spot Weld</option>
+					<option value="0">None</option>
+				</select>
+				<dialog>
+					<h2>Enter number of Fasteners</h2>
+					<input type="number" autofocus>
+					<div class="dialog-buttons">
+						<button id="cnlBtn">Cancel</button>
+						<button id="okBtn">OK</button>
+					</div>
+				</dialog>
+			</div>
+			</template>
+			<header><h2>Lap Joint Doubler</h2></header>
+			<div class="formIO">
+			<h3>Instructions</h3>
+			<p>Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+				<br>Then press "Prepare" to generate the input tables</p>
+			<h3>Setup</h3>
+			<table class="inTab">
+				<tr>
+					<td># of Plates High</td>
+					<td># of Plates Long</td>
+					<td style="width: 15%;"></td>
+					<td>Fast Flex H - Huth</td>
+					<td>Spotweld K</td>
+					<td>Total Applied Load</td>
+					<td>Matrix Output</td>
+				</tr>
+				<tr>
+					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
+					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
+					<td></td>
+					<td><input id="FastFlexIn" type="number" placeholder="Enter"></td>
+					<td><input id="SWKIn" type="number" placeholder="Enter K"></td>
+					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
+					<td><select id="matrixIn" name="matrixIn" onchange="">
+						<option value="1">True</option>
+						<option value="0" selected="1">False</option>
+					</select></td>
+				</tr>
+			</table>
+			<br>
+			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
+			<button style="width: 15%;" onclick="LJDSketch()">Sketch</button>
+			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
+			<br>
+			</div>
+			<h2 style="text-align: center;">Input</h2>
+			<table class="inTab2" id="inTab1"></table>
+			<br>
+			<table class="inTab2" id="inTab2"></table>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>

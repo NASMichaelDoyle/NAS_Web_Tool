@@ -78,6 +78,7 @@ function downloadInput() {
 	ids = ["EIn", "EcIn", "FtuIn", "FcyIn", "FsuIn", "bIn", "hIn", "tstiffIn", "twebIn", "tchordIn", "vIn", "KssIn", "RhIn", "RdIn", "FscrIn", "kIn", "alphaIn", "FsallIn"];
 	for (let i=18; i<ids.length+18; i++) fWDTData[i] = GEBID("frameDiagTensForm", ids[i-18]).value;
 	
+	// Download it
 	let csv = "";
 	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT"];
 	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData];

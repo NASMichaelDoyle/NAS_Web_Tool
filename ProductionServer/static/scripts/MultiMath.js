@@ -1679,8 +1679,8 @@ function boltgroupCalcs() {
 	outs = [];
 	for (let i=0; i<fastProps.length; i++) {
 		outs[i] = [];
-		outs[i][0] = fastProps[i][0]==""?"":fastProps[i][0]-Ycg;
-		outs[i][1] = fastProps[i][0]==""?"":fastProps[i][1]-Zcg;
+		outs[i][0] = fastProps[i][0]==""?"":fastProps[i][0];//-Ycg;
+		outs[i][1] = fastProps[i][0]==""?"":fastProps[i][1];//-Zcg;
 		outs[i][2] = fastProps[i][0]==""?"":Fy*fastProps[i][2]/SUM(temp[2]);
 		outs[i][3] = fastProps[i][1]==""?"":Fz*fastProps[i][3]/SUM(temp[3]);
 		outs[i][4] = fastProps[i][0]==""?"":-fastProps[i][2]*(fastProps[i][1]-Zcg)*Mxcg/Ix;
@@ -1689,10 +1689,10 @@ function boltgroupCalcs() {
 		outs[i][7] = fastProps[i][0]==""?"":outs[i][3]+outs[i][5];
 		outs[i][8] = fastProps[i][0]==""?"":Math.sqrt(outs[i][6]**2 + outs[i][7]**2);
 	}
-	//console.log(outs);
+	console.log(outs); console.log(array2Transpose(outs)); console.log(array2Transpose(outs)[6]); console.log(SUM(array2Transpose(outs)[6]));
 	let PyTot = SUM(array2Transpose(outs)[6]);
 	let PzTot = SUM(array2Transpose(outs)[7]);
-	let MxTot = mxtotal(array2Transpose(outs)[6],array2Transpose(outs)[7],temp[0],temp[1],Ycg,Zcg);
+	let MxTot = mxtotal(array2Transpose(outs)[6],array2Transpose(outs)[7],temp[0],temp[1],Ycg,Zcg, fastProps.length);
 	//console.log(MxTot);
 	// Set
 	GEBID("boltgroupForm", "YcgOut").innerHTML = sRound(Ycg, 3);
@@ -1733,7 +1733,7 @@ function boltgroupCalcs() {
 			}]
 		},
 		options: {
-			responsive: true,
+			responsive: false,
 			maintainAspectRatio: true,
 			aspectRatio: 1.5,
             scales: {
@@ -1742,14 +1742,14 @@ function boltgroupCalcs() {
                     position: 'bottom',
                     title: {
                         display: true,
-                        text: 'Y-Axis'
+                        text: 'X-Axis'
                     }
                 },
                 y: {
                     type: 'linear',
                     title: {
                         display: true,
-                        text: 'Z-Axis'
+                        text: 'Y-Axis'
                     }
                 }
             }
@@ -1770,7 +1770,7 @@ function SUM(ARR) { // Excel array sum
 	for (let i=0; i<ARR.length; i++) result += ARR[i];
 	return +result;
 }
-function array2Transpose(ARR) { // Matrix shit lol
+function array2Transpose(ARR) { // Matrix shtuff lol
 	let result = [];
 	for (let i=0; i< ARR[0].length; i++) {
 		result[i] = [];
@@ -1778,9 +1778,9 @@ function array2Transpose(ARR) { // Matrix shit lol
 	}
 	return result;
 }
-function mxtotal(Py,Pz,y,z,Ycg,Zcg) {
+function mxtotal(Py,Pz,y,z,Ycg,Zcg, n) {
 	let result = 0, Pyy, Pzz;
-	for (let i = 0; i<30; i++) {
+	for (let i = 0; i<n; i++) {
 		if (Py[i] == "") Pyy = 0;
 		else Pyy = Py[i];
 		if (Pz[i] == "") Pzz = 0;
@@ -1788,6 +1788,206 @@ function mxtotal(Py,Pz,y,z,Ycg,Zcg) {
 		result += -Pyy * (z[i] - Zcg) + Pzz * (y[i] - Ycg);
 	}
 	return result;
+}
+
+// Lap Joint Doubler funcs
+function LJDCalcs() {
+	
+}
+function LJDPrepIns() {
+	let Tab1 = GEBID("LJDForm", "inTab1");
+	let Tab2 = GEBID("LJDForm", "inTab2");
+	// Clear tables
+	for (let elem of [Tab1, Tab2]) while (elem.children[0] !== undefined) elem.children[0].remove();
+	
+	let pHigh = +GEBID("LJDForm", "platesHighIn").value;
+	let pLong = +GEBID("LJDForm", "platesLongIn").value;
+	if (pHigh<1 || pLong<1) return;
+	let dumRow = document.createElement("tr");
+	let dumCell = document.createElement("td");
+	// Headers
+	dumCell.innerHTML = "Props at Fast"
+	dumRow.appendChild(dumCell);
+	dumCell = document.createElement("td");
+	dumCell.innerHTML = "P<sub>Applied</sub>"
+	dumRow.appendChild(dumCell);
+	for (let i=1; i<pLong; i++) {
+		dumCell = document.createElement("td");
+		dumCell.innerHTML = "Fast #" + i;
+		dumRow.appendChild(dumCell);
+	}
+	dumCell = document.createElement("td");
+	dumCell.innerHTML = "Fixed"
+	dumRow.appendChild(dumCell);
+	Tab1.appendChild(dumRow);
+	// Coordinates
+	dumRow = document.createElement("tr");
+	dumRow.style.backgroundColor = "#ccffff";
+	dumCell = document.createElement("th");
+	dumCell.innerHTML = "X-Coord"
+	dumRow.appendChild(dumCell);
+	for (let i=0; i<pLong+1; i++) {
+		dumCell = document.createElement("td");
+		dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
+		dumRow.appendChild(dumCell);
+	}
+	Tab1.appendChild(dumRow);
+	// Make inputs
+	for (let sect of ["Thickness (in)", "Width (in)", "YM (Msi)"]) {
+		dumRow = document.createElement("tr");
+		dumCell = document.createElement("th");
+		dumCell.innerHTML = sect;
+		dumRow.appendChild(dumCell);
+		Tab1.appendChild(dumRow);
+		for (let i=0; i<pHigh; i++) {
+			dumRow = document.createElement("tr");
+			dumRow.style.backgroundColor = colorIndex(i);
+			dumCell = document.createElement("th");
+			dumCell.innerHTML = (sect=="YM (Msi)"?"E":sect.toLowerCase().split("")[0]) + (i+1);
+			dumRow.appendChild(dumCell);
+			for (let j=0; j<pLong+1; j++) {
+				dumCell = document.createElement("td");
+				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); // If thickness change inTab2
+				dumRow.appendChild(dumCell);
+			}
+			Tab1.appendChild(dumRow);
+		}
+		Tab1.appendChild(document.createElement("br"));
+	}
+	for (let sect of ["Fast Dia (in)", "Fast E (in)"]) {
+		dumRow = document.createElement("tr");
+		dumCell = document.createElement("th");
+		dumCell.innerHTML = sect;
+		dumRow.appendChild(dumCell);
+		dumCell = document.createElement("td");
+		dumCell.style.border = "none";
+		dumRow.appendChild(dumCell);
+		for (let i=1; i<pLong; i++) {
+			dumCell = document.createElement("td");
+			dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
+			dumCell.style.backgroundColor = "#ccffff";
+			dumRow.appendChild(dumCell);
+		}
+		Tab1.appendChild(dumRow);
+	}
+	dumRow = document.createElement("tr");
+	dumCell = document.createElement("th");
+	dumCell.innerHTML = "Bolt or Rivet";
+	dumRow.appendChild(dumCell);
+	dumCell = document.createElement("td");
+	dumCell.style.border = "none";
+	dumRow.appendChild(dumCell);
+	for (let i=1; i<pLong; i++) {
+		dumCell = document.createElement("td");
+		dumCell.appendChild(GEBID("LJDForm", "LJDinTabBorRTemplate").content.cloneNode(true).firstElementChild);
+		dumCell.style.backgroundColor = "#ccffff";
+		dumRow.appendChild(dumCell);
+	}
+	Tab1.appendChild(dumRow);
+	// Second table
+	dumRow = document.createElement("tr");
+	dumCell = document.createElement("th");
+	dumCell.innerHTML = "FEM Parameters";
+	dumRow.appendChild(dumCell);
+	for (let i=1; i<=pLong; i++) {
+		dumCell = document.createElement("th");
+		dumCell.innerHTML = "Plate " + i;
+		dumRow.appendChild(dumCell);
+		dumCell = document.createElement("th");
+		dumCell.innerHTML = i<pLong?("Fast " + i):"Fixed";
+		dumRow.appendChild(dumCell);
+	}
+	Tab2.appendChild(dumRow);
+	for (let i=0; i<pHigh*2-1; i++) {
+		dumRow = document.createElement("tr");
+		if (i%2==0) {
+			dumCell = document.createElement("th");
+			dumCell.innerHTML = "Node 1";
+			dumRow.appendChild(dumCell);
+			for (let j=0; j<pLong; j++) {
+				dumCell = document.createElement("td");
+				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
+				dumRow.appendChild(dumCell);
+				dumCell = document.createElement("th");
+				dumCell.innerHTML = "Node " + (i/2 + 2 + j*pHigh);
+				dumRow.appendChild(dumCell);
+			}
+		} else {
+			dumRow.appendChild(document.createElement("td"));
+			for (let j=0; j<pLong; j++) {
+				dumCell = document.createElement("td");
+				dumRow.appendChild(document.createElement("td"));
+				if (j<pLong-1) LJDaddCustomSelect(dumCell);
+				dumRow.appendChild(dumCell);
+			}
+		}
+		Tab2.appendChild(dumRow);
+	}
+}
+function colorIndex(I) {
+	switch (I) {
+		case 0: return "#ffff99";
+		case 1: return "#99ccff";
+		case 2: return "#ff99cc";
+		case 3: return "#cc99ff";
+		case 4: return "#ffcc99";
+		case 5: return "#33cccc";
+		case 6: return "#99cc00";
+		case 7: return "#ffcc00";
+		case 8: return "#ff9900";
+		case 9: return "#ff6600";
+		case 10: return "#666699";
+		case 11: return "#969696";
+		case 12: return "#003366";
+		case 13: return "#339966";
+		case 14: return "#003300";
+		case 15: return "#333300";
+		case 16: return "#993300";
+		case 17: return "#993366";
+		case 18: return "#333399";
+		case 19: return "#333333";
+		default: return "#ffffff";
+	}
+}
+class LJDCustomSelect { // TODO: Add dynamic option to display custom number
+	constructor(container) {
+		this.container = container;
+		this.select = container.querySelector('select');
+		this.dialog = container.querySelector('dialog');
+		this.input = this.dialog.querySelector('input');
+		this.okBtn = this.dialog.querySelector('#okBtn');
+		this.cnlBtn = this.dialog.querySelector('#cnlBtn');
+		
+		this.select.addEventListener('change', () => {
+			if (this.select.value === 'N') {
+				this.dialog.showModal();
+			}
+		});
+
+		this.okBtn.addEventListener('click', () => {
+			const value = this.input.value;
+		
+			if (value !== null && value !== '') {
+				this.select.value = value;
+			} else {
+				this.select.value = this.select.options[0].value;
+			}
+
+			this.dialog.close();
+		});
+
+		this.cnlBtn.addEventListener('click', () => {
+			this.select.value = this.select.options[0].value;
+			this.dialog.close();
+		});
+    }
+}
+function LJDaddCustomSelect(targetElement) {
+    const template = document.getElementById('LJDinTabFastTypeTemplate');
+    const clone = template.content.cloneNode(true);
+    const container = clone.querySelector('.CSContainer');
+    targetElement.appendChild(clone);
+    new LJDCustomSelect(container);
 }
 
 // Frame funcs
@@ -2086,6 +2286,7 @@ function getfc_cr(a, b, t, E, nc, mu_e, Fcy, ff) {
 	if (f > Fcy) f = Fcy;
 	return [k, Et, Es, mu, N, fc_cre, f];
 }
+
 // WDT
 function frameWDTCalcs() {
 	let [dum, IchInit, AchInit] = WDTSPCalcs(GEBID("frameDiagTensForm", "SPICTab"), GEBID("frameDiagTensForm", "SPICOut"));
@@ -2155,8 +2356,8 @@ function WDTSPCalcs(table, table2) {
 	
 	return [Azt/At, Iyot+Az2t-Math.pow(Azt/At, 2)*At, At];
 }
-
 function dbgSetAll() {
+
 	let dummy = [];
 	// Set Ellipse
 	document.getElementById("ellForm").querySelector("#Fx").value = 1000;

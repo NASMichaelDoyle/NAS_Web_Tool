@@ -41,6 +41,8 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "Lug Analysis";
 		case "boltgroup":
 			return "Boltgroup";
+		case "LJD":
+			return "Lap Joint Doubler";
 		default:
 			return "Unknown";
 	}

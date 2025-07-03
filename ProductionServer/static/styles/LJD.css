@@ -1,0 +1,28 @@
+#LJDForm .inTab {
+	margin: 0 auto;
+}
+#LJDForm .inTab td {
+	width: 110px;
+}
+#LJDForm .inTab input {
+	width: 100px;
+}
+#LJDForm .inTab select {
+	width: 100px;
+}
+#LJDForm .inTab2 {
+	border-collapse: collapse;
+}
+#LJDForm .inTab2 td, #LJDForm .inTab2 th {
+	border: 1px solid black;
+	color: black;
+}
+#LJDForm .inTab2 tr {
+	background-color: white;
+}
+#LJDForm .inTab2 input {
+	background-color: transparent;
+	width: 50px;
+	color: black;
+	border-color: black;
+}
