@@ -7,6 +7,20 @@ ellBox.addEventListener('change', function() {
 });
  */
  
+// Sidebar collapse
+let sbActive = true;
+function sbToggle() {
+	if (sbActive) {
+		GEBID("sidebarContent").style.display = "none";
+		GEBID("mainContainer").style.display = "flex";
+		GEBID("FormParent").style.width = "100%";
+	} else {
+		GEBID("sidebarContent").style.display = "block";
+		GEBID("mainContainer").style.display = "grid";
+	}
+	sbActive = !sbActive;
+}
+ 
 // Sortable
 let DOL = new Sortable(document.getElementById('docOrderList'), { // Document Order List
     animation: 150, // Animation period in ms

@@ -60,9 +60,11 @@
 	<img src="images/NAS.png" alt="NAS Logo" style="width: 100%;">
 	<h1 style="text-align:center">Multi-Analysis</h1>
 </header>
-<div class="container" style="height: 80vh;">
+<div id="mainContainer" class="container" style="height: 80vh;">
 	<div class="sidebar">
-		<h2 style="text-align: center; margin-top: 40px">Analyses</h2>
+	<div style="text-align: right;"><button class="button" onclick="sbToggle()" style=" margin-top: 20px; width: 25px; display: inline-block;">☰</button></div>
+	<div id="sidebarContent">
+		<h2 style="text-align: center;">Analyses</h2>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
 		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
 		<input id="TCBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('TCForm'))"> Tension Clip <br>
@@ -107,6 +109,7 @@
 		<button class="button" id="pdfButton" onclick="downloadPDF()">Download PDF</button>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Disclaimer</h4>
 		Not every tool fits every application, inputs and results need to be verified by a qualified engineer.
+	</div>
 	</div>
 	<div id="FormParent" class="formParent" style="margin-top: -1px;">
 		<div id="hiddenCharts">
@@ -1771,8 +1774,8 @@
 				</select>
 				<dialog>
 					<h2>Enter number of Fasteners</h2>
-					<input type="number" autofocus>
-					<div class="dialog-buttons">
+					<input type="number" autofocus style="text-align: center;"><br>
+					<div class="dialog-buttons" style="margin: 0 auto;">
 						<button id="cnlBtn">Cancel</button>
 						<button id="okBtn">OK</button>
 					</div>
@@ -1782,8 +1785,10 @@
 			<header><h2>Lap Joint Doubler</h2></header>
 			<div class="formIO">
 			<h3>Instructions</h3>
-			<p>Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
-				<br>Then press "Prepare" to generate the input tables</p>
+			<p style="text-align: left; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+				<br>Then press "Prepare" to generate the input tables<br><br>
+				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
+				<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.</p>
 			<h3>Setup</h3>
 			<table class="inTab">
 				<tr>

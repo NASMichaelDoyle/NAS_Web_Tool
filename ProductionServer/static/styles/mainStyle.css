@@ -33,6 +33,7 @@ input[type="checkbox"] {
 	display: grid;
 	grid-template-columns: 20% auto;
 	grid-template-rows: auto;
+	width: 99vw;
 }
 .sidebar {
 	text-align: left;
@@ -72,6 +73,7 @@ input[type="checkbox"] {
 	display:flex;
 	align-items:flex-start;
 	align-items: stretch;
+	width: 100%;
 }
 .formIO {
 	text-align: center;

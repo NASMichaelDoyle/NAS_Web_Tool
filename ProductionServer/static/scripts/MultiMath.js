@@ -1847,7 +1847,9 @@ function LJDPrepIns() {
 			dumRow.appendChild(dumCell);
 			for (let j=0; j<pLong+1; j++) {
 				dumCell = document.createElement("td");
-				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); // If thickness change inTab2
+				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); 
+				// If thickness change inTab2
+				if (sect == "Thickness (in)") dumCell.children[0].onchange = LJDFEM;
 				dumRow.appendChild(dumCell);
 			}
 			Tab1.appendChild(dumRow);
@@ -1907,6 +1909,7 @@ function LJDPrepIns() {
 			for (let j=0; j<pLong; j++) {
 				dumCell = document.createElement("td");
 				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
+				dumCell.title = "Plate shear flow"
 				dumRow.appendChild(dumCell);
 				dumCell = document.createElement("th");
 				dumCell.innerHTML = "Node " + (i/2 + 2 + j*pHigh);
@@ -1918,6 +1921,7 @@ function LJDPrepIns() {
 				dumCell = document.createElement("td");
 				dumRow.appendChild(document.createElement("td"));
 				if (j<pLong-1) LJDaddCustomSelect(dumCell);
+				dumCell.title = "Fastener type/count";
 				dumRow.appendChild(dumCell);
 			}
 		}
@@ -1949,7 +1953,7 @@ function colorIndex(I) {
 		default: return "#ffffff";
 	}
 }
-class LJDCustomSelect { // TODO: Add dynamic option to display custom number
+class LJDCustomSelect {
 	constructor(container) {
 		this.container = container;
 		this.select = container.querySelector('select');
@@ -1960,6 +1964,7 @@ class LJDCustomSelect { // TODO: Add dynamic option to display custom number
 		
 		this.select.addEventListener('change', () => {
 			if (this.select.value === 'N') {
+				if (this.select.querySelector("#customNumOpt")) this.select.lastElementChild.remove();
 				this.dialog.showModal();
 			}
 		});
@@ -1968,6 +1973,11 @@ class LJDCustomSelect { // TODO: Add dynamic option to display custom number
 			const value = this.input.value;
 		
 			if (value !== null && value !== '') {
+				let newOpt = document.createElement("option");
+				newOpt.value = value;
+				newOpt.textContent = value;
+				newOpt.id = "customNumOpt";
+				this.select.appendChild(newOpt);
 				this.select.value = value;
 			} else {
 				this.select.value = this.select.options[0].value;
@@ -1988,6 +1998,25 @@ function LJDaddCustomSelect(targetElement) {
     const container = clone.querySelector('.CSContainer');
     targetElement.appendChild(clone);
     new LJDCustomSelect(container);
+}
+function LJDFEM() {
+	// Get
+	let pHigh = +GEBID("LJDForm", "platesHighIn").value;
+	let pLong = +GEBID("LJDForm", "platesLongIn").value;
+	let ins = GEBID("LJDForm", "inTab1");
+	let FEM = GEBID("LJDForm", "inTab2");
+	let plates = [];
+	for (let i=0; i<pHigh; i++) {
+		plates[i] = [];
+		for (let j=0; j<pLong+1; j++) plates[i][j] = (childSeq(ins, [i+3, j+1, 0]).value==0 || childSeq(ins, [i+3, j+1, 0]).value=="")?0:1;
+	}
+	// Draw colors
+	for (let i=0; i<pHigh; i++) 
+		for (let j=0; j<pLong+1; j++) 
+			if (plates[i][j]) {
+				childSeq(FEM, [2*i+1, 2*j]).style.backgroundColor = colorIndex(i);
+				if (j>0 && plates[i][j-1]) childSeq(FEM, [2*i+1, 2*j-1]).style.backgroundColor = colorIndex(i);
+			}
 }
 
 // Frame funcs
