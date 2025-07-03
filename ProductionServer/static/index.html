@@ -2,6 +2,7 @@
 <!-- MAIN BRANCH COMMENT -->
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multi-Analysis</title>
 <link rel="stylesheet" href="styles/mainStyle.css">
 <link rel="stylesheet" href="styles/ellipseStyle.css">
@@ -1615,8 +1616,7 @@
 		</div>
 		<div class="analForm" id="boltgroupForm">
 			<header><h2>Boltgroup 2D</h2></header>
-			<div style="display: grid; grid-template-columns: 30% 70%;">
-			<div class="formIO">
+			<div class="formIO" style="float: left; width: 270px;">
 				<h3>Applied Load</h3>
 				<table>
 					<tr>
@@ -1693,7 +1693,7 @@
 					</tr>
 				</table>
 				<br>
-				<canvas id="bgChart" style="width: 85%; margin: 0 auto;"></canvas>
+				<canvas id="bgChart" style="margin: 0 auto; width: 500px;"></canvas>
 				<br>
 				<table id="outTab" class="outTable">
 					<tr>
@@ -1723,7 +1723,6 @@
 						<td style="text-align: left;">(in-lb)</td>
 					</tr>
 				</table>
-			</div>
 			</div>
 			<script>
 					let BGNumFast = 0;

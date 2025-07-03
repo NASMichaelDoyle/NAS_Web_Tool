@@ -1733,7 +1733,7 @@ function boltgroupCalcs() {
 			}]
 		},
 		options: {
-			responsive: true,
+			responsive: false,
 			maintainAspectRatio: true,
 			aspectRatio: 1.5,
             scales: {
