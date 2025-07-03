@@ -1679,8 +1679,8 @@ function boltgroupCalcs() {
 	outs = [];
 	for (let i=0; i<fastProps.length; i++) {
 		outs[i] = [];
-		outs[i][0] = fastProps[i][0]==""?"":fastProps[i][0]-Ycg;
-		outs[i][1] = fastProps[i][0]==""?"":fastProps[i][1]-Zcg;
+		outs[i][0] = fastProps[i][0]==""?"":fastProps[i][0];//-Ycg;
+		outs[i][1] = fastProps[i][0]==""?"":fastProps[i][1];//-Zcg;
 		outs[i][2] = fastProps[i][0]==""?"":Fy*fastProps[i][2]/SUM(temp[2]);
 		outs[i][3] = fastProps[i][1]==""?"":Fz*fastProps[i][3]/SUM(temp[3]);
 		outs[i][4] = fastProps[i][0]==""?"":-fastProps[i][2]*(fastProps[i][1]-Zcg)*Mxcg/Ix;
@@ -1689,10 +1689,10 @@ function boltgroupCalcs() {
 		outs[i][7] = fastProps[i][0]==""?"":outs[i][3]+outs[i][5];
 		outs[i][8] = fastProps[i][0]==""?"":Math.sqrt(outs[i][6]**2 + outs[i][7]**2);
 	}
-	//console.log(outs);
+	console.log(outs); console.log(array2Transpose(outs)); console.log(array2Transpose(outs)[6]); console.log(SUM(array2Transpose(outs)[6]));
 	let PyTot = SUM(array2Transpose(outs)[6]);
 	let PzTot = SUM(array2Transpose(outs)[7]);
-	let MxTot = mxtotal(array2Transpose(outs)[6],array2Transpose(outs)[7],temp[0],temp[1],Ycg,Zcg);
+	let MxTot = mxtotal(array2Transpose(outs)[6],array2Transpose(outs)[7],temp[0],temp[1],Ycg,Zcg, fastProps.length);
 	//console.log(MxTot);
 	// Set
 	GEBID("boltgroupForm", "YcgOut").innerHTML = sRound(Ycg, 3);
@@ -1742,14 +1742,14 @@ function boltgroupCalcs() {
                     position: 'bottom',
                     title: {
                         display: true,
-                        text: 'Y-Axis'
+                        text: 'X-Axis'
                     }
                 },
                 y: {
                     type: 'linear',
                     title: {
                         display: true,
-                        text: 'Z-Axis'
+                        text: 'Y-Axis'
                     }
                 }
             }
@@ -1778,9 +1778,9 @@ function array2Transpose(ARR) { // Matrix shtuff lol
 	}
 	return result;
 }
-function mxtotal(Py,Pz,y,z,Ycg,Zcg) {
+function mxtotal(Py,Pz,y,z,Ycg,Zcg, n) {
 	let result = 0, Pyy, Pzz;
-	for (let i = 0; i<30; i++) {
+	for (let i = 0; i<n; i++) {
 		if (Py[i] == "") Pyy = 0;
 		else Pyy = Py[i];
 		if (Pz[i] == "") Pzz = 0;
