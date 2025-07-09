@@ -67,7 +67,9 @@
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
 		<div style="display: none;"> <!-- DLC -->
 		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
+		</div>
 		<input id="TCBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('TCForm'))"> Tension Clip <br>
+		<div style="display: none;"> <!-- DLC -->
 		<input id="cripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('cripForm'))"> Crippling <br>
 		<input id="bCripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('bCripForm'))"> Bending Crippling <br>
 		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
@@ -342,6 +344,7 @@
 				<div id="Inputs" class="formIO">
 
 					<h2 style="text-align: center;">Input</h2>
+					<div style="text-align: right; margin: 0 auto; width: 270px;">
 					<span>Clip Type</span>
 					<select id="CTIn" name="CTIn" onchange="TCCalcs()">
 						<option value="SCSA">Single Clad Sheet Angle</option>
@@ -368,6 +371,7 @@
 					<span>Point Count =</span>
 					<input type="text" id="PCIn" placeholder="Enter Point Count" onchange="TCCalcs()">
 					<span id="units">qty</span><br><br>
+					</div>
 					<br><h2>Output</h2>
 					<div style="text-align: center;">
 						<span>P =</span>

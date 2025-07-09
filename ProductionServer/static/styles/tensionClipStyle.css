@@ -1,12 +1,11 @@
 /* Tension Clip */
 #TCForm .container {
-	display:flex;
-	align-items:flex-start;
+	width: 100%;
+	display:grid;
+	grid-template-columns: 25% 75%;
 }
 #TCForm .container #Inputs {
-	width: 400px;
-	text-align: right;
-
+	text-align: center;
 	padding: 10px;
 }
 #TCForm .container h2 {
@@ -28,28 +27,29 @@
 	width: 150px;
 	margin: 0 auto;
 }
-#TCForm #clipTypes {
-	background-color: white;
-	flex-grow: 1;
-}
 #TCForm #CTGrid {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: auto;
+}
+@media (max-width: 1425px) {
+    #TCForm .container {
+		width: 100%;
+		display:grid;
+		grid-template-columns: auto;
+		grid-template-rows: auto auto;
+	}
+	#TCForm #CTGrid {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-template-rows: 1fr 1fr;
+	}
 }
 #TCForm .gridItem {
 	text-align: center;
 }
 #TCForm .gridItem img {
 	width:100%;
-}
-#TCForm #dataParent {
-	justify-content: center; /* Center horizontally */
-	flex: 1; /* Tells this div to grow and take up available space */
-	width: 30%;
-}
-#TCForm .container #Data {
-	text-align: center;
 }
 /* Table Jazz */
 #TCForm table {
