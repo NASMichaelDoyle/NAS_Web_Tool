@@ -1813,6 +1813,7 @@ function LJDCalcs() {
 		dumRow.appendChild(dumCell);
 	}
 	Tab.appendChild(dumRow);
+	LJDCompute();
 }
 function LJDPrepIns() {
 	let Tab1 = GEBID("LJDForm", "inTab1");
@@ -2048,37 +2049,41 @@ function matrixGen(rows, cols) {
 	for (let i=0; i<rows; i++) ARR[i] = new Array(cols).fill(0);
 	return ARR;
 }
-function Compute() {
-	//Application.ScreenUpdating = False
+function LJDCompute() { // Typo here?
+	// Variables can probably be better defined with long and high
+	let plates = +GEBID("LJDForm", "platesHighIn").value;
+	let sections = +GEBID("LJDForm", "platesLongIn").value;
+	//size of matrix
+	let Size = plates * (sections) + 1; // " + 1"? fr?
+	
 	let inTab1 = GEBID("LJDForm", "inTab1");
 	let inTab2 = GEBID("LJDForm", "inTab2");
 	let outTab = GEBID("LJDForm", "outTab");
 	//let x = [];
-	let t = matrixGen(20, 1000);
-	let w = matrixGen(20, 1000);
-	let E = matrixGen(20, 1000);
-	let q = matrixGen(20, 1000);
-	let P_node = matrixGen(10000);
-	let kfast = matrixGen(20, 1000);
-	let k_original_fast = matrixGen(20, 1000);
-	let kplate = matrixGen(20, 1000);
-	let Distance = [];
-	let Fastdia = [];
-	let FastE = [];
+	let t = matrixGen(plates, sections+1); // Plate thickness
+	let w = matrixGen(plates, sections+1); // width
+	let E = matrixGen(plates, sections+1); // YM
+	let q = matrixGen(plates, sections); // Shear flow
+	let P_node = new Array(Size+1).fill(0);; // shear force @ nodes (0-indexed now, so node 1 = P_node[0])
+	let kfast = matrixGen(plates, sections); // fastener stiffness?
+	let k_original_fast = matrixGen(plates, sections); // fastener stiffness?
+	let kplate = matrixGen(plates, sections); // plate stiffness?
+	let Distance = []; // distance between nodes
+	let Fastdia = []; // fastener diameters
+	let FastE = []; // fastener YMs
 	//let Clearence = [];
-	let fast_Clear = matrixGen(20, 1000);
+	let fast_Clear = matrixGen(20, 1000); // idk
 	let f = matrixGen(20, 1000);
-	let fref = matrixGen(20, 1000);
-	let fbrg = matrixGen(20, 1000);
-	let pplate = matrixGen(20, 1000);
-	let LTFbot = matrixGen(20, 1000);
-	let LTF = matrixGen(20, 1000);
-	let typer = matrixGen(20, 1);
-	let k = matrixGen(2000, 2000);
+	//let fref = matrixGen(20, 1000);
+	//let fbrg = matrixGen(20, 1000);
+	let pplate = matrixGen(20, 1000); // plate shear???
+	//let LTFbot = matrixGen(20, 1000);
+	let LTF = matrixGen(20, 1000); // no clue
+	//let typer = matrixGen(plates, 1);
+	let k = matrixGen(Size*2, Size*2); // stiffness matrix
 	let Fast_Type = [];
 
 	let fast_flex_check = GEBID("LJDForm", "FastFlexIn").value;
-	//On Error GoTo ErrorHandler
 	
 
    /*  ActiveWorkbook.Sheets("Matrix").Select
@@ -2086,121 +2091,123 @@ function Compute() {
     Selection.Copy
     ActiveWorkbook.Sheets("Matrix").Range("A3:IV10000").Select
     ActiveSheet.Paste
-    ActiveWorkbook.Sheets("Program").Select */ // Huh?
+    ActiveWorkbook.Sheets("Program").Select */ 
+	// Huh?
 
 	// #### Gets ####
 	let counter;
-	let plates = +GEBID("LJDForm", "platesHighIn").value;
-	let sections = +GEBID("LJDForm", "platesLongIn").value;
 	let Loads = +GEBID("LJDForm", "TAppLoadIn").value;
 	for (let i=0; i<sections + 1; i++) {
 		//x[i] = ActiveSheet.Cells(7, 1 + i).Value
 		if (i<sections-1) {
-			Fastdia[i] = childSeq(inTab1, [5+plates*3, i+2, 0]).value; //ActiveSheet.Cells(17 + 3 * plates, 2 + i).Value
-			FastE[i] = childSeq(inTab1, [6+plates*3, i+2, 0]).value; //ActiveSheet.Cells(18 + 3 * plates, 2 + i).Value
-			Fast_Type[i] = childSeq(inTab1, [7+plates*3, i+2, 0]).value; //ActiveSheet.Cells(8 + 3 * plates + 12, 2 + i).Value
+			Fastdia[i] = childSeq(inTab1, [8+plates*3, i+2, 0]).value; //ActiveSheet.Cells(17 + 3 * plates, 2 + i).Value
+			FastE[i] = childSeq(inTab1, [9+plates*3, i+2, 0]).value; //ActiveSheet.Cells(18 + 3 * plates, 2 + i).Value
+			Fast_Type[i] = childSeq(inTab1, [10+plates*3, i+2, 0]).value; //ActiveSheet.Cells(8 + 3 * plates + 12, 2 + i).Value
 		}
 		//Clearence[i] = ActiveSheet.Cells(19 + 3 * plates, 2 + i).Value //Clearence between each layer and fastener
-		if (i<sections) Distance[i] = childSeq(inTab, [1, i+2]).value - childSeq(inTab, [1, i+1]).value; //ActiveSheet.Cells(7, 2 + i).Value - ActiveSheet.Cells(7, 1 + i).Value
+		if (i<sections) Distance[i] = childSeq(inTab1, [1, i+2, 0]).value - childSeq(inTab1, [1, i+1, 0]).value; //ActiveSheet.Cells(7, 2 + i).Value - ActiveSheet.Cells(7, 1 + i).Value
 		for (let n=0; n<plates; n++) {
-			t[n][i] = childSeq(inTab, [3+n, 1+i]).value; //ActiveSheet.Cells(8 + n, 1 + i).Value
-			w[n][i] = childSeq(inTab, [4+plates+n, 1+i]).value; //ActiveSheet.Cells(11 + plates + n, 1 + i).Value
-			E[n][i] = childSeq(inTab, [5+plates*2+n, 1+i]).value; //ActiveSheet.Cells(14 + plates * 2 + n, 1 + i).Value
-			kfast[n][i] = 0;
+			t[n][i] = childSeq(inTab1, [3+n, 1+i, 0]).value; //ActiveSheet.Cells(8 + n, 1 + i).Value
+			w[n][i] = childSeq(inTab1, [5+plates+n, 1+i, 0]).value; //ActiveSheet.Cells(11 + plates + n, 1 + i).Value
+			E[n][i] = childSeq(inTab1, [7+plates*2+n, 1+i, 0]).value; //ActiveSheet.Cells(14 + plates * 2 + n, 1 + i).Value
+			//kfast[n][i] = 0;
 		}
 	}
-
-
-
+	//console.log(Distance);
+	
+	// Typo in this loop?
 	for (let i=0; i<sections - 1; i++) {
 		counter = 0;
-		for (let n=0; n<plates; n++) {
+		let a, b, ratio_max, tp, Fast_Flexibility;
+		for (let n=0; n<plates/*-1*/; n++) {
 			counter++;
-			let fastener_numbering = Cells(8 + 3 * plates + 13 + n * 2, (i - 1) * 2 + 3).Value
-			if (fastener_numbering = "x" || fastener_numbering = "xx" || fastener_numbering > 0) {
-				for (let j=0; j<(plates - n); j++) {
-					if ((t(n, i + 1) > 0 And t(n + j, i + 1) > 0)) {
+			let dummiest = childSeq(GEBID("LJDForm", "inTab2"), [2+2*n, 2+2*i,0, 0]);
+			let fastener_numbering = dummiest===undefined?0:dummiest.value; //Cells(8 + 3 * plates + 13 + n * 2, (i - 1) * 2 + 3).Value
+			//console.log(fastener_numbering);
+			if (fastener_numbering == "SW" || +fastener_numbering > 0) {
+				for (let j=0; j<(plates - n-1); j++) {
+					let breakCond=0;
+					if (t[n][i+1] > 0 && t[n+j][i+1] > 0) {
 						//HUTH method below
-						let t1 = t(n, i + 1)
-						let E1 = E(n, i + 1) * 1000000
-						let t2 = t(n + j, i + 1)
-						let E2 = E(n + j, i + 1) * 1000000
-						let dia = Fastdia(1, i)
-						let Eb = FastE(1, i) * 1000000
+						let t1 = t[n][i+1];
+						let E1 = E[n][i+1] * 1000000;
+						let t2 = t[n+j][i+1];
+						let E2 = E[n+j][i+1] * 1000000;
+						let dia = Fastdia[i];
+						let Eb = FastE[i] * 1000000;
 						//fast_gap = Clearence(i)
-						let Ab = 3.14 * dia * dia / 4
-						let Ib = 3.14 * (dia ^ 4) / 64
-						if (fast_flex_check = "H") {
-							if (Fast_Type(1, i) = "B") {
+						let Ab = 3.14 * dia * dia / 4;
+						let Ib = 3.14 * (dia ** 4) / 64;
+						if (fast_flex_check == "H") {
+							if (Fast_Type[i] == "B") {
 								//Bolt
 								a = 0.6667;
 								b = 3;
-								if (t1 > t2) ratio_max = ((-E2 * (-E1 - Eb) + E2 ^ (1 / 2) * (E1 + Eb) ^ (1 / 2) * (13 * E1 * E2 + 24 * E1 * Eb + E2 * Eb) ^ (1 / 2)) / (2 * E1 * (E2 + 2 * Eb)))
-								else ratio_max = ((-E1 * (-E2 - Eb) + E1 ^ (1 / 2) * (E2 + Eb) ^ (1 / 2) * (13 * E2 * E1 + 24 * E2 * Eb + E1 * Eb) ^ (1 / 2)) / (2 * E2 * (E1 + 2 * Eb)))
-								
-							} else if (Fast_Type(1, i) = "R") {
+								if (t1 > t2) ratio_max = ((-E2 * (-E1 - Eb) + E2 ** (1 / 2) * (E1 + Eb) ** (1 / 2) * (13 * E1 * E2 + 24 * E1 * Eb + E2 * Eb) ** (1 / 2)) / (2 * E1 * (E2 + 2 * Eb)));
+								else ratio_max = ((-E1 * (-E2 - Eb) + E1 ** (1 / 2) * (E2 + Eb) ** (1 / 2) * (13 * E2 * E1 + 24 * E2 * Eb + E1 * Eb) ** (1 / 2)) / (2 * E2 * (E1 + 2 * Eb)));
+							} else if (Fast_Type[i] = "R") {
 							//Rivet
-								a = (2 / 5)
-								b = 2.2
-								if (t1 > t2) ratio_max = (1 / (E1 * (E2 + 2 * Eb)) * (0.5 * (-E2 * (-3 * E1 - 3 * Eb) + (E2 ^ 2 * (-3 * E1 - 3 * Eb) ^ 2 - 4 * E1 * E2 * (-5 * E1 - 5 * Eb) * (E2 + 2 * Eb)) ^ (1 / 2))))
-								else ratio_max = (1 / (E2 * (E1 + 2 * Eb)) * (0.5 * (-E1 * (-3 * E2 - 3 * Eb) + (E1 ^ 2 * (-3 * E2 - 3 * Eb) ^ 2 - 4 * E2 * E1 * (-5 * E2 - 5 * Eb) * (E1 + 2 * Eb)) ^ (1 / 2))))
-								
+								a = (2 / 5);
+								b = 2.2;
+								if (t1 > t2) ratio_max = (1 / (E1 * (E2 + 2 * Eb)) * (0.5 * (-E2 * (-3 * E1 - 3 * Eb) + (E2 ** 2 * (-3 * E1 - 3 * Eb) ** 2 - 4 * E1 * E2 * (-5 * E1 - 5 * Eb) * (E2 + 2 * Eb)) ** (1 / 2))));
+								else ratio_max = (1 / (E2 * (E1 + 2 * Eb)) * (0.5 * (-E1 * (-3 * E2 - 3 * Eb) + (E1 ** 2 * (-3 * E2 - 3 * Eb) ** 2 - 4 * E2 * E1 * (-5 * E2 - 5 * Eb) * (E1 + 2 * Eb)) ** (1 / 2))));
 							}
 						} else {
 							if (Eb >= 21000000) {
 							//Steel Bolt
-								a = 1.666
-								b = 0.86
+								a = 1.666;
+								b = 0.86;
 							} else if (Eb <= 13000000) {
 							//Aluminum Rivit
-								a = 5
-								b = 0.8
+								a = 5;
+								b = 0.8;
 							} else {
 							//Titanium
-								a = 3.82
-								b = 0.82
+								a = 3.82;
+								b = 0.82;
 							}
 						}
-//                  	  if (E1 * t1 > E2 * t2 Then
+						// if (E1 * t1 > E2 * t2 Then
 						if (t1 > t2) {
-							if (fast_flex_check = "H") tp = Application.WorksheetFunction.Min(t1, ratio_max * t2)
-							else tp = t1
-							Ep = E1
-							ts = t2
-							Es = E2
+							if (fast_flex_check == "H") tp = Math.min(t1, ratio_max * t2);
+							else tp = t1;
+							Ep = E1;
+							ts = t2;
+							Es = E2;
 						} else {
-							if (fast_flex_check = "H") tp = Application.WorksheetFunction.Min(t2, ratio_max * t1)
-							else tp = t2
-							Ep = E2
-							ts = t1
-							Es = E1
+							if (fast_flex_check == "H") tp = Math.min(t2, ratio_max * t1);
+							else tp = t2;
+							Ep = E2;
+							ts = t1;
+							Es = E1;
 						}
-						n_shear = 1
-						if (fast_flex_check = "H") Fast_Flexibility = 1 / ((((tp + ts) / (2 * dia)) ^ a) * (b / n_shear) * (1 / (tp * Ep) + 1 / (n_shear * ts * Es) + 1 / (n_shear * tp * Eb) + 1 / (2 * n_shear * ts * Eb)))
-						else Fast_Flexibility = 1 / (a / (Ep * dia) + b * ((1 / (Ep * tp)) + (1 / (Es * ts))))
- //for one fastener shared between two rows
-						let Fastener_grouper = Cells(8 + 3 * plates + 13 + n * 2, (i - 1) * 2 + 3).Value
-						if (Fastener_grouper = "X" || Fastener_grouper = "x");
-						else if (Fastener_grouper = "XX" Or Fastener_grouper = "xx") Fast_Flexibility = Fast_Flexibility * 0.5
-						else if (Fastener_grouper = "SW" Or Fastener_grouper = "sw") Fast_Flexibility = Cells(5, 5).Value
-						else if (Fastener_grouper > 0) Fast_Flexibility = Fast_Flexibility * Fastener_grouper
-//To Correct for fasteners in series must increase their stiffness
+						let n_shear = 1;
+						if (fast_flex_check == "H") Fast_Flexibility = 1 / ((((tp + ts) / (2 * dia)) ** a) * (b / n_shear) * (1 / (tp * Ep) + 1 / (n_shear * ts * Es) + 1 / (n_shear * tp * Eb) + 1 / (2 * n_shear * ts * Eb)));
+						else Fast_Flexibility = 1 / (a / (Ep * dia) + b * ((1 / (Ep * tp)) + (1 / (Es * ts))));
+						//for one fastener shared between two rows
+						//let Fastener_grouper = childSeq(GEBID("LJDForm", "inTab2"), [2+2*n, 2+2*i, 0]).value; //Cells(8 + 3 * plates + 13 + n * 2, (i - 1) * 2 + 3).Value
+						if (+fastener_numbering == 1);
+						else if (+fastener_numbering == 2) Fast_Flexibility = Fast_Flexibility * 0.5;
+						else if (fastener_numbering == "SW") Fast_Flexibility = GEBID("LJDForm", "SWKIn").value;
+/*Typo?*/				else if (+fastener_numbering > 0) Fast_Flexibility = Fast_Flexibility * fastener_numbering; // Should this be division? ??---------------------------------------------------------------------------??
+						//To Correct for fasteners in series must increase their stiffness
 						for (let h=0; h<j; h++) {
-							k_original_fast(n + h, i) = Fast_Flexibility
-							kfast(n + h, i) = Fast_Flexibility * j
+							k_original_fast[n + h][i] = Fast_Flexibility;
+							kfast[n + h][i] = Fast_Flexibility * (j+1);
 						}
-						fast_Clear(n + 1, i) = 0; //Clearence(i)
+						fast_Clear[n + 1][i] = 0; //Clearence(i)
 						/* if (Clearence(i) > 0 Then
 							k_original_fast(n + 1, i) = k_original_fast(n + 1, i) / 1000000
 							kfast(n + 1, i) = kfast(n + 1, i) / 1000000
 						End If */
-						GoTo breaking
+						breakCond=1; //GoTo breaking
 					}
+					if (breakCond) break;
 				}
-	//breaking:
+			//breaking:
 			} else {
-				k_original_fast(n + 1, i) = 0
-				kfast(n + 1, i) = 0
+				//k_original_fast[n + 1][i] = 0;
+				//kfast[n + 1][i] = 0;
 			}
 			//fast_Clear(n + 1, i) = fast_gap
 		}
@@ -2208,233 +2215,198 @@ function Compute() {
 
 	for (let i=0; i<sections; i++)
 		for (let n=0; n<plates; n++) {
-			bob = Cells(8 + 3 * plates + 13 + n * 2 - 1, (i) * 2).Value
-			if (Cells(8 + 3 * plates + 13 + n * 2 - 1, (i) * 2).Value = "") q(n, i) = 0
-			else q(n, i) = Cells(8 + 3 * plates + 13 + n * 2 - 1, (i) * 2).Value
-			if (i == 1) {
-				node_count = 1
-				Next_node_count = 1 + (i - 1) * plates + n
+			let node_count, Next_node_count;
+			//bob = Cells(8 + 3 * plates + 13 + n * 2 - 1, (i) * 2).Value
+			//if (childSeq(GEBID("LJDForm", "inTab2"), [1+2*n, 1+2*i, 0]).value == "" /*Cells(8 + 3 * plates + 13 + n * 2 - 1, (i) * 2).Value = ""*/) q[n][i] = 0;
+/*Question*/q[n][i] = +childSeq(GEBID("LJDForm", "inTab2"), [1+2*n, 1+2*i, 0]).value; // is "q" the node number?
+			if (i == 0) {
+				node_count = 1;
+				Next_node_count = 2 + n;
 			} else {
-				node_count = 1 + (i - 2) * plates + n
-				Next_node_count = 1 + (i - 1) * plates + n
+				node_count = 2 + (i-1)*plates + n;
+				Next_node_count = 2 + (i)*plates + n;
 			}
-			P_node(node_count) = P_node(node_count) + (q(n, i) * Distance(1, i)) * 0.5
-			P_node(Next_node_count) = P_node(Next_node_count) + (q(n, i) * Distance(1, i)) * 0.5
+			//console.log(q[n][i] * Distance[i]);
+			P_node[node_count-1] += q[n][i] * Distance[i] * 0.5;
+			P_node[Next_node_count-1] += q[n][i] * Distance[i] * 0.5;
 		}
-
-
+	//console.log(P_node);
 
 	// #### Computes Plate Stiffness ####
 	for (let i=0; i<sections; i++)
 		for (let n=0; n<plates; n++) {
-			if (t(n, i) > 0)
-                if (Application.WorksheetFunction.IsNumber(t(n, i + 1)) && t(n, i + 1) > 0) kplate(n, i) = (((w(n, i) + w(n, i + 1)) * 0.5 * (E(n, i) + E(n, i + 1)) * 0.5 * 1000000) / Distance(1, i)) * ((t(n, i) + t(n, i + 1)) / 2) //**** V8.0 ****
-                    //elseif ((i = sections) Then
-                    //    kplate(n, i) = (((w(n, i) + w(n, i + 1)) * 0.5 * (E(n, i) + E(n, i + 1)) * 0.5 * 1000000) / Distance(1, i)) * ((t(n, i) + t(n, i + 1)) / 2) //**** V8.0 ****
-                    //    //kplate(n, i) = ((w(n, i) * E(n, i) * 1000000) / Distance(1, i)) * ((t(n, i)))       //**** V8.0 ****
-                else kplate(n, i) = 0
-			else kplate(n, i) = 0
+			if (t[n][i] > 0)
+                if (!isNaN(t[n][i + 1]) && t[n][i + 1] > 0) kplate[n][i] = (((w[n][i] + w[n][i + 1]) * 0.5 * (E[n][i] + E[n][i + 1]) * 0.5 * 1000000) / Distance[i]) * ((t[n][i] + t[n][i + 1]) / 2); //**** V8.0 ****
+                else kplate[n][i] = 0;
+			else kplate[n][i] = 0;
 		}
-
-
-
-
-
-	//size of matrix
-	let Size = plates * (sections) + 1
-	
+	//console.log(kplate);
+	//console.log(kfast);
 	for (let j=0; j<Size; j++)
 		for (let M=0; M<Size; M++)
-			k(j, M) = 0
+			k[j][M] = 0;
 	
 	counter = 0;
-	n = 0;
-	i = 1;
-	for j = 1 To Size
-		if (j = 1 Then
-			for M = 2 To plates + 1
-			//k(1, 1) = k(1, 1) & " + " & kplate(m - 1, 1)
-			k(1, 1) = k(1, 1) + kplate(M - 1, 1)
-			//k(1, m) = k(1, m) & " - " & kplate(m - 1, 1)
-			k(1, M) = k(1, M) - kplate(M - 1, 1)
-			//k(m, 1) = k(m, 1) & " - " & kplate(m - 1, 1)
-			k(M, 1) = k(M, 1) - kplate(M - 1, 1)
-			//k(m, m) = k(m, m) & " + " & kplate(m - 1, 1)
-			k(M, M) = k(M, M) + kplate(M - 1, 1)
-			Next M
-		else
-			check2 = (n + 1) * plates + 1
-			if (j > check2 Then n = n + 1
-			check1 = n * plates + 1
-			h = j - check1
+	let n=0;
+	/* n = 0;
+	i = 1; */
+	for (let j=0; j<Size; j++) {
+		
+		if (j == 0) 
+			for (let M=1; M<plates + 1; M++) {
+				k[0][0] = k[0][0] + kplate[M - 1][0];
+				k[0][M] = k[0][M] - kplate[M - 1][0];
+				k[M][0] = k[M][0] - kplate[M - 1][0];
+				k[M][M] = k[M][M] + kplate[M - 1][0];
+			}
+		else {
+			let check2 = (n + 1) * plates + 1;
+			if (j > check2) n++;
+			check1 = n * plates + 1;
+			let h = parseInt(j - check1);
 			//Fasteners
-			//k(j, j) = k(j, j) & " + " & kfast(h + 1, n + 1)
-			k(j, j) = k(j, j) + kfast(h + 1, n + 1)
-			//k(j, j + 1) = k(j, j + 1) & " - " & kfast(h + 1, n + 1)
-			k(j, j + 1) = k(j, j + 1) - kfast(h + 1, n + 1)
-			//k(j + 1, j) = k(j + 1, j) & " - " & kfast(h + 1, n + 1)
-			k(j + 1, j) = k(j + 1, j) - kfast(h + 1, n + 1)
-			//k(j + 1, j + 1) = k(j + 1, j + 1) & " + " & kfast(h + 1, n + 1)
-			k(j + 1, j + 1) = k(j + 1, j + 1) + kfast(h + 1, n + 1)
+			//console.log(h + 1);
+			//console.log(kfast[h + 1]);
+			let Robert = kfast[h];
+			k[j][j] += kfast[h /* + 1 */][n + 1];
+			k[j][j + 1] += -kfast[h/*  + 1 */][n + 1];
+			k[j + 1][j] += -kfast[h /* + 1 */][n + 1];
+			k[j + 1][j + 1] += kfast[h/*  + 1 */][n + 1];
 			//Plates
-			//k(j, j) = k(j, j) & " + " & kplate(h, n + 2)
-			k(j, j) = k(j, j) + kplate(h, n + 2)
-			//k(j, j + plates) = k(j, j + plates) & " - " & kplate(h, n + 2)
-			k(j, j + plates) = k(j, j + plates) - kplate(h, n + 2)
-			//k(j + plates, j) = k(j + plates, j) & " - " & kplate(h, n + 2)
-			k(j + plates, j) = k(j + plates, j) - kplate(h, n + 2)
-			//k(j + plates, j + plates) = k(j + plates, j + plates) & " + " & kplate(h, n + 2)
-			k(j + plates, j + plates) = k(j + plates, j + plates) + kplate(h, n + 2)
-		End If
-	Next j
+			//console.log(kplate);
+			//console.log(h);
+			k[j][j] += kplate[h][n + 2];
+			k[j][j + plates] += -kplate[h][n + 2];
+			k[j + plates][j] += -kplate[h][n + 2];
+			k[j + plates][j + plates] += kplate[h][n + 2];
+		}
+	}
+	//console.log(k);
 
-	ReDim redstiff(1 To Size - plates, 1 To Size - plates)
-	ReDim invstiff(1 To Size - plates, 1 To Size - plates)
-	ReDim stiff(1 To Size, 1 To Size)
-	ReDim forces(0 To Size, 0 To 2)
-	ReDim applied(1 To Size - plates, 1 To 1)
+	let redstiff = matrixGen(Size - plates, Size - plates); //[1 To Size - plates][1 To Size - plates];
+	let invstiff; //= matrixGen(Size - plates, Size - plates); //[1 To Size - plates][1 To Size - plates];
+	let stiff = matrixGen(Size, Size); //[1 To Size][1 To Size];
+	let forces;// = matrixGen(Size, 2); //[0 To Size][0 To 2];
+	let applied = []; //[1 To Size - plates][1 To 1];
+	let displ;
 	
-	for ijk = 1 To 100 //incriment load untill reached 100% to determine fast loads with clearences
-		load_factor = ijk / 100
-		for j = 1 To Size - plates
-		
-			if (j = 1 Then
-				applied(j, 1) = (ActiveWorkbook.Sheets("Program").Cells(4, 6).Value + P_node(j)) * load_factor
-			else
-				applied(j, 1) = P_node(j) * load_factor
-			End If
-		
-			for M = 1 To Size - plates
-				redstiff(j, M) = k(j, M)
-				//ActiveWorkbook.Sheets("Matrix").Cells(j + 5, m + 6).Value = redstiff(j, m)
-			Next M
-		Next j
+	for (let ijk=0; ijk<100; ijk++) {//incriment load untill reached 100% to determine fast loads with clearences
+		load_factor = ijk / 100;
+		for (let j=0; j<Size - plates; j++) {
+			if (j == 1) applied[j] = (Loads + P_node[j]) * load_factor;
+			else applied[j] = P_node[j] * load_factor;
+			for (let M=0; M<Size - plates; M++) redstiff[j][M] = k[j][M];
+		}
 		
 		//invstiff() = Application.WorksheetFunction.MInverse(redstiff)
-		invstiff = minvertplus(redstiff)
-		displ = M_Mult(invstiff, applied)
-	ReDim displacement(1 To 1, 1 To Size)
-		for n = 1 To Size
-			check = Size - plates + 1
-			if (n < check Then
-				displacement(1, n) = displ(n, 1)
-			else
-				displacement(1, n) = 0
-			End If
-		Next n
-				for j = 1 To Size
-					for M = 1 To Size
-						k(j, M) = 0
-					Next M
-				Next j
-				counter = 0
-				n = 0
-				i = 1
-				for j = 1 To Size
-					if (j = 1 Then
-						for M = 2 To plates + 1
-						//k(1, 1) = k(1, 1) & " + " & kplate(m - 1, 1)
-						k(1, 1) = k(1, 1) + kplate(M - 1, 1)
-						//k(1, m) = k(1, m) & " - " & kplate(m - 1, 1)
-						k(1, M) = k(1, M) - kplate(M - 1, 1)
-						//k(m, 1) = k(m, 1) & " - " & kplate(m - 1, 1)
-						k(M, 1) = k(M, 1) - kplate(M - 1, 1)
-						//k(m, m) = k(m, m) & " + " & kplate(m - 1, 1)
-						k(M, M) = k(M, M) + kplate(M - 1, 1)
-						Next M
-					else
-						check2 = (n + 1) * plates + 1
-						if (j > check2 Then n = n + 1
-						check1 = n * plates + 1
-						h = j - check1
-						if (j = Size Then
-							check_displ = 0
-						else
-							check_displ = displacement(1, j) - displacement(1, j + 1)
-						End If
-						check_clear = (fast_Clear(h + 1, n + 1) / 1000)
-						if (fast_Clear(h + 1, n + 1) = 0 Then
-						else
-							if (check_displ > check_clear Then
-								if (check_clear = 0 Then
-								
-								else
-									k_original_fast(h + 1, n + 1) = k_original_fast(h + 1, n + 1) * 1000000
-									kfast(h + 1, n + 1) = kfast(h + 1, n + 1) * 1000000
-									fast_Clear(h + 1, n + 1) = 0
-								End If
-							End If
-						End If
-						//Fasteners
-						//k(j, j) = k(j, j) & " + " & kfast(h + 1, n + 1)
-						k(j, j) = k(j, j) + kfast(h + 1, n + 1)
-						//k(j, j + 1) = k(j, j + 1) & " - " & kfast(h + 1, n + 1)
-						k(j, j + 1) = k(j, j + 1) - kfast(h + 1, n + 1)
-						//k(j + 1, j) = k(j + 1, j) & " - " & kfast(h + 1, n + 1)
-						k(j + 1, j) = k(j + 1, j) - kfast(h + 1, n + 1)
-						//k(j + 1, j + 1) = k(j + 1, j + 1) & " + " & kfast(h + 1, n + 1)
-						k(j + 1, j + 1) = k(j + 1, j + 1) + kfast(h + 1, n + 1)
-						//Plates
-						//k(j, j) = k(j, j) & " + " & kplate(h, n + 2)
-						k(j, j) = k(j, j) + kplate(h, n + 2)
-						//k(j, j + plates) = k(j, j + plates) & " - " & kplate(h, n + 2)
-						k(j, j + plates) = k(j, j + plates) - kplate(h, n + 2)
-						//k(j + plates, j) = k(j + plates, j) & " - " & kplate(h, n + 2)
-						k(j + plates, j) = k(j + plates, j) - kplate(h, n + 2)
-						//k(j + plates, j + plates) = k(j + plates, j + plates) & " + " & kplate(h, n + 2)
-						k(j + plates, j + plates) = k(j + plates, j + plates) + kplate(h, n + 2)
-					End If
-				Next j
-				
-	
-	Next ijk
+		invstiff = minvertplus(redstiff);
+		displ = M_Mult([invstiff, applied]);
+		let displacement = []; //(1 To 1, 1 To Size)
+		for (let n=0; n<Size; n++) {
+			let check = Size - plates + 1;
+			if (n < check) displacement[n] = displ[n];
+			else displacement[n] = 0;
+		}
+		for (let j=0; j<Size; j++)
+			for (let M=0; M<Size; M++)
+				k[j][M] = 0;
+		counter = 0;
+		n = 0;
+		/*i = 1; */
+		for (let j=0; j<Size; j++) {
+			if (j == 0)
+				for (let M=1; M<plates + 1; M++) {
+					k[0][0] = k[0][0] + kplate[M - 1][0];
+					k[0][M] = k[0][M] - kplate[M - 1][0];
+					k[M][0] = k[M][0] - kplate[M - 1][0];
+					k[M][M] = k[M][M] + kplate[M - 1][0];
+				}
+			else {
+				let check_displ;
+				let check2 = (n + 1) * plates + 1;
+				if (j > check2) n++;
+				let check1 = n * plates + 1;
+				let h = parseInt(j - check1);
+				if (h<0) h=0;
+				if (j == Size) check_displ = 0;
+				else check_displ = displacement[j] - displacement[j + 1];
+				let check_clear = (fast_Clear[h + 1][n + 1] / 1000);
+				if (fast_Clear[h + 1][n + 1] == 0);
+				else
+					if (check_displ > check_clear)
+						if (check_clear == 0);
+						else {
+							k_original_fast[h + 1][n + 1] *= 1000000;
+							kfast[h + 1][n + 1] *= 1000000;
+							fast_Clear[h + 1][n + 1] = 0;
+						}
+				//Fasteners
+				k[j][j] += kfast[h + 1][n + 1];
+				k[j][j + 1] +=  -kfast[h + 1][n + 1];
+				k[j + 1][j] += -kfast[h + 1][n + 1];
+				k[j + 1][j + 1] += kfast[h + 1][n + 1];
+				//Plates
+				k[j][j] += kplate[h][n + 2];
+				k[j][j + plates] += -kplate[h][n + 2];
+				k[j + plates][j] += -kplate[h][n + 2];
+				k[j + plates][j + plates] += kplate[h][n + 2];
+			}
+		}		
+	}
+	console.log(kplate);
+	console.log(k_original_fast);
+	//console.log(redstiff);
+	//console.log(invstiff);
+	//console.log(applied);
+	//console.log(displ);
+	//console.log(k);
 	//Check to see if displacements across fastener are enough to close gap if they are increase fast stiffness and recompute
 	
-	ReDim displacement(1 To 1, 1 To Size)
-		for n = 1 To Size
-			check = Size - plates + 1
-			if (n < check Then
-				displacement(1, n) = displ(n, 1)
-			else
-				displacement(1, n) = 0
-			End If
-		Next n
-		disp_transp = mtransposeplus(displacement)
-	ReDim stiff_forces(0 To Size, 0 To Size)
-	ReDim disp_forces(0 To Size, 2)
-		
-		for i = 1 To Size
-			disp_forces(i, 2) = disp_transp(i - 1)
-			for j = 1 To Size
-				stiff_forces(i, j) = k(i, j)
-			Next j
-		Next i
-	forces = M_Mult(stiff_forces, disp_forces)
+	let displacement = []; //(1 To 1, 1 To Size)
+	for (let n=0; n<Size; n++) {
+		let check = Size - plates;
+		if (n < check) displacement[n] = displ[n];
+		//else displacement[n] = 0;
+	}
 	
-	output_check = ActiveWorkbook.Sheets("Program").Cells(5, 6).Value
-	if (output_check = True Then
-		for j = 1 To Size
-			for M = 1 To Size
-				stiff(j, M) = k(j, M)
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Value = stiff(j, M)
-			Next M
-		Next j
+	displacement = array2Transpose(displacement)[0];
+	let stiff_forces = matrixGen(Size, Size); //(0 To Size, 0 To Size)
+	let disp_forces = []; //(0 To Size, 2)
+	
+	for (let i=0; i<Size; i++) {
+		if (i<displacement.length) disp_forces[i] = displacement[i /*- 1*/];
+		for (let j=0; j<Size; j++) stiff_forces[i][j] = k[i][j];
+	}
+	//console.log(displacement);
+	//console.log(stiff_forces);
+	//console.log(disp_forces);
+	forces = M_Mult([stiff_forces, disp_forces]);
+	
+	 // Matrix output
+	output_check = +GEBID("LJDForm", "matrixIn").value;
+	// UNFINISHED!!!
+	if (output_check) {
+		/* for (let j=0; j<Size; j++)
+			for (let M=0; M<Size; M++) {
+				stiff[j][M] = k[j][M];
+				//uhhh idk: ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Value = stiff(j, M)
+			}
 		
-		for j = 1 To Size
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Value = forces(j, 2)
+		for (let j=0; j<Size; j++) {
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Value = forces(j, 2)
 			
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Interior.ColorIndex = 35
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Font.ColorIndex = 1
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Numberformat = "0"
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).HorizontalAlignment = xlCenter
-				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Font.Bold = False
-				With ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Borders()
-					.LineStyle = xlContinuous
-					.Weight = xlThin
-					.ColorIndex = 1
-				End With
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Interior.ColorIndex = 35
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Font.ColorIndex = 1
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Numberformat = "0"
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).HorizontalAlignment = xlCenter
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Font.Bold = False
+			With ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 5).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With
 			
-			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, Size + 8).Value = displacement(1, j)
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, Size + 8).Value = displacement[j]
 			
             ActiveWorkbook.Sheets("Matrix").Cells(j + 5, Size + 8).Interior.ColorIndex = 35
             ActiveWorkbook.Sheets("Matrix").Cells(j + 5, Size + 8).Font.ColorIndex = 1
@@ -2447,267 +2419,369 @@ function Compute() {
                 .ColorIndex = 1
             End With
         
-        for M = 1 To Size
-            ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Value = stiff(j, M)
-            
-            ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Interior.ColorIndex = 35
-            ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Font.ColorIndex = 1
-            ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Numberformat = "0"
-            ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).HorizontalAlignment = xlCenter
-            ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Font.Bold = False
-            With ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Borders()
-                .LineStyle = xlContinuous
-                .Weight = xlThin
-                .ColorIndex = 1
-            End With
-            
-        Next M
-    Next j
-
-else
-    for j = 1 To Size
-        ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 8).Value = displacement(1, j)
-        ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 9).Value = j
-    Next j
-End If
-
-
-
-ActiveSheet.Range(Cells(8 + 3 * plates + 14 + 2 * plates, 1), Cells(8 + 3 * plates + 14 + 2 * plates + 200, 150)).Select
-Selection.ClearContents
-//#### BEGIN FEM OUTPUT CODE ####
-
-ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1).Value = "Stiffness lbs/in"
-ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1).Font.Bold = True
-With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1).Borders()
-    .LineStyle = xlContinuous
-    .Weight = xlThin
-    .ColorIndex = 1
-End With
-M = 1
-for n = 1 To (plates * 2 - 1)
-    for i = 1 To (sections)
-        if (i <= sections Then
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, i * 2).Value = "Plate" & i
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, i * 2).Font.Bold = True
-            With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, i * 2).Borders()
-                .LineStyle = xlContinuous
-                .Weight = xlThin
-                .ColorIndex = 1
-            End With
-            if (i = sections Then
-                ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Value = "Fixed"
-            else
-                ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Value = "Fast" & i
-            End If
-            
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Font.Bold = True
-            With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Borders()
-                .LineStyle = xlContinuous
-                .Weight = xlThin
-                .ColorIndex = 1
-            End With
-        End If
-        if (kplate(n, i) = 0 Then
-            kplate(n, i) = 0.0001
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2 - 1, i * 2).Value = ""
-        else
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2 - 1, i * 2).Value = kplate(n, i)
-        End If
-        
-        if (k_original_fast(n + 1, i) = 0 Then
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2, 1 + i * 2).Value = ""
-        else
-            ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2, 1 + i * 2).Value = k_original_fast(n + 1, i)
-        End If
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Interior.ColorIndex = 35
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Font.ColorIndex = 1
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Numberformat = "0"
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).HorizontalAlignment = xlCenter
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Font.Bold = True
-        With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Borders()
-            .LineStyle = xlContinuous
-            .Weight = xlThin
-            .ColorIndex = 1
-        End With
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Interior.ColorIndex = 35
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Font.ColorIndex = 1
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Numberformat = "0"
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).HorizontalAlignment = xlCenter
-        ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Font.Bold = True
-        With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Borders()
-            .LineStyle = xlContinuous
-            .Weight = xlThin
-            .ColorIndex = 1
-        End With
-    Next i
-Next n
-
-//#### Calculate Bush and Plate Loads ####
-M = 0
-for i = 1 To sections
-    for n = 1 To plates
-        if (i = 1 Then
-            if (t(n, i) = 0 Then
-                pplate(n, i) = ""
-            else
-                pplate(n, i) = (kplate(n, i) * displacement(1, 1) - kplate(n, i) * displacement(1, n + 1))
-            End If
-        else
-            h = n + M * plates + 1
-            if (t(n, i) = 0 Then
-                pplate(n, i) = ""
-            else
-                pplate(n, i) = (kplate(n, i) * displacement(1, h) - kplate(n, i) * displacement(1, h + plates))
-            End If
-        End If
-    Next n
-    if (i > 1 Then M = M + 1
-Next i
-M = 0
-for i = 1 To sections
-    for n = 2 To plates
-        if (i = sections Then
-            for h = 1 To sections - 1
-                f(n, sections) = f(n, sections) + (f(n, h))
-            Next h
-        else
-            f(n, i) = kfast(n, i) * displacement(1, n + M * plates) - kfast(n, i) * displacement(1, n + 1 + M * plates)
-        End If
-    Next n
-    M = M + 1
-Next i
-
-//#### BEGIN LOADS OUTPUT CODE ####
-
-
-ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Value = "Loads lbs"
-ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Font.Bold = True
-With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Borders()
-    .LineStyle = xlContinuous
-    .Weight = xlThin
-    .ColorIndex = 1
-End With
-
-M = 1
-//for n = 1 To (plates * 2 - 1)
-for n = 1 To (plates)
-    for i = 1 To (sections)
-        if (i <= sections Then
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, i * 2).Value = "Plate" & i
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, i * 2).Font.Bold = True
-            With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, i * 2).Borders()
-                .LineStyle = xlContinuous
-                .Weight = xlThin
-                .ColorIndex = 1
-            End With
-            if (i = sections Then
-                ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Value = "Fixed"
-            else
-                ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Value = "Fast" & i
-            End If
-            
-            
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Font.Bold = True
-            With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Borders()
-                .LineStyle = xlContinuous
-                .Weight = xlThin
-                .ColorIndex = 1
-            End With
-        End If
-        if (kplate(n, i) = 0 Then
-            kplate(n, i) = 0.0001
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2 - 1, i * 2).Value = ""
-        else
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2 - 1, i * 2).Value = pplate(n, i)
-        End If
-
-        if (k_original_fast(n + 1, i) = 0 Then
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2, 1 + i * 2).Value = ""
-        else
-            ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2, 1 + i * 2).Value = f(n + 1, i)
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Value = f(n, i) - f(n + 1, i) //bearing load
-            
-        End If
-        
-         bearing_load = f(n, i) - f(n + 1, i)
-        
-        
-//first block
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Interior.ColorIndex = 35
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Font.ColorIndex = 1
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Numberformat = "0"
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).HorizontalAlignment = xlCenter
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Font.Bold = True
-        With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Borders()
-            .LineStyle = xlContinuous
-            .Weight = xlThin
-            .ColorIndex = 1
-        End With
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Interior.ColorIndex = 35
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Font.ColorIndex = 1
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Numberformat = "0"
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).HorizontalAlignment = xlCenter
-        ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Font.Bold = True
-        With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Borders()
-            .LineStyle = xlContinuous
-            .Weight = xlThin
-            .ColorIndex = 1
-        End With
-//second block
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Interior.ColorIndex = 35
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Font.ColorIndex = 1
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Numberformat = "0"
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).HorizontalAlignment = xlCenter
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Font.Bold = True
-        With ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Borders()
-            .LineStyle = xlContinuous
-            .Weight = xlThin
-            .ColorIndex = 1
-        End With
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Interior.ColorIndex = 35
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Font.ColorIndex = 1
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Numberformat = "0"
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).HorizontalAlignment = xlCenter
-        ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Font.Bold = True
-        With ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Borders()
-            .LineStyle = xlContinuous
-            .Weight = xlThin
-            .ColorIndex = 1
-        End With
-        
-    Next i
-Next n
-
-//### Insert Bearing Loads ###
-for n = 1 To (plates + 1)
-    for i = 1 To (sections)
-        if (k_original_fast(n + 1, i) > 0 Or k_original_fast(n, i) > 0 Then
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Value = f(n, i) - f(n + 1, i) //bearing load
-        else
-
-        End If
-//Change bearing cells to another color
-        if (n > plates Then)
-        
-        else
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Interior.ColorIndex = 45
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Font.ColorIndex = 3
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Numberformat = "0"
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).HorizontalAlignment = xlCenter
-            ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Font.Bold = True
-            With ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Borders()
-                .LineStyle = xlContinuous
-                .Weight = xlThin
-                .ColorIndex = 1
-            End With
-        End If
-    Next i
-Next n
-
-//Application.ScreenUpdating = True
+			for (let M=0; M<Size; M++) {
+				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Value = stiff(j, M)
+				
+				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Interior.ColorIndex = 35
+				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Font.ColorIndex = 1
+				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Numberformat = "0"
+				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).HorizontalAlignment = xlCenter
+				ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Font.Bold = False
+				With ActiveWorkbook.Sheets("Matrix").Cells(j + 5, M + 6).Borders()
+					.LineStyle = xlContinuous
+					.Weight = xlThin
+					.ColorIndex = 1
+				End With
+				
+			} //1:26:10
+		}
+	} else {
+		for j = 1 To Size
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 8).Value = displacement[j]
+			ActiveWorkbook.Sheets("Matrix").Cells(j + 5, 9).Value = j
+		Next j */
+	}
+	
+	//#### BEGIN FEM OUTPUT CODE ####
+	
+	/* ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1).Value = "Stiffness lbs/in"
+	ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1).Font.Bold = True
+	With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1).Borders()
+		.LineStyle = xlContinuous
+		.Weight = xlThin
+		.ColorIndex = 1
+	End With
+	M = 1
+	for n = 1 To (plates * 2 - 1)
+		for i = 1 To (sections) {
+			if (i <= sections) {
+				ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, i * 2).Value = "Plate" & i
+				ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, i * 2).Font.Bold = True
+				With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, i * 2).Borders()
+					.LineStyle = xlContinuous
+					.Weight = xlThin
+					.ColorIndex = 1
+				End With
+				if (i = sections)  ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Value = "Fixed"
+				else ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Value = "Fast" & i
+				
+				ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Font.Bold = True
+				With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates, 1 + i * 2).Borders()
+					.LineStyle = xlContinuous
+					.Weight = xlThin
+					.ColorIndex = 1
+				End With
+			}
+			if (kplate(n, i) == 0) {
+				kplate(n, i) = 0.0001
+				ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2 - 1, i * 2).Value = ""
+			} else ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2 - 1, i * 2).Value = kplate(n, i)
+			
+			if (k_original_fast(n + 1, i) == 0) ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2, 1 + i * 2).Value = ""
+			else  ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n * 2, 1 + i * 2).Value = k_original_fast(n + 1, i)
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Interior.ColorIndex = 35
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Font.ColorIndex = 1
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Numberformat = "0"
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).HorizontalAlignment = xlCenter
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Font.Bold = True
+			With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, 1 + i * 2).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Interior.ColorIndex = 35
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Font.ColorIndex = 1
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Numberformat = "0"
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).HorizontalAlignment = xlCenter
+			ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Font.Bold = True
+			With ActiveSheet.Cells(8 + 3 * plates + 14 + 2 * plates + n, i * 2).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With 
+		}*/
+	
+	//#### Calculate Bush and Plate Loads ####
+	let M = 0;
+	for (let i=0; i<sections; i++) {
+		for (let n=0; n<plates; n++) {
+			if (i == 0)
+				if (t[n][i] == 0) pplate[n][i] = "";
+				else pplate[n][i] = (kplate[n][i] * displacement[1] - kplate[n][i] * displacement[n + 1]);
+			else {
+				let h = n + M * plates + 1;
+				if (t[n][i] == 0) pplate[n][i] = "";
+				else pplate[n][i] = (kplate[n][i] * displacement[h] - kplate[n][i] * displacement[h + plates]);
+			}
+		}
+		if (i > 1) M++;
+	}
+	M = 0;
+	for (let i=0; i<sections; i++) {
+		for (let n=0; n<plates; n++)
+			if (i == sections) 
+				for (let h=0; h<sections - 1; h++) f[n][sections] = f[n][sections] + (f[n][h]);
+			else f[n][i] = kfast[n][i] * displacement[n + M * plates] - kfast[n][i] * displacement[n + 1 + M * plates]
+		M++;
+	}
+	
+	//#### BEGIN LOADS OUTPUT CODE ####
+	
+	/* ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Value = "Loads lbs"
+	ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Font.Bold = True
+	With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Borders()
+		.LineStyle = xlContinuous
+		.Weight = xlThin
+		.ColorIndex = 1
+	End With
+	
+	M = 1
+	//for n = 1 To (plates * 2 - 1)
+	for n = 1 To (plates)
+		for i = 1 To (sections)
+			if (i <= sections Then
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, i * 2).Value = "Plate" & i
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, i * 2).Font.Bold = True
+				With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, i * 2).Borders()
+					.LineStyle = xlContinuous
+					.Weight = xlThin
+					.ColorIndex = 1
+				End With
+				if (i = sections Then
+					ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Value = "Fixed"
+				else
+					ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Value = "Fast" & i
+				End If
+				
+				
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Font.Bold = True
+				With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1 + i * 2).Borders()
+					.LineStyle = xlContinuous
+					.Weight = xlThin
+					.ColorIndex = 1
+				End With
+			End If
+			if (kplate(n, i) = 0 Then
+				kplate(n, i) = 0.0001
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2 - 1, i * 2).Value = ""
+			else
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2 - 1, i * 2).Value = pplate(n, i)
+			End If
+	
+			if (k_original_fast(n + 1, i) = 0 Then
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2, 1 + i * 2).Value = ""
+			else
+				ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n * 2, 1 + i * 2).Value = f(n + 1, i)
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Value = f(n, i) - f(n + 1, i) //bearing load
+				
+			End If
+			
+			bearing_load = f(n, i) - f(n + 1, i)
+			
+			
+	//first block
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Interior.ColorIndex = 35
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Font.ColorIndex = 1
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Numberformat = "0"
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).HorizontalAlignment = xlCenter
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Font.Bold = True
+			With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, 1 + i * 2).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Interior.ColorIndex = 35
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Font.ColorIndex = 1
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Numberformat = "0"
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).HorizontalAlignment = xlCenter
+			ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Font.Bold = True
+			With ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates + n, i * 2).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With
+	//second block
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Interior.ColorIndex = 35
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Font.ColorIndex = 1
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Numberformat = "0"
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).HorizontalAlignment = xlCenter
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Font.Bold = True
+			With ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, 1 + i * 2).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Interior.ColorIndex = 35
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Font.ColorIndex = 1
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Numberformat = "0"
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).HorizontalAlignment = xlCenter
+			ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Font.Bold = True
+			With ActiveSheet.Cells(8 + 3 * plates + 15 + 5 * plates + n, i * 2).Borders()
+				.LineStyle = xlContinuous
+				.Weight = xlThin
+				.ColorIndex = 1
+			End With
+			
+		Next i
+	Next n
+	
+	//### Insert Bearing Loads ###
+	for n = 1 To (plates + 1)
+		for i = 1 To (sections)
+			if (k_original_fast(n + 1, i) > 0 Or k_original_fast(n, i) > 0 Then
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Value = f(n, i) - f(n + 1, i) //bearing load
+			else
+	
+			End If
+	//Change bearing cells to another color
+			if (n > plates Then)
+			
+			else
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Interior.ColorIndex = 45
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Font.ColorIndex = 3
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Numberformat = "0"
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).HorizontalAlignment = xlCenter
+				ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Font.Bold = True
+				With ActiveSheet.Cells(8 + 3 * plates + 15 + 4 * plates + n * 2, 1 + i * 2).Borders()
+					.LineStyle = xlContinuous
+					.Weight = xlThin
+					.ColorIndex = 1
+				End With
+			End If
+		Next i
+	Next n */
+	
+	//Application.ScreenUpdating = True
+	//console.log(stiff_forces);
+	//console.log(disp_forces);
+	//console.log(t);
+	//console.log(w);
+	//console.log(P_node);
+	//console.log(kfast);
 }
+function minvertplus(bob) {
+	let a = bob;
+	let n = bob.length; //UBound(a)
+	let x = matrixGen(n, n);
+	let Results = matrixGen(n, n); // (1 To n, 1 To n)?????????
+	let P = [] //(n)
+	
+	const UFL = 5.9e-39; // ... = max{ under, 1/over}flow thresholds.
+	let G = 4;
+	G = G / 3;
+	G = G - 1; // ... = 1/3 + roundoff in 4/3
+	let EPS = Math.abs(((G + G) - 1) + G); // ... = roundoff level.
+	G = 1; // ... will record pivot-growth factor
+//
+// Copy A to X and record each column's biggest element.
+	for (let j=0; j<n; j++) {
+		P[j] = 0;
+		for (let i=0; i<n; i++) {
+			let t = a[i][j];
+			x[i][j] = t;
+			t = Math.abs(t);
+			if (t > P[j]) P[j] = t;
+		}
+	}
+	for (let k=0; k<n; k++) { // ... perform elimination upon column K .
+		let q = 0;
+		let j = k; // ... search for Kth pivot ...
+		for (let i = k; i<n; i++) {
+			let t = Math.abs(x[i][k]);
+			if (t > q) {
+				q = t;
+				j = i;
+			}
+		}
+		if (q == 0) {
+			q = EPS * P[k] + UFL;
+			x[k][k] = q;
+		}
+		if (P[k] > 0) {
+			q = q / P[k];
+			if (q > G) G = q;
+		}
+		
+		P[k] = j; // ... record pivotal row exchange, if any.
+		if (j != k) // ... Don't bother to swap.
+			for (let L=0; L<n; L++) {
+				q = x[j][L];
+				x[j][L] = x[k][L];
+				x[k][L] = q;
+			}
+		q = x[k][k];
+		x[k][k] = 1;
+		for (let j=0; j<n; j++) x[k][j] = x[k][j] / q;
+		for (let i=0; i<n; i++)
+			if (i != k) {
+				q = x[i][k];
+				x[i][k] = 0;
+				for (let j=0; j<n; j++) x[i][j] = x[i][j] - x[k][j] * q;
+			}
+	}
+	for (let k=n-1; k>=0; k--) {//Step -1 // ... unswap columns of X
+		let j = P[k];
+		if (j != k)
+			for (let i=0; i<n; i++) {
+				let q = x[i][k];
+				x[i][k] = x[i][j];
+				x[i][j] = q;
+			}
+	}
+	for (let i=0; i<n; i++)
+		for (let j=0; j<n; j++)
+			Results[i][j] = x[i][j];
+		
+	return Results;
+}
+function M_Mult(IPM) { // Takes an array of matrices, and multiplies them in order LTR. returns -1 if matrices are incompatible
+	//let i, j, k, L, temp=0;
+	let Result;
 
+//***********************************************
+//* Function multiplies n matrices.             *
+//* Matrices must be conformable:               *
+//* Matrix M(i) is mxn and matrix M(i+1) is nxm *
+//***********************************************
+
+    //Cycle through the parameter array multiplying each matrix
+    /* M = IPM[0];
+    for (L = 0; L<IPM.length-1; L++) {
+    
+        //Check that matrices are conformable
+        if (M[0].length != IPM[L+1].length) return Matrix; // error?
+        
+        //Redimension the product matrix
+        Matrix = matrixGen(M.length, IPM[L+1].length); //(1 To UBound(M, 1), 1 To UBound(IPM(L + 1), 2))
+        
+        //Multiplication routine
+        for (i=0; i<M.length; i++) {
+            for (j=0; j<IPM[L+1][0].length; j++) {
+                for (k=0; k<IPM[L+1].length; k++) temp = temp + M[i][k] * IPM[L+1][k][j];
+                Matrix[i][j] = temp;
+                temp = 0;
+            }
+        }
+        
+        M = Matrix;
+	}
+    return Matrix; */
+	
+	let M = IPM[0];
+	for (let k=1; k<IPM.length; k++) {
+		let m1 = M, m2 = IPM[k];
+		if (m1[0].length != m2.length) return -1; // Check for matrix mult
+		M = matrixGen(m1.length, m2[0].length);
+		
+		for (let i=0; i<m1.length; i++)
+			for (let j=0; j<m2[0].length; j++) {
+				let elem = 0;
+				for (let l=0; l<m2.length; l++) elem += m1[i][l] * m2[l][j];
+				M[i][j] = elem;
+			}
+	}
+	return M;
+}
 
 // Frame funcs
 // STA
