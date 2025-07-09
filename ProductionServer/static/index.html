@@ -59,9 +59,11 @@
 	<img src="images/NAS.png" alt="NAS Logo" style="width: 100%;">
 	<h1 style="text-align:center">Multi-Analysis</h1>
 </header>
-<div class="container" style="height: 80vh;">
+<div id="mainContainer" class="container" style="height: 80vh;">
 	<div class="sidebar">
-		<h2 style="text-align: center; margin-top: 40px">Analyses</h2>
+	<div style="text-align: right;"><button class="button" onclick="sbToggle()" style=" margin-top: 20px; width: 25px; display: inline-block;">☰</button></div>
+	<div id="sidebarContent">
+		<h2 style="text-align: center;">Analyses</h2>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
 		<div style="display: none;"> <!-- DLC -->
 		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
@@ -115,6 +117,7 @@
 		</div>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Disclaimer</h4>
 		Not every tool fits every application, inputs and results need to be verified by a qualified engineer.
+	</div>
 	</div>
 	<div id="FormParent" class="formParent" style="margin-top: -1px;">
 		<div id="hiddenCharts">
@@ -1764,8 +1767,8 @@
 			</template>
 			<template id="LJDinTabBorRTemplate">
 				<select style="width: 100%; background-color: transparent;">
-					<option value="bolt">Bolt</option>
-					<option value="rivet">Rivet</option>
+					<option value="B">Bolt</option>
+					<option value="R">Rivet</option>
 				</select>
 			</template>
 			<template id="LJDinTabFastTypeTemplate">
@@ -1779,8 +1782,8 @@
 				</select>
 				<dialog>
 					<h2>Enter number of Fasteners</h2>
-					<input type="number" autofocus>
-					<div class="dialog-buttons">
+					<input type="number" autofocus style="text-align: center;"><br>
+					<div class="dialog-buttons" style="margin: 0 auto;">
 						<button id="cnlBtn">Cancel</button>
 						<button id="okBtn">OK</button>
 					</div>
@@ -1790,8 +1793,10 @@
 			<header><h2>Lap Joint Doubler</h2></header>
 			<div class="formIO">
 			<h3>Instructions</h3>
-			<p>Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
-				<br>Then press "Prepare" to generate the input tables</p>
+			<p style="text-align: left; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+				<br>Then press "Prepare" to generate the input tables<br><br>
+				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
+				<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.</p>
 			<h3>Setup</h3>
 			<table class="inTab">
 				<tr>
@@ -1807,7 +1812,10 @@
 					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
 					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
 					<td></td>
-					<td><input id="FastFlexIn" type="number" placeholder="Enter"></td>
+					<td><select id="FastFlexIn" name="FastFlexIn" onchange="">
+						<option value="H">Huth</option>
+						<option value="NotH">Other</option>
+					</select></td>
 					<td><input id="SWKIn" type="number" placeholder="Enter K"></td>
 					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
 					<td><select id="matrixIn" name="matrixIn" onchange="">
@@ -1818,7 +1826,6 @@
 			</table>
 			<br>
 			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
-			<button style="width: 15%;" onclick="LJDSketch()">Sketch</button>
 			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
 			<br>
 			</div>
@@ -1826,6 +1833,10 @@
 			<table class="inTab2" id="inTab1"></table>
 			<br>
 			<table class="inTab2" id="inTab2"></table>
+			<h2 style="text-align: center;">Output</h2>
+			<table class="outTab" id="outTab"></table>
+			<br>
+			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
