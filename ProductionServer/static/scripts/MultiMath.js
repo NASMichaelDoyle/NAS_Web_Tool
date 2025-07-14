@@ -173,7 +173,7 @@ function fn_epsilon(x,y,c_o,eps0) {
      } 
      while (err>0.001) ;
      return epsa;
-   }
+}
 function rounder_three(x) {
      return Number.parseFloat(x).toFixed(3);
 }
@@ -1689,7 +1689,7 @@ function boltgroupCalcs() {
 		outs[i][7] = fastProps[i][0]==""?"":outs[i][3]+outs[i][5];
 		outs[i][8] = fastProps[i][0]==""?"":Math.sqrt(outs[i][6]**2 + outs[i][7]**2);
 	}
-	console.log(outs); console.log(array2Transpose(outs)); console.log(array2Transpose(outs)[6]); console.log(SUM(array2Transpose(outs)[6]));
+	//console.log(outs); console.log(array2Transpose(outs)); console.log(array2Transpose(outs)[6]); console.log(SUM(array2Transpose(outs)[6]));
 	let PyTot = SUM(array2Transpose(outs)[6]);
 	let PzTot = SUM(array2Transpose(outs)[7]);
 	let MxTot = mxtotal(array2Transpose(outs)[6],array2Transpose(outs)[7],temp[0],temp[1],Ycg,Zcg, fastProps.length);
@@ -1813,7 +1813,34 @@ function LJDCalcs() {
 		dumRow.appendChild(dumCell);
 	}
 	Tab.appendChild(dumRow);
-	LJDCompute();
+
+	let pplate = matrixGen(pHigh, pLong); // plate shear
+	let f = matrixGen(pHigh-1, pLong-1);
+	LJDCompute(pplate, f);
+	console.log(pplate);
+	console.log(f);
+
+	for (let i=0; i<pHigh*2-1; i++) {
+		dumRow = document.createElement("tr");
+		for (let j=0; j<pLong*2; j++) {
+			dumCell = document.createElement("td");
+			dumCell.style.backgroundColor = "#ccffcc";
+			//dumCell.innerHTML = i + ", " + j;
+			if (!(i%2) && !(j%2)) dumCell.innerHTML = pplate[i/2][j/2]===""?"":sRound(pplate[i/2][j/2], 0);
+			else if (!(i%2)) {
+				let val = 0;
+				if (!!f[parseInt(i/2-1)]) val += f[parseInt(i/2-1)][parseInt(j/2)];
+				if (!!f[parseInt(i/2)]) val -= f[parseInt(i/2)][parseInt(j/2)];
+				if ((!f[parseInt(i/2-1)] || !f[parseInt(i/2-1)][parseInt(j/2)]) && (!f[parseInt(i/2)] || !f[parseInt(i/2)][parseInt(j/2)])) val = "";
+				else val = sRound(val, 0);
+				dumCell.innerHTML = val;
+				dumCell.style.backgroundColor = "#ff9900";
+				dumCell.style.color = "#ff0000";
+			} else if (!!(j%2) && j<pLong*2-2) dumCell.innerHTML = !f[parseInt(i/2)][parseInt(j/2)]?"":sRound(f[parseInt(i/2)][parseInt(j/2)], 0);
+			dumRow.appendChild(dumCell);
+		}
+		Tab.appendChild(dumRow);
+	}
 }
 function LJDPrepIns() {
 	let Tab1 = GEBID("LJDForm", "inTab1");
@@ -2049,7 +2076,7 @@ function matrixGen(rows, cols) {
 	for (let i=0; i<rows; i++) ARR[i] = new Array(cols).fill(0);
 	return ARR;
 }
-function LJDCompute() { // Typo here?
+function LJDCompute(pplate, f) { // Typo here?
 	// Variables can probably be better defined with long and high
 	let plates = +GEBID("LJDForm", "platesHighIn").value;
 	let sections = +GEBID("LJDForm", "platesLongIn").value;
@@ -2065,20 +2092,18 @@ function LJDCompute() { // Typo here?
 	let E = matrixGen(plates, sections+1); // YM
 	let q = matrixGen(plates, sections); // Shear flow
 	let P_node = new Array(Size+1).fill(0);; // shear force @ nodes (0-indexed now, so node 1 = P_node[0])
-	let kfast = matrixGen(plates, sections); // fastener stiffness?
-	let k_original_fast = matrixGen(plates, sections); // fastener stiffness?
+	let kfast = matrixGen(plates-1, sections-1); // fastener stiffness?
+	let k_original_fast = matrixGen(plates-1, sections-1); // fastener stiffness?
 	let kplate = matrixGen(plates, sections); // plate stiffness?
 	let Distance = []; // distance between nodes
 	let Fastdia = []; // fastener diameters
 	let FastE = []; // fastener YMs
 	//let Clearence = [];
 	let fast_Clear = matrixGen(20, 1000); // idk
-	let f = matrixGen(20, 1000);
 	//let fref = matrixGen(20, 1000);
 	//let fbrg = matrixGen(20, 1000);
-	let pplate = matrixGen(20, 1000); // plate shear???
 	//let LTFbot = matrixGen(20, 1000);
-	let LTF = matrixGen(20, 1000); // no clue
+	//let LTF = matrixGen(20, 1000); // no clue
 	//let typer = matrixGen(plates, 1);
 	let k = matrixGen(Size*2, Size*2); // stiffness matrix
 	let Fast_Type = [];
@@ -2100,16 +2125,16 @@ function LJDCompute() { // Typo here?
 	for (let i=0; i<sections + 1; i++) {
 		//x[i] = ActiveSheet.Cells(7, 1 + i).Value
 		if (i<sections-1) {
-			Fastdia[i] = childSeq(inTab1, [8+plates*3, i+2, 0]).value; //ActiveSheet.Cells(17 + 3 * plates, 2 + i).Value
-			FastE[i] = childSeq(inTab1, [9+plates*3, i+2, 0]).value; //ActiveSheet.Cells(18 + 3 * plates, 2 + i).Value
+			Fastdia[i] = +childSeq(inTab1, [8+plates*3, i+2, 0]).value; //ActiveSheet.Cells(17 + 3 * plates, 2 + i).Value
+			FastE[i] = +childSeq(inTab1, [9+plates*3, i+2, 0]).value; //ActiveSheet.Cells(18 + 3 * plates, 2 + i).Value
 			Fast_Type[i] = childSeq(inTab1, [10+plates*3, i+2, 0]).value; //ActiveSheet.Cells(8 + 3 * plates + 12, 2 + i).Value
 		}
 		//Clearence[i] = ActiveSheet.Cells(19 + 3 * plates, 2 + i).Value //Clearence between each layer and fastener
-		if (i<sections) Distance[i] = childSeq(inTab1, [1, i+2, 0]).value - childSeq(inTab1, [1, i+1, 0]).value; //ActiveSheet.Cells(7, 2 + i).Value - ActiveSheet.Cells(7, 1 + i).Value
+		if (i<sections) Distance[i] = +childSeq(inTab1, [1, i+2, 0]).value - childSeq(inTab1, [1, i+1, 0]).value; //ActiveSheet.Cells(7, 2 + i).Value - ActiveSheet.Cells(7, 1 + i).Value
 		for (let n=0; n<plates; n++) {
-			t[n][i] = childSeq(inTab1, [3+n, 1+i, 0]).value; //ActiveSheet.Cells(8 + n, 1 + i).Value
-			w[n][i] = childSeq(inTab1, [5+plates+n, 1+i, 0]).value; //ActiveSheet.Cells(11 + plates + n, 1 + i).Value
-			E[n][i] = childSeq(inTab1, [7+plates*2+n, 1+i, 0]).value; //ActiveSheet.Cells(14 + plates * 2 + n, 1 + i).Value
+			t[n][i] = +childSeq(inTab1, [3+n, 1+i, 0]).value; //ActiveSheet.Cells(8 + n, 1 + i).Value
+			w[n][i] = +childSeq(inTab1, [5+plates+n, 1+i, 0]).value; //ActiveSheet.Cells(11 + plates + n, 1 + i).Value
+			E[n][i] = +childSeq(inTab1, [7+plates*2+n, 1+i, 0]).value; //ActiveSheet.Cells(14 + plates * 2 + n, 1 + i).Value
 			//kfast[n][i] = 0;
 		}
 	}
@@ -2118,8 +2143,8 @@ function LJDCompute() { // Typo here?
 	// Typo in this loop?
 	for (let i=0; i<sections - 1; i++) {
 		counter = 0;
-		let a, b, ratio_max, tp, Fast_Flexibility;
-		for (let n=0; n<plates/*-1*/; n++) {
+		let a, b, ratio_max, tp, ts, Ep, Es, Fast_Flexibility;
+		for (let n=0; n<plates/* -1 */; n++) {
 			counter++;
 			let dummiest = childSeq(GEBID("LJDForm", "inTab2"), [2+2*n, 2+2*i,0, 0]);
 			let fastener_numbering = dummiest===undefined?0:dummiest.value; //Cells(8 + 3 * plates + 13 + n * 2, (i - 1) * 2 + 3).Value
@@ -2127,12 +2152,12 @@ function LJDCompute() { // Typo here?
 			if (fastener_numbering == "SW" || +fastener_numbering > 0) {
 				for (let j=0; j<(plates - n-1); j++) {
 					let breakCond=0;
-					if (t[n][i+1] > 0 && t[n+j][i+1] > 0) {
+					if (t[n][i+1] > 0 && t[n+j+1][i+1] > 0) {
 						//HUTH method below
 						let t1 = t[n][i+1];
 						let E1 = E[n][i+1] * 1000000;
-						let t2 = t[n+j][i+1];
-						let E2 = E[n+j][i+1] * 1000000;
+						let t2 = t[n+j+1][i+1];
+						let E2 = E[n+j+1][i+1] * 1000000;
 						let dia = Fastdia[i];
 						let Eb = FastE[i] * 1000000;
 						//fast_gap = Clearence(i)
@@ -2191,10 +2216,12 @@ function LJDCompute() { // Typo here?
 						else if (fastener_numbering == "SW") Fast_Flexibility = GEBID("LJDForm", "SWKIn").value;
 /*Typo?*/				else if (+fastener_numbering > 0) Fast_Flexibility = Fast_Flexibility * fastener_numbering; // Should this be division? ??---------------------------------------------------------------------------??
 						//To Correct for fasteners in series must increase their stiffness
-						for (let h=0; h<j; h++) {
+						//console.log(Fast_Flexibility);
+						for (let h=0; h<j+1; h++) {
 							k_original_fast[n + h][i] = Fast_Flexibility;
 							kfast[n + h][i] = Fast_Flexibility * (j+1);
 						}
+						//console.log(kfast);
 						fast_Clear[n + 1][i] = 0; //Clearence(i)
 						/* if (Clearence(i) > 0 Then
 							k_original_fast(n + 1, i) = k_original_fast(n + 1, i) / 1000000
@@ -2231,7 +2258,11 @@ function LJDCompute() { // Typo here?
 			P_node[Next_node_count-1] += q[n][i] * Distance[i] * 0.5;
 		}
 	//console.log(P_node);
-
+	//console.log((w[0][0] + w[0][0 + 1]) * 0.5);
+	//console.log((E[0][0] + E[0][0 + 1]) * 0.5 * 1000000);
+	//console.log((Distance[0]));
+	//console.log((t[0][0] + t[0][0 + 1]) / 2);
+	//console.log((((w[0][0] + w[0][0 + 1]) * 0.5 * (E[0][0] + E[0][0 + 1]) * 0.5 * 1000000) / Distance[0]) * ((t[0][0] + t[0][0 + 1]) / 2));
 	// #### Computes Plate Stiffness ####
 	for (let i=0; i<sections; i++)
 		for (let n=0; n<plates; n++) {
@@ -2242,6 +2273,7 @@ function LJDCompute() { // Typo here?
 		}
 	//console.log(kplate);
 	//console.log(kfast);
+	//console.log(k_original_fast);
 	for (let j=0; j<Size; j++)
 		for (let M=0; M<Size; M++)
 			k[j][M] = 0;
@@ -2267,18 +2299,19 @@ function LJDCompute() { // Typo here?
 			//Fasteners
 			//console.log(h + 1);
 			//console.log(kfast[h + 1]);
-			let Robert = kfast[h];
-			k[j][j] += kfast[h /* + 1 */][n + 1];
-			k[j][j + 1] += -kfast[h/*  + 1 */][n + 1];
-			k[j + 1][j] += -kfast[h /* + 1 */][n + 1];
-			k[j + 1][j + 1] += kfast[h/*  + 1 */][n + 1];
+			let Robert = kfast[h]===undefined?0:(kfast[h][n]===undefined?0:kfast[h][n]);
+			k[j][j] += Robert;
+			k[j][j + 1] += -Robert;
+			k[j + 1][j] += -Robert;
+			k[j + 1][j + 1] += Robert;
 			//Plates
 			//console.log(kplate);
 			//console.log(h);
-			k[j][j] += kplate[h][n + 2];
-			k[j][j + plates] += -kplate[h][n + 2];
-			k[j + plates][j] += -kplate[h][n + 2];
-			k[j + plates][j + plates] += kplate[h][n + 2];
+			Robert = kplate[h]===undefined?0:(kplate[h][n+1]===undefined?0:kplate[h][n+1]);
+			k[j][j] += Robert;
+			k[j][j + plates] += -Robert;
+			k[j + plates][j] += -Robert;
+			k[j + plates][j + plates] += Robert;
 		}
 	}
 	//console.log(k);
@@ -2286,22 +2319,22 @@ function LJDCompute() { // Typo here?
 	let redstiff = matrixGen(Size - plates, Size - plates); //[1 To Size - plates][1 To Size - plates];
 	let invstiff; //= matrixGen(Size - plates, Size - plates); //[1 To Size - plates][1 To Size - plates];
 	let stiff = matrixGen(Size, Size); //[1 To Size][1 To Size];
-	let forces;// = matrixGen(Size, 2); //[0 To Size][0 To 2];
-	let applied = []; //[1 To Size - plates][1 To 1];
-	let displ;
+	let forces; //cha-ching matrix LHS // = matrixGen(Size, 2); //[0 To Size][0 To 2];
+	let applied = matrixGen(Size-plates, 1); //[1 To Size - plates][1 To 1];
+	let displ; //cha-ching 
 	
-	for (let ijk=0; ijk<100; ijk++) {//incriment load untill reached 100% to determine fast loads with clearences
+	for (let ijk=1; ijk<=100; ijk++) {//incriment load untill reached 100% to determine fast loads with clearences
 		load_factor = ijk / 100;
 		for (let j=0; j<Size - plates; j++) {
-			if (j == 1) applied[j] = (Loads + P_node[j]) * load_factor;
-			else applied[j] = P_node[j] * load_factor;
+			if (j == 0) applied[j][0] = (Loads + P_node[j]) * load_factor;
+			else applied[j][0] = P_node[j] * load_factor;
 			for (let M=0; M<Size - plates; M++) redstiff[j][M] = k[j][M];
 		}
-		
-		//invstiff() = Application.WorksheetFunction.MInverse(redstiff)
 		invstiff = minvertplus(redstiff);
+		//console.log(redstiff);
+		//console.log(invstiff);
 		displ = M_Mult([invstiff, applied]);
-		let displacement = []; //(1 To 1, 1 To Size)
+		let displacement = []; //cha-ching //(1 To 1, 1 To Size)
 		for (let n=0; n<Size; n++) {
 			let check = Size - plates + 1;
 			if (n < check) displacement[n] = displ[n];
@@ -2324,40 +2357,40 @@ function LJDCompute() { // Typo here?
 			else {
 				let check_displ;
 				let check2 = (n + 1) * plates + 1;
-				if (j > check2) n++;
+				if (j+1 > check2) n++;
 				let check1 = n * plates + 1;
 				let h = parseInt(j - check1);
 				if (h<0) h=0;
-				if (j == Size) check_displ = 0;
+				if (j == Size-1) check_displ = 0;
 				else check_displ = displacement[j] - displacement[j + 1];
-				let check_clear = (fast_Clear[h + 1][n + 1] / 1000);
-				if (fast_Clear[h + 1][n + 1] == 0);
+				let check_clear = (fast_Clear[h][n + 1] / 1000);
+				if (fast_Clear[h][n + 1] == 0);
 				else
 					if (check_displ > check_clear)
 						if (check_clear == 0);
 						else {
-							k_original_fast[h + 1][n + 1] *= 1000000;
-							kfast[h + 1][n + 1] *= 1000000;
-							fast_Clear[h + 1][n + 1] = 0;
+							k_original_fast[h][n + 1] *= 1000000;
+							kfast[h][n + 1] *= 1000000;
+							fast_Clear[h][n + 1] = 0;
 						}
 				//Fasteners
-				k[j][j] += kfast[h + 1][n + 1];
-				k[j][j + 1] +=  -kfast[h + 1][n + 1];
-				k[j + 1][j] += -kfast[h + 1][n + 1];
-				k[j + 1][j + 1] += kfast[h + 1][n + 1];
+				let Robert = kfast[h]===undefined?0:(kfast[h][n]===undefined?0:kfast[h][n]);
+				k[j][j] += Robert;
+				k[j][j + 1] +=  -Robert;
+				k[j + 1][j] += -Robert;
+				k[j + 1][j + 1] += Robert;
 				//Plates
-				k[j][j] += kplate[h][n + 2];
-				k[j][j + plates] += -kplate[h][n + 2];
-				k[j + plates][j] += -kplate[h][n + 2];
-				k[j + plates][j + plates] += kplate[h][n + 2];
+				Robert = kplate[h]===undefined?0:(kplate[h][n+1]===undefined?0:kplate[h][n+1]);
+				k[j][j] += Robert;
+				k[j][j + plates] += -Robert;
+				k[j + plates][j] += -Robert;
+				k[j + plates][j + plates] += Robert;
 			}
 		}		
 	}
-	console.log(kplate);
-	console.log(k_original_fast);
 	//console.log(redstiff);
 	//console.log(invstiff);
-	//console.log(applied);
+	//console.log(array2Transpose(applied));
 	//console.log(displ);
 	//console.log(k);
 	//Check to see if displacements across fastener are enough to close gap if they are increase fast stiffness and recompute
@@ -2366,15 +2399,16 @@ function LJDCompute() { // Typo here?
 	for (let n=0; n<Size; n++) {
 		let check = Size - plates;
 		if (n < check) displacement[n] = displ[n];
-		//else displacement[n] = 0;
+		else displacement[n] = 0;
 	}
 	
-	displacement = array2Transpose(displacement)[0];
+	//displacement = array2Transpose(displacement)[0];
 	let stiff_forces = matrixGen(Size, Size); //(0 To Size, 0 To Size)
-	let disp_forces = []; //(0 To Size, 2)
+	let disp_forces = matrixGen(Size, 1); //(0 To Size, 2)
 	
 	for (let i=0; i<Size; i++) {
-		if (i<displacement.length) disp_forces[i] = displacement[i /*- 1*/];
+		if (i<displacement.length) disp_forces[i][0] = displacement[i /*- 1*/];
+		//else disp_forces[i][0] = 0;
 		for (let j=0; j<Size; j++) stiff_forces[i][j] = k[i][j];
 	}
 	//console.log(displacement);
@@ -2382,6 +2416,11 @@ function LJDCompute() { // Typo here?
 	//console.log(disp_forces);
 	forces = M_Mult([stiff_forces, disp_forces]);
 	
+	//console.log(stiff);
+	//console.log(forces);
+	//console.log(disp_forces);
+	//console.log(applied);
+
 	 // Matrix output
 	output_check = +GEBID("LJDForm", "matrixIn").value;
 	// UNFINISHED!!!
@@ -2501,30 +2540,33 @@ function LJDCompute() { // Typo here?
 			End With 
 		}*/
 	
+	//console.log(kplate);
+	//console.log(kfast);
+	//console.log(displacement);
+
 	//#### Calculate Bush and Plate Loads ####
 	let M = 0;
 	for (let i=0; i<sections; i++) {
 		for (let n=0; n<plates; n++) {
 			if (i == 0)
 				if (t[n][i] == 0) pplate[n][i] = "";
-				else pplate[n][i] = (kplate[n][i] * displacement[1] - kplate[n][i] * displacement[n + 1]);
+				else pplate[n][i] = (kplate[n][i] * displacement[0] - kplate[n][i] * displacement[n + 1]);
 			else {
 				let h = n + M * plates + 1;
 				if (t[n][i] == 0) pplate[n][i] = "";
 				else pplate[n][i] = (kplate[n][i] * displacement[h] - kplate[n][i] * displacement[h + plates]);
 			}
 		}
-		if (i > 1) M++;
+		if (i > 0) M++;
 	}
 	M = 0;
 	for (let i=0; i<sections; i++) {
-		for (let n=0; n<plates; n++)
-			if (i == sections) 
-				for (let h=0; h<sections - 1; h++) f[n][sections] = f[n][sections] + (f[n][h]);
-			else f[n][i] = kfast[n][i] * displacement[n + M * plates] - kfast[n][i] * displacement[n + 1 + M * plates]
+		for (let n=0; n<plates-1/*uhh*/; n++)
+			if (i == sections-1); //for (let h=0; h<sections - 1; h++) f[n][sections-1] += f[n][h];
+			else f[n][i] = kfast[n][i] * displacement[n+1 + M * plates] - kfast[n][i] * displacement[n + 2 + M * plates];
 		M++;
 	}
-	
+
 	//#### BEGIN LOADS OUTPUT CODE ####
 	
 	/* ActiveSheet.Cells(8 + 3 * plates + 16 + 4 * plates, 1).Value = "Loads lbs"
@@ -3287,7 +3329,35 @@ function dbgSetAll() {
 			childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1, j+1, 0]).value = dummy[j];
 	boltgroupCalcs();
 	
-	
+	// Set LJD
+	GEBID("LJDForm", "platesHighIn").value = 3;
+	GEBID("LJDForm", "platesLongIn").value = 4;
+	GEBID("LJDForm", "SWKIn").value = 69;
+	GEBID("LJDForm", "TAppLoadIn").value = 1000;
+	LJDPrepIns();
+	dummy = [0,2,4,6,8];
+	for (let i=0; i<5; i++)
+		childSeq(GEBID("LJDForm", "inTab1"), [1, 1+i, 0]).value = dummy[i];
+	dummy = [1,1,1,0,0,0,0,1,1,1,1,1,1,1,0];
+	for (let i=0; i<3; i++)
+		for (let j=0; j<5; j++)
+			childSeq(GEBID("LJDForm", "inTab1"), [3+i, 1+j, 0]).value = dummy[5*i+j];
+	LJDFEM();
+	for (let i=0; i<3; i++)
+		for (let j=0; j<5; j++)
+			childSeq(GEBID("LJDForm", "inTab1"), [8+i, 1+j, 0]).value = 1;
+	for (let i=0; i<3; i++)
+		for (let j=0; j<5; j++)
+			childSeq(GEBID("LJDForm", "inTab1"), [13+i, 1+j, 0]).value = 5;
+	dummy = [1,1,1,4,4,4];
+	for (let i=0; i<2; i++)
+		for (let j=0; j<3; j++)
+			childSeq(GEBID("LJDForm", "inTab1"), [17+i, 2+j, 0]).value = dummy[3*i+j];
+	dummy = [[1,1,0,0],[0,0,1,1],[1,1,1,0]]
+	for (let i=0; i<3; i++)
+		for (let j=0; j<4; j++)
+			childSeq(GEBID("LJDForm", "inTab2"), [1+i*2, 1+j*2, 0]).value = dummy[i][j];
+
 	// Set frame STA
 	GEBID("frameSTAForm", "FcyIn").value = 65000;
 	GEBID("frameSTAForm", "tfIn").value = 0.043;
