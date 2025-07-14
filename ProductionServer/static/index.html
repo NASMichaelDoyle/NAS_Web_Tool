@@ -79,8 +79,9 @@
 		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
 		</div>
 		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">WIP</h4>
+		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler (WIP)<br>
 		<div style="display: none;"> <!-- DLC -->
-		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -1794,10 +1795,10 @@
 				</dialog>
 			</div>
 			</template>
-			<header><h2>Lap Joint Doubler</h2></header>
-			<div class="formIO">
+			<header><h2>Lap Joint Doubler (WIP)</h2></header>
+			<div class="formIO" style="text-align: center;">
 			<h3>Instructions</h3>
-			<p style="text-align: left; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+			<p style="text-align: center; padding: 5px; margin: 0 auto;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
 				<br>Then press "Prepare" to generate the input tables<br><br>
 				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
 				<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.<br><br>
