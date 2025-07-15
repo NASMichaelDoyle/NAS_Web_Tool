@@ -1817,8 +1817,8 @@ function LJDCalcs() {
 	let pplate = matrixGen(pHigh, pLong); // plate shear
 	let f = matrixGen(pHigh-1, pLong-1);
 	LJDCompute(pplate, f);
-	console.log(pplate);
-	console.log(f);
+	//console.log(pplate);
+	//console.log(f);
 
 	for (let i=0; i<pHigh*2-1; i++) {
 		dumRow = document.createElement("tr");
@@ -1877,14 +1877,62 @@ function LJDPrepIns() {
 	for (let i=0; i<pLong+1; i++) {
 		dumCell = document.createElement("td");
 		dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
+		dumCell.setAttribute("title", "X-coordinate of node");
 		dumRow.appendChild(dumCell);
 	}
 	Tab1.appendChild(dumRow);
+	Tab1.appendChild(document.createElement("br"));
 	// Make inputs
-	for (let sect of ["Thickness (in)", "Width (in)", "YM (Msi)"]) {
+	dumRow = document.createElement("tr");
+		dumCell = document.createElement("th");
+		dumCell.innerHTML = "Thickness (in)";
+		dumRow.appendChild(dumCell);
+		Tab1.appendChild(dumRow);
+		for (let i=0; i<pHigh; i++) {
+			dumRow = document.createElement("tr");
+			dumRow.style.backgroundColor = colorIndex(i);
+			dumCell = document.createElement("th");
+			dumCell.innerHTML = "t" + (i+1);
+			dumRow.appendChild(dumCell);
+			for (let j=0; j<pLong+1; j++) {
+				dumCell = document.createElement("td");
+				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); 
+				// If thickness change inTab2
+				dumCell.setAttribute("title", "Thickness of plate at node");
+				dumCell.children[0].onchange = LJDFEM;
+				dumRow.appendChild(dumCell);
+			}
+			// fill row button
+			dumCell = document.createElement("td");
+			dumCell.appendChild(document.createElement("button"))
+			dumCell.children[0].innerHTML = "Set row";
+			dumCell.children[0].setAttribute("onclick", "LJDFillTab("+i+")");
+			dumRow.appendChild(dumCell);
+			dumCell =  document.createElement("td");
+			dumCell.appendChild(document.createElement("input"))
+			dumCell.children[0].setAttribute("placeholder", "Value");
+			dumCell.children[0].setAttribute("type", "Number");
+			dumCell.children[0].setAttribute("title", "Value to set entire row to");
+			dumRow.appendChild(dumCell);
+			Tab1.appendChild(dumRow);
+		}
+		Tab1.appendChild(document.createElement("br"));
+	for (let sect of ["Width (in)", "YM (Msi)"]) {
 		dumRow = document.createElement("tr");
 		dumCell = document.createElement("th");
 		dumCell.innerHTML = sect;
+		dumRow.appendChild(dumCell);
+		// Create "fill all" buttons
+		dumCell = document.createElement("td");
+		dumCell.appendChild(document.createElement("button"))
+		dumCell.children[0].innerHTML = "Set all";
+		dumCell.children[0].setAttribute("onclick", "LJDFillTab(this)");
+		dumRow.appendChild(dumCell);
+		dumCell =  document.createElement("td");
+		dumCell.appendChild(document.createElement("input"))
+		dumCell.children[0].setAttribute("placeholder", "Value");
+		dumCell.children[0].setAttribute("type", "Number");
+		dumCell.children[0].setAttribute("title", "Value to set entire table to");
 		dumRow.appendChild(dumCell);
 		Tab1.appendChild(dumRow);
 		for (let i=0; i<pHigh; i++) {
@@ -1897,6 +1945,8 @@ function LJDPrepIns() {
 				dumCell = document.createElement("td");
 				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); 
 				// If thickness change inTab2
+				let propty = sect=="YM (Msi)"?"Young's Modulus":sect.split(" ")[0];
+				dumCell.setAttribute("title", propty + " of plate at node");
 				if (sect == "Thickness (in)") dumCell.children[0].onchange = LJDFEM;
 				dumRow.appendChild(dumCell);
 			}
@@ -1904,7 +1954,7 @@ function LJDPrepIns() {
 		}
 		Tab1.appendChild(document.createElement("br"));
 	}
-	for (let sect of ["Fast Dia (in)", "Fast E (in)"]) {
+	for (let sect of ["Fast Dia (in)", "Fast E (Msi)"]) {
 		dumRow = document.createElement("tr");
 		dumCell = document.createElement("th");
 		dumCell.innerHTML = sect;
@@ -1916,6 +1966,7 @@ function LJDPrepIns() {
 			dumCell = document.createElement("td");
 			dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
 			dumCell.style.backgroundColor = "#ccffff";
+			dumCell.setAttribute("title", (sect=="Fast Dia (in)"?"Diameter":"Young's Modulus") + " of fastener");
 			dumRow.appendChild(dumCell);
 		}
 		Tab1.appendChild(dumRow);
@@ -1975,6 +2026,25 @@ function LJDPrepIns() {
 		}
 		Tab2.appendChild(dumRow);
 	}
+}
+function LJDFillTab(Button) {
+	
+	let plat = +GEBID("LJDForm", "platesHighIn").value;
+	let sect = +GEBID("LJDForm", "platesLongIn").value;
+	let Tab = GEBID("LJDForm", "inTab1");
+	if (!isNaN(Button)) {
+		let val = childSeq(Tab, [4+Button, 3+sect, 0]).value;
+		for (let i=1; i<sect+2; i++)
+			childSeq(Tab, [4+Button, i, 0]).value = val;
+		LJDFEM();
+		return;
+	}
+	let val = Button.parentElement.parentElement.children[2].children[0].value;
+	let start = Array.from(Tab.children).indexOf(Button.parentElement.parentElement) + 1;
+	//console.log(start);
+	for (let i=start; i<start+plat; i++)
+		for (let j=1; j<sect+2; j++)
+			childSeq(Tab, [i, j, 0]).value = val;
 }
 function colorIndex(I) {
 	switch (I) {
@@ -2056,7 +2126,7 @@ function LJDFEM() {
 	let plates = [];
 	for (let i=0; i<pHigh; i++) {
 		plates[i] = [];
-		for (let j=0; j<pLong+1; j++) plates[i][j] = (childSeq(ins, [i+3, j+1, 0]).value==0 || childSeq(ins, [i+3, j+1, 0]).value=="")?0:1;
+		for (let j=0; j<pLong+1; j++) plates[i][j] = (childSeq(ins, [i+4, j+1, 0]).value==0 || childSeq(ins, [i+4, j+1, 0]).value=="")?0:1;
 	}
 	// Reset colors
 	for (let i=0; i<pHigh; i++) 
@@ -2125,16 +2195,16 @@ function LJDCompute(pplate, f) { // Typo here?
 	for (let i=0; i<sections + 1; i++) {
 		//x[i] = ActiveSheet.Cells(7, 1 + i).Value
 		if (i<sections-1) {
-			Fastdia[i] = +childSeq(inTab1, [8+plates*3, i+2, 0]).value; //ActiveSheet.Cells(17 + 3 * plates, 2 + i).Value
-			FastE[i] = +childSeq(inTab1, [9+plates*3, i+2, 0]).value; //ActiveSheet.Cells(18 + 3 * plates, 2 + i).Value
-			Fast_Type[i] = childSeq(inTab1, [10+plates*3, i+2, 0]).value; //ActiveSheet.Cells(8 + 3 * plates + 12, 2 + i).Value
+			Fastdia[i] = +childSeq(inTab1, [9+plates*3, i+2, 0]).value; //ActiveSheet.Cells(17 + 3 * plates, 2 + i).Value
+			FastE[i] = +childSeq(inTab1, [10+plates*3, i+2, 0]).value; //ActiveSheet.Cells(18 + 3 * plates, 2 + i).Value
+			Fast_Type[i] = childSeq(inTab1, [11+plates*3, i+2, 0]).value; //ActiveSheet.Cells(8 + 3 * plates + 12, 2 + i).Value
 		}
 		//Clearence[i] = ActiveSheet.Cells(19 + 3 * plates, 2 + i).Value //Clearence between each layer and fastener
 		if (i<sections) Distance[i] = +childSeq(inTab1, [1, i+2, 0]).value - childSeq(inTab1, [1, i+1, 0]).value; //ActiveSheet.Cells(7, 2 + i).Value - ActiveSheet.Cells(7, 1 + i).Value
 		for (let n=0; n<plates; n++) {
-			t[n][i] = +childSeq(inTab1, [3+n, 1+i, 0]).value; //ActiveSheet.Cells(8 + n, 1 + i).Value
-			w[n][i] = +childSeq(inTab1, [5+plates+n, 1+i, 0]).value; //ActiveSheet.Cells(11 + plates + n, 1 + i).Value
-			E[n][i] = +childSeq(inTab1, [7+plates*2+n, 1+i, 0]).value; //ActiveSheet.Cells(14 + plates * 2 + n, 1 + i).Value
+			t[n][i] = +childSeq(inTab1, [4+n, 1+i, 0]).value; //ActiveSheet.Cells(8 + n, 1 + i).Value
+			w[n][i] = +childSeq(inTab1, [6+plates+n, 1+i, 0]).value; //ActiveSheet.Cells(11 + plates + n, 1 + i).Value
+			E[n][i] = +childSeq(inTab1, [8+plates*2+n, 1+i, 0]).value; //ActiveSheet.Cells(14 + plates * 2 + n, 1 + i).Value
 			//kfast[n][i] = 0;
 		}
 	}
@@ -3341,18 +3411,18 @@ function dbgSetAll() {
 	dummy = [1,1,1,0,0,0,0,1,1,1,1,1,1,1,0];
 	for (let i=0; i<3; i++)
 		for (let j=0; j<5; j++)
-			childSeq(GEBID("LJDForm", "inTab1"), [3+i, 1+j, 0]).value = dummy[5*i+j];
+			childSeq(GEBID("LJDForm", "inTab1"), [4+i, 1+j, 0]).value = dummy[5*i+j];
 	LJDFEM();
 	for (let i=0; i<3; i++)
 		for (let j=0; j<5; j++)
-			childSeq(GEBID("LJDForm", "inTab1"), [8+i, 1+j, 0]).value = 1;
+			childSeq(GEBID("LJDForm", "inTab1"), [9+i, 1+j, 0]).value = 1;
 	for (let i=0; i<3; i++)
 		for (let j=0; j<5; j++)
-			childSeq(GEBID("LJDForm", "inTab1"), [13+i, 1+j, 0]).value = 5;
+			childSeq(GEBID("LJDForm", "inTab1"), [14+i, 1+j, 0]).value = 5;
 	dummy = [1,1,1,4,4,4];
 	for (let i=0; i<2; i++)
 		for (let j=0; j<3; j++)
-			childSeq(GEBID("LJDForm", "inTab1"), [17+i, 2+j, 0]).value = dummy[3*i+j];
+			childSeq(GEBID("LJDForm", "inTab1"), [18+i, 2+j, 0]).value = dummy[3*i+j];
 	dummy = [[1,1,0,0],[0,0,1,1],[1,1,1,0]]
 	for (let i=0; i<3; i++)
 		for (let j=0; j<4; j++)
