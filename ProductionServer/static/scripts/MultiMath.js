@@ -1883,7 +1883,41 @@ function LJDPrepIns() {
 	Tab1.appendChild(dumRow);
 	Tab1.appendChild(document.createElement("br"));
 	// Make inputs
-	for (let sect of ["Thickness (in)", "Width (in)", "YM (Msi)"]) {
+	dumRow = document.createElement("tr");
+		dumCell = document.createElement("th");
+		dumCell.innerHTML = "Thickness (in)";
+		dumRow.appendChild(dumCell);
+		Tab1.appendChild(dumRow);
+		for (let i=0; i<pHigh; i++) {
+			dumRow = document.createElement("tr");
+			dumRow.style.backgroundColor = colorIndex(i);
+			dumCell = document.createElement("th");
+			dumCell.innerHTML = "t" + (i+1);
+			dumRow.appendChild(dumCell);
+			for (let j=0; j<pLong+1; j++) {
+				dumCell = document.createElement("td");
+				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); 
+				// If thickness change inTab2
+				dumCell.setAttribute("title", "Thickness of plate at node");
+				dumCell.children[0].onchange = LJDFEM;
+				dumRow.appendChild(dumCell);
+			}
+			// fill row button
+			dumCell = document.createElement("td");
+			dumCell.appendChild(document.createElement("button"))
+			dumCell.children[0].innerHTML = "Set row";
+			dumCell.children[0].setAttribute("onclick", "LJDFillTab("+i+")");
+			dumRow.appendChild(dumCell);
+			dumCell =  document.createElement("td");
+			dumCell.appendChild(document.createElement("input"))
+			dumCell.children[0].setAttribute("placeholder", "Value");
+			dumCell.children[0].setAttribute("type", "Number");
+			dumCell.children[0].setAttribute("title", "Value to set entire row to");
+			dumRow.appendChild(dumCell);
+			Tab1.appendChild(dumRow);
+		}
+		Tab1.appendChild(document.createElement("br"));
+	for (let sect of ["Width (in)", "YM (Msi)"]) {
 		dumRow = document.createElement("tr");
 		dumCell = document.createElement("th");
 		dumCell.innerHTML = sect;
@@ -1994,16 +2028,23 @@ function LJDPrepIns() {
 	}
 }
 function LJDFillTab(Button) {
+	
 	let plat = +GEBID("LJDForm", "platesHighIn").value;
 	let sect = +GEBID("LJDForm", "platesLongIn").value;
+	let Tab = GEBID("LJDForm", "inTab1");
+	if (!isNaN(Button)) {
+		let val = childSeq(Tab, [4+Button, 3+sect, 0]).value;
+		for (let i=1; i<sect+2; i++)
+			childSeq(Tab, [4+Button, i, 0]).value = val;
+		LJDFEM();
+		return;
+	}
 	let val = Button.parentElement.parentElement.children[2].children[0].value;
-	let Tab = Button.parentElement.parentElement.parentElement;
 	let start = Array.from(Tab.children).indexOf(Button.parentElement.parentElement) + 1;
 	//console.log(start);
 	for (let i=start; i<start+plat; i++)
 		for (let j=1; j<sect+2; j++)
 			childSeq(Tab, [i, j, 0]).value = val;
-	LJDFEM();
 }
 function colorIndex(I) {
 	switch (I) {
