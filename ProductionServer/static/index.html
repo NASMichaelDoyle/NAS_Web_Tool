@@ -1778,7 +1778,8 @@
 			</template>
 			<template id="LJDinTabFastTypeTemplate">
 			<div class="CSContainer">
-				<select style="width: 100%; background-color: transparent;">
+				Fastener
+				<select style="width: 100%; background-color: transparent; display: none;">
 					<option value="1">Single</option>
 					<option value="2">Double</option>
 					<option value="N">N-group</option>
@@ -1801,7 +1802,7 @@
 			<p style="text-align: center; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
 				<br>Then press "Prepare" to generate the input tables.<br><br>
 				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
-				<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.<br><br>
+				<!--<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.--><br><br>
 				Once everything has been inputted, press "Compute" to calculate loads.<br><br>
 				Hover over certain fields for more information.
 			</p>
@@ -1810,23 +1811,23 @@
 				<tr>
 					<td># of Plates High</td>
 					<td># of Plates Long</td>
-					<td style="width: 15%;"></td>
-					<td>Fast Flex H - Huth</td>
-					<td>Spotweld K</td>
+					<td style="width: 15%; display:none;"></td>
+					<td style="display:none;">Fast Flex H - Huth</td>
+					<td style="display:none;">Spotweld K</td>
 					<td>Total Applied Load</td>
-					<td>Matrix Output</td>
+					<td style="display:none;">Matrix Output</td>
 				</tr>
 				<tr>
 					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
 					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
-					<td></td>
-					<td><select id="FastFlexIn" name="FastFlexIn" onchange="">
+					<td style="display:none;"></td>
+					<td style="display:none;"><select id="FastFlexIn" name="FastFlexIn" onchange="">
 						<option value="H">Huth</option>
 						<option value="NotH">Other</option>
 					</select></td>
-					<td><input id="SWKIn" type="number" placeholder="Enter K"></td>
+					<td style="display:none;"><input id="SWKIn" type="number" placeholder="Enter K"></td>
 					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
-					<td><select id="matrixIn" name="matrixIn" onchange="">
+					<td style="display:none;"><select id="matrixIn" name="matrixIn" onchange="">
 						<option value="1">True</option>
 						<option value="0" selected="1">False</option>
 					</select></td>
