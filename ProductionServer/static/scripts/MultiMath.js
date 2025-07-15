@@ -1944,9 +1944,9 @@ function LJDPrepIns() {
 			for (let j=0; j<pLong+1; j++) {
 				dumCell = document.createElement("td");
 				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild); 
-				// If thickness change inTab2
 				let propty = sect=="YM (Msi)"?"Young's Modulus":sect.split(" ")[0];
 				dumCell.setAttribute("title", propty + " of plate at node");
+				// If thickness change inTab2
 				if (sect == "Thickness (in)") dumCell.children[0].onchange = LJDFEM;
 				dumRow.appendChild(dumCell);
 			}
@@ -1969,6 +1969,18 @@ function LJDPrepIns() {
 			dumCell.setAttribute("title", (sect=="Fast Dia (in)"?"Diameter":"Young's Modulus") + " of fastener");
 			dumRow.appendChild(dumCell);
 		}
+		// Create "fill all" buttons
+		dumCell = document.createElement("td");
+		dumCell.appendChild(document.createElement("button"))
+		dumCell.children[0].innerHTML = "Set all";
+		dumCell.children[0].setAttribute("onclick", "LJDFillTab("+(sect=="Fast Dia (in)"?"-1":"-2")+")");
+		dumRow.appendChild(dumCell);
+		dumCell =  document.createElement("td");
+		dumCell.appendChild(document.createElement("input"))
+		dumCell.children[0].setAttribute("placeholder", "Value");
+		dumCell.children[0].setAttribute("type", "Number");
+		dumCell.children[0].setAttribute("title", "Value to set entire row to");
+		dumRow.appendChild(dumCell);
 		Tab1.appendChild(dumRow);
 	}
 	dumRow = document.createElement("tr");
@@ -1988,7 +2000,7 @@ function LJDPrepIns() {
 	// Second table
 	dumRow = document.createElement("tr");
 	dumCell = document.createElement("th");
-	dumCell.innerHTML = "FEM Parameters";
+	dumCell.innerHTML = "FEM Model";//"FEM Parameters";
 	dumRow.appendChild(dumCell);
 	for (let i=1; i<=pLong; i++) {
 		dumCell = document.createElement("th");
@@ -2008,7 +2020,8 @@ function LJDPrepIns() {
 			for (let j=0; j<pLong; j++) {
 				dumCell = document.createElement("td");
 				dumCell.appendChild(GEBID("LJDForm", "LJDinTabInTemplate").content.cloneNode(true).firstElementChild);
-				dumCell.title = "Plate shear flow"
+				//dumCell.title = "Plate shear flow"
+				dumCell.children[0].style.display = "none";
 				dumRow.appendChild(dumCell);
 				dumCell = document.createElement("th");
 				dumCell.innerHTML = "Node " + (i/2 + 2 + j*pHigh);
@@ -2020,7 +2033,7 @@ function LJDPrepIns() {
 				dumCell = document.createElement("td");
 				dumRow.appendChild(document.createElement("td"));
 				if (j<pLong-1) LJDaddCustomSelect(dumCell);
-				dumCell.title = "Fastener type/count";
+				//dumCell.title = "Fastener type/count";
 				dumRow.appendChild(dumCell);
 			}
 		}
@@ -2032,11 +2045,16 @@ function LJDFillTab(Button) {
 	let plat = +GEBID("LJDForm", "platesHighIn").value;
 	let sect = +GEBID("LJDForm", "platesLongIn").value;
 	let Tab = GEBID("LJDForm", "inTab1");
-	if (!isNaN(Button)) {
+	if (!isNaN(Button) && Button >= 0) {
 		let val = childSeq(Tab, [4+Button, 3+sect, 0]).value;
 		for (let i=1; i<sect+2; i++)
 			childSeq(Tab, [4+Button, i, 0]).value = val;
 		LJDFEM();
+		return;
+	} else if (!isNaN(Button)) {
+		let val = childSeq(Tab, [8-Button + 3*plat, 2+sect, 0]).value;
+		for (let i=2; i<sect+1; i++)
+			childSeq(Tab, [8-Button + 3*plat, i, 0]).value = val;
 		return;
 	}
 	let val = Button.parentElement.parentElement.children[2].children[0].value;
