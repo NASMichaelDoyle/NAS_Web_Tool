@@ -1872,7 +1872,7 @@ function LJDPrepIns() {
 	dumRow = document.createElement("tr");
 	dumRow.style.backgroundColor = "#ccffff";
 	dumCell = document.createElement("th");
-	dumCell.innerHTML = "X-Coord"
+	dumCell.innerHTML = "X-Coord (in)"
 	dumRow.appendChild(dumCell);
 	for (let i=0; i<pLong+1; i++) {
 		dumCell = document.createElement("td");
