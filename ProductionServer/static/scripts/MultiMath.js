@@ -1720,7 +1720,8 @@ function boltgroupCalcs() {
                 borderColor: 'rgba(00, 00, 80, 1)', // Border color of the points
                 borderWidth: 1,
                 pointRadius: 3, // Size of the points
-                pointHoverRadius: 5 // Size of the points on hover
+                pointHoverRadius: 5, // Size of the points on hover
+				order:1
 			},
 			{
 				label: "CG",
@@ -1729,11 +1730,12 @@ function boltgroupCalcs() {
                 borderColor: 'rgba(255, 00, 255, 1)', // Border color of the points
                 borderWidth: 1,
                 pointRadius: 3, // Size of the points
-                pointHoverRadius: 5 // Size of the points on hover
+                pointHoverRadius: 5, // Size of the points on hover
+				order:0
 			}]
 		},
 		options: {
-			responsive: false,
+			responsive: true,
 			maintainAspectRatio: true,
 			aspectRatio: 1.5,
             scales: {

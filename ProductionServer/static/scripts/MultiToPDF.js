@@ -490,6 +490,9 @@ function texBoltgroup() {
 	tex = tex.replace("<outRow>", dumRow);
 	return tex;
 }
+function texLJD() {
+
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -663,6 +666,9 @@ function writeTeX() { // Build TeX document in order from inputs
 				break;
 			case "boltgroup":
 				tex += texBoltgroup();
+				break;
+			case "LJD":
+				tex += texLJD();
 				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));

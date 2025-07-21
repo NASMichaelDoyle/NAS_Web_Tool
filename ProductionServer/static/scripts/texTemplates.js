@@ -666,6 +666,11 @@ From the above properties, the following can be calculated in table \\ref{tab:bg
 \\end{table}
 `
 
+// Lap Joint Doubler ------------------------------------------------------------------------------------------------
+const LJDTemplate = `
+
+`
+
 // FRAME STA --------------------------------------------------------------------------------------------------------
 const frameSTATemplate = `
 \\clearpage
