@@ -491,7 +491,42 @@ function texBoltgroup() {
 	return tex;
 }
 function texLJD() {
-
+	// Get em'
+	let tex = LJDTemplate;
+	let plat = +GEBID("LJDForm", "platesHighIn").value;
+	let sect = +GEBID("LJDForm", "platesLongIn").value;
+	let TAppLoad = +GEBID("LJDForm", "TAppLoadIn").value;
+	let inTab = GEBID("LJDForm", "inTab1");
+	let outTab = GEBID("LJDForm", "outTab");
+	let XCoord = [];
+	let tp = matrixGen(plat, sect+1);
+	let wp = matrixGen(plat, sect+1);
+	let Ep = matrixGen(plat, sect+1);
+	let diaf = [];
+	let Ef = [];
+	let BorR = [];
+	let loads = matrixGen(plat*2-1, sect*2);
+	for (let i=0; i<sect+1; i++) XCoord[i] = childSeq(inTab, [1, i+1, 0]).value;
+	let iter = 0;
+	for (let arr of [tp, wp, Ep]) {
+		for (let i=0; i<plat; i++)
+			for (let j=0; j<sect+1; j++)
+				arr[i][j] = childSeq(inTab, [(plat+2)*iter+i+4, j+1, 0]).value;
+		iter++;
+	}
+	iter = 0;
+	for (let arr of [diaf, Ef, BorR]) {
+		for (let i=0; i<sect-1; i++) {
+			arr[i] = childSeq(inTab, [plat*3+9+iter, i+2, 0]).value;
+			if (iter==2) arr[i] = arr[i]=="B"?"Bolt":"Rivet";
+		}
+		iter++;
+	}
+	for (let i=0; i<plat*2-1; i++)
+		for (let j=0; j<sect*2; j++)
+			loads[i][j] = childSeq(outTab, [i+2, j]).innerHTML;
+	
+	//for (let thing of [XCoord, tp, wp, Ep, diaf, Ef, BorR, loads]) console.log(thing);
 }
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
