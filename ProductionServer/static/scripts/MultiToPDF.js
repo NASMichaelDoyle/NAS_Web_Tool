@@ -527,6 +527,11 @@ function texLJD() {
 			loads[i][j] = childSeq(outTab, [i+2, j]).innerHTML;
 	
 	//for (let thing of [XCoord, tp, wp, Ep, diaf, Ef, BorR, loads]) console.log(thing);
+
+	tex = tex
+	.replace("<plates>", plat)
+	.replace("<TAppLoad>", TAppLoad);
+	let cols = sect+1;
 }
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
