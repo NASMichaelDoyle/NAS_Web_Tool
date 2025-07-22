@@ -531,7 +531,85 @@ function texLJD() {
 	tex = tex
 	.replace("<plates>", plat)
 	.replace("<TAppLoad>", TAppLoad);
-	let cols = sect+1;
+	iter = 0;
+	for (let colsize of [sect+2, sect+2, sect, sect*2+1, sect*2]) {
+		let cols = "|";
+		for (let j=0; j<colsize; j++) cols += "c|";
+		tex = tex.replace("<cols" + iter + ">", cols);
+		iter++;
+	}
+	let dummy = "\\textbf{Property} & \\textbf{P\\textsubscript{Applied}} & ";
+	for (let i=1; i<sect; i++) dummy += "\\textbf{Fast "+i+"} & ";
+	dummy += "\\textbf{Fixed} \\\\\\hline";
+	// Common table header
+	tex = tex.replace("<pos>", dummy + "\n<pos>");
+	tex = tex.replace("<pProps>", dummy + "\n<pProps>");
+	// Position table
+	dummy = "\\textbf{X-Coord (in)}";
+	for (let i=0; i<sect+1; i++) dummy += " & " + XCoord[i];
+	tex = tex.replace("<pos>", dummy);
+	// Plate property table
+	for (let prop of ["Thickness (in)", "Width (in)", "Young's Modulus (Msi)"]) {
+		tex = tex.replace("<pProps>", "\\multicolumn{"+(sect+2)+"}{|c|}{\\textbf{"+prop+"}}\\\\\\hline\n<pProps>");
+		let prp = prop==="Thickness (in)"?"t":(prop==="Width (in)"?"w":"E");
+		for (let i=0; i<plat; i++) {
+			dummy = "\\textbf{"+prp+(i+1)+"}";
+			for (let j=0; j<sect+1; j++) dummy += " & " + (prop==="Thickness (in)"?tp[i][j]:(prop==="Width (in)"?wp[i][j]:Ep[i][j]));
+			dummy += (prop!=="Young's Modulus (Msi)" || i<plat-1)?"\\\\\\hline\n<pProps>":"";
+			tex = tex.replace("<pProps>", dummy);
+		}
+	}
+	// Fastener property table
+	dummy = "\\textbf{Property}";
+	for (let i=1; i<sect; i++) dummy += "& \\textbf{Fast "+i+"}";
+	dummy += "\\\\\\hline\n<fProps>";
+	tex = tex.replace("<fProps>", dummy);
+	for (let prop of ["Diameter (in)", "Young's Modulus (Msi)", "Bolt or Rivet"]) {
+		dummy = "\\textbf{"+prop+"}";
+		for (let i=0; i<sect-1; i++) dummy += " & " + (prop==="Diameter (in)"?diaf[i]:(prop==="Young's Modulus (Msi)"?Ef[i]:BorR[i]));
+		if (prop!=="Bolt or Rivet") dummy += "\\\\\\hline\n<fProps>";
+		tex = tex.replace("<fProps>", dummy);
+	}
+	// FEM model
+	dummy = "\\textbf{P\\textsubscript{Applied}} & ";
+	for (let i=1; i<sect; i++) dummy += "\\textbf{Plate "+i+"} & \\textbf{Fast "+i+"} & ";
+	dummy += "\\textbf{Plate "+sect+"} & \\textbf{Fixed} \\\\\\hline";
+	tex = tex.replace("<FEM>", dummy + "\n<FEM>");
+	for (let i=0; i<plat; i++) {
+		dummy="\\textbf{Node 1}";
+		if (+tp[i][0]) dummy += "\\cellcolor{LJD"+i+"}";
+		for (let j=1; j<sect+1; j++) {
+			dummy += "&";
+			if (+tp[i][j-1] && +tp[i][j]) dummy += "\\cellcolor{LJD"+i+"}";
+			dummy +="& \\textbf{Node "+(2+i+plat*(j-1))+"}";
+			if (+tp[i][j]) dummy += "\\cellcolor{LJD"+i+"}";
+		}
+		if (i<plat-1) {
+			dummy += "\\\\\\hline\n&&"
+			for (let j=0; j<sect-1; j++) dummy += "Fastener&&"; // Add "fastener" rows
+			dummy += "\\\\\\hline\n<FEM>"
+		}
+		tex = tex.replace("<FEM>", dummy);
+	}
+	// Load output table
+	dummy = "";
+	for (let i=1; i<sect; i++) dummy += "\\textbf{Plate "+i+"} & \\textbf{Fast "+i+"} & ";
+	dummy += "\\textbf{Plate "+sect+"} & \\textbf{Fixed} \\\\\\hline";
+	tex = tex.replace("<loads>", dummy + "\n<loads>");
+	for (let i=0; i<plat*2-1; i++) {
+		dummy = loads[i][0];
+		for (let j=1; j<sect*2; j++) {
+			dummy += " & "+loads[i][j];
+			if (!(i%2) && j%2) dummy += "\\cellcolor{LJD8}";
+		}
+		tex = tex.replace("<loads>", dummy + (i<plat*2-2?"\\\\\\hline\n<loads>":""));
+	}
+	// Resize tables if needed
+	let sTSize = sect<10?1:(10/sect).toFixed(3);
+	let mTSize = sect<=6?1:(6/sect).toFixed(3);
+	let bTSize = sect<=5?1:(5/sect).toFixed(3);
+	for (let size of [sTSize, sTSize, sTSize, bTSize, mTSize]) tex = tex.replace("<tScale>", size);
+	return tex;
 }
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
@@ -708,7 +786,8 @@ function writeTeX() { // Build TeX document in order from inputs
 				tex += texBoltgroup();
 				break;
 			case "LJD":
-				tex += texLJD();
+				try {tex += texLJD();}
+				catch {alert("Lap Joint Doubler was not computed. Omitting");}
 				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));

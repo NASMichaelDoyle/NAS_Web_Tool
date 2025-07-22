@@ -668,7 +668,102 @@ From the above properties, the following can be calculated in table \\ref{tab:bg
 
 // Lap Joint Doubler ------------------------------------------------------------------------------------------------
 const LJDTemplate = `
+\\clearpage
+\\section{Lap Joint Doubler}
+%LJD colors
+\\definecolor{LJD0}{HTML}{ffff99}
+\\definecolor{LJD1}{HTML}{99ccff}
+\\definecolor{LJD2}{HTML}{ff99cc}
+\\definecolor{LJD3}{HTML}{cc99ff}
+\\definecolor{LJD4}{HTML}{ffcc99}
+\\definecolor{LJD5}{HTML}{33cccc}
+\\definecolor{LJD6}{HTML}{99cc00}
+\\definecolor{LJD7}{HTML}{ffcc00}
+\\definecolor{LJD8}{HTML}{ff9900}
+\\definecolor{LJD9}{HTML}{ff6600}
+\\definecolor{LJD10}{HTML}{666699}
+\\definecolor{LJD11}{HTML}{969696}
+\\definecolor{LJD12}{HTML}{003366}
+\\definecolor{LJD13}{HTML}{339966}
+\\definecolor{LJD14}{HTML}{003300}
+\\definecolor{LJD15}{HTML}{333300}
+\\definecolor{LJD16}{HTML}{993300}
+\\definecolor{LJD17}{HTML}{993366}
+\\definecolor{LJD18}{HTML}{333399}
+\\definecolor{LJD19}{HTML}{333333}
 
+%paratop%
+
+The following section analyses the loads through a given doubler configuration of <plates> plates, under an applied load of <TAppLoad> lbs. The configuration is modeled as a 2-dimensional finite element model.
+
+\\subsection{Properties}
+
+Table \\ref{tab:LJD1} states the relative positions of each fastener and each edge of the doubler configuration, along the X-axis:
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{<tScale>}{
+    \\begin{tabular}{<cols0>}
+      \\hline <pos> \\\\\\hline
+    \\end{tabular}}}
+	\\caption{Relative positions}
+	\\label{tab:LJD1}
+\\end{table}
+
+Table \\ref{tab:LJD2} states the thickness, width and Young's modulus respectively for each section of each plate, subdivided at each fastener:
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{<tScale>}{
+    \\begin{tabular}{<cols1>}
+      \\hline <pProps> \\\\\\hline
+    \\end{tabular}}}
+	\\caption{Plate properties}
+	\\label{tab:LJD2}
+\\end{table}
+
+The diameter and Young's modulus for each fastener is listed in table \\ref{tab:LJD3}. Whether the fastener is a bolt or a rivet is also listed.
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{<tScale>}{
+    \\begin{tabular}{<cols2>}
+      \\hline <fProps> \\\\\\hline
+    \\end{tabular}}}
+	\\caption{Fastener properties}
+	\\label{tab:LJD3}
+\\end{table}
+
+\\subsection{Output}
+
+A visual representation of the FEM model can be seen in table \\ref{tab:LJD4}.
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{<tScale>}{
+    \\begin{tabular}{<cols3>}
+      \\hline <FEM> \\\\\\hline
+    \\end{tabular}}}
+	\\caption{FEM representation}
+	\\label{tab:LJD4}
+\\end{table}
+
+From the above properties, the loading through every plate and fastener can be computed, seen in table \\ref{tab:LJD5}. Note that fastener bearing loads are colored orange.
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{<tScale>}{
+    \\begin{tabular}{<cols4>}
+      \\hline <loads> \\\\\\hline
+    \\end{tabular}}}
+	\\caption{Loads}
+	\\label{tab:LJD5}
+\\end{table}
 `
 
 // FRAME STA --------------------------------------------------------------------------------------------------------
