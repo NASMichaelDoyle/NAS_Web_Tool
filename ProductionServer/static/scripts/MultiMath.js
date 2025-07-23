@@ -2926,6 +2926,8 @@ function IRBCalcs(row) {
 	let tsheet = childSeq(row, [7, 0]).value;
 	let Et = interrivet(1000000*Ec, 1000*Fcy, nc, Pitch, c, tsheet)[0];
 	let Fir = interrivet(1000000*Ec, 1000*Fcy, nc, Pitch, c, tsheet)[1];
+	childSeq(row, [8]).innerHTML = sRound(Et, 0);
+	childSeq(row, [9]).innerHTML = sRound(Fir, 0);
 }
 function interrivet(E, Fcy, nc, pitch, fixity, t) {
 	//------------------------------------------------------------------
