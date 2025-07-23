@@ -57,6 +57,8 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "Boltgroup";
 		case "LJD":
 			return "Lap Joint Doubler";
+		case "IRB":
+			return "Inter Rivet Buckling";
 		default:
 			return "Unknown";
 	}

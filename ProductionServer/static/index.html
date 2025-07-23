@@ -79,6 +79,7 @@
 		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
 		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
 		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
+		<input id="IRBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Inter Rivet Buckling <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -1840,6 +1841,70 @@
 			<table class="inTab2" id="outTab"></table>
 			<br>
 			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
+		</div>
+		<div class="analForm" id="IRBForm">
+			<style>
+				#IRBForm input {
+					width: 75px;
+				}
+			</style>
+			<template id="IRBInRowTemplate">
+				<tr>
+					<td></td>
+					<td><input type="number" placeholder="Enter Material" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Ec" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Fcy" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter nc" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Pitch" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter c" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter tsheet" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</template>
+			<header><h2>Inter Rivet Buckling</h2></header>
+			<div class="formIO">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<table class="inTab" id="IOTab">
+				<colgroup>
+					<col span="1" style="border-right: 1px solid black">
+				</colgroup>
+				<tr style="border-bottom: 1px solid black;">
+					<th>Section</th>
+					<th>Material</th>
+					<th>E<sub>c</sub> (Msi)</th>
+					<th>F<sub>cy</sub> (ksi)</th>
+					<th>nc</th>
+					<th>Pitch (in)</th>
+					<th>c</th>
+					<th>t<sub>sheet</sub> (in)</th>
+					<th>E<sub>t</sub> (psi)</th>
+					<th>F<sub>ir</sub> (psi)</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="IRBAddSect()" style="margin-left: 0px;">Add Section</button>
+			<button onclick="IRBRmSect()" style="margin-left: 0px;">Remove Section</button>
+			</div>
+			<script>
+				let IRBNumSect = 0;
+				function IRBAddSect() {
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
+					Tab.appendChild(tRow);
+				}
+				function IRBRmSect() {
+					if (IRBNumSect <= 1) return;
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					Tab.lastElementChild.remove();
+					IRBNumSect--;
+				}
+				IRBAddSect();
+			</script>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>

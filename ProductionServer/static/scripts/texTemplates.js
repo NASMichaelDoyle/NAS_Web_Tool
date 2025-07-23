@@ -57,7 +57,7 @@ const coverTemplate = `\\documentclass[11pt]{article}
 \\centering
 \\vspace*{100pt}
 \\begin{figure}[h!]
-\\includegraphics[width=1\\linewidth]{ProductionServer/static/images/NAS.png}
+\\includegraphics[width=1\\linewidth]{static/images/NAS.png}
 \\end{figure}
 
 \\vspace{130pt}
@@ -152,7 +152,7 @@ Data seen below.
 
 \\begin{figure}[h!]
     \\centering
-    \\includegraphics[width=0.9\\linewidth]{ProductionServer/static/images/tension_clip/UAL_CSMA.png}
+    \\includegraphics[width=0.9\\linewidth]{static/images/tension_clip/UAL_CSMA.png}
     \\label{fig:UAL1}
 \\end{figure}
 
@@ -176,7 +176,7 @@ Data seen below.
 
 \\begin{figure}[h!]
     \\centering
-    \\includegraphics[width=0.9\\linewidth]{ProductionServer/static/images/tension_clip/UAL_EA.png}
+    \\includegraphics[width=0.9\\linewidth]{static/images/tension_clip/UAL_EA.png}
     \\label{fig:UAL2}
 \\end{figure}
 
@@ -868,7 +868,7 @@ Compression buckling analysis seen in table \\ref{tab:fSTA5}, figure \\ref{fig:f
 \\begin{figure}[h!]
 	\\centering
     \\label{fig:fSTA1}
-    \\includegraphics[width=0.5\\linewidth]{ProductionServer/static/images/frame/FrameDia1.png}
+    \\includegraphics[width=0.5\\linewidth]{static/images/frame/FrameDia1.png}
     \\caption{ESDU S020404}
 \\end{figure}
 
@@ -899,7 +899,7 @@ Shear buckling analysis seen in table \\ref{tab:fSTA6}, figure \\ref{fig:fSTA2}.
 \\begin{figure}[h!]
 	\\centering
     \\label{fig:fSTA2}
-    \\includegraphics[width=0.5\\linewidth]{ProductionServer/static/images/frame/FrameDia2.png}
+    \\includegraphics[width=0.5\\linewidth]{static/images/frame/FrameDia2.png}
     \\caption{ESDU 71005}
 \\end{figure}
 `
@@ -945,7 +945,7 @@ The section properties of the inner chord are herein summarized:
 \\begin{figure}[!htb]
 	\\centering
     \\label{fig:fWDT1}
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia1.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia1.png}
     \\caption{Inner chord diagram}
 \\end{figure}
 
@@ -981,7 +981,7 @@ The section properties of the stiffener (stringer clip) are herein summarized:
 \\begin{figure}[!htb]
     \\label{fig:fWDT2}
 	\\centering
-    \\includegraphics[width=0.5\\linewidth]{ProductionServer/static/images/frame/WDTDia2.png}
+    \\includegraphics[width=0.5\\linewidth]{static/images/frame/WDTDia2.png}
     \\caption{Stiffener (stringer clip) diagram}
 \\end{figure}
 
@@ -1023,7 +1023,7 @@ or
 \\begin{figure}[H]
     \\label{fig:fWDT3}
 	\\centering
-    \\includegraphics[width=0.5\\linewidth]{ProductionServer/static/images/frame/WDTDia3.png}
+    \\includegraphics[width=0.5\\linewidth]{static/images/frame/WDTDia3.png}
 \\end{figure}
 
 With Kss calculated from Figure \\ref{fig:fWDT4}.
@@ -1031,7 +1031,7 @@ With Kss calculated from Figure \\ref{fig:fWDT4}.
 \\begin{figure}[H]
     \\label{fig:fWDT4}
 	\\centering
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia4.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia4.png}
     \\caption{Figure 18 of NASA TM X-73305, Section B4.8.2}
 \\end{figure}
 
@@ -1050,7 +1050,7 @@ Rh and Rd can be calculated from Figure \\ref{fig:fWDT5}.
 \\begin{figure}[H]
     \\label{fig:fWDT5}
 	\\centering
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia5.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia5.png}
     \\caption{Figure 19 of NASA TM X-73305, Section B4.8.2}
 \\end{figure}
 
@@ -1073,14 +1073,14 @@ Correcting for plasticity,
 \\begin{figure}[H]
     \\label{fig:fWDT6}
 	\\centering
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia6.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia6.png}
     \\caption{Figure 20 of NASA TM X-73305, Section B4.8.2}
 \\end{figure}
 
 \\begin{figure}[H]
     \\label{fig:fWDT7}
 	\\centering
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia7.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia7.png}
     \\caption{Figure 21 of NASA TM X-73305, Section B4.8.2}
 \\end{figure}
 
@@ -1097,7 +1097,7 @@ Correcting for plasticity,
 \\begin{figure}[H]
     \\label{fig:fWDT8}
 	\\centering
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia8.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia8.png}
     \\caption{Figure 22 of NASA TM X-73305, Section B4.8.2}
 \\end{figure}
 
@@ -1114,7 +1114,7 @@ Correcting for plasticity,
 \\begin{figure}[H]
     \\label{fig:fWDT9}
 	\\centering
-    \\includegraphics[width=0.8\\linewidth]{ProductionServer/static/images/frame/WDTDia9.png}
+    \\includegraphics[width=0.8\\linewidth]{static/images/frame/WDTDia9.png}
     \\caption{Figure 24 of NASA TM X-73305, Section B4.8.2}
 \\end{figure}
 
