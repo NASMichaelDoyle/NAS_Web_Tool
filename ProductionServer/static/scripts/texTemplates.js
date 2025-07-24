@@ -766,6 +766,27 @@ From the above properties, the loading through every plate and fastener can be c
 \\end{table}
 `
 
+// Inter Rivet Buckling ------------------------------------------------------------------------------------------------
+const IRBTemplate = `
+\\clearpage
+\\section{Inter Rivet Buckling}
+%paratop%
+
+The following section analyses inter rivet buckling. Data and properties for the section<sornot>seen in table \\ref{tab:IRB1}.
+
+\\begin{table}[htbp]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+      \\hline \\textbf{Sections} & \\textbf{Material} & \\textbf{E\\textsubscript{c}} & \\textbf{F\\textsubscript{cy}} & \\textbf{nc} & \\textbf{Pitch} & \\textbf{c} & \\textbf{t\\textsubscript{sheet}} & \\textbf{E\\textsubscript{t}} & \\textbf{F\\textsubscript{ir}} \\\\\\hline
+      <trow> \\\\\\hline
+    \\end{tabular}}}
+	\\caption{Inter rivet buckling data}
+	\\label{tab:IRB1}
+\\end{table}
+`
+
 // FRAME STA --------------------------------------------------------------------------------------------------------
 const frameSTATemplate = `
 \\clearpage

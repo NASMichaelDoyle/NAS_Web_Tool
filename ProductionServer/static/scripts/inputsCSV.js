@@ -33,6 +33,7 @@ function downloadInput() {
 	let fSTAData = [];
 	let fWDTData = [];
 	let LJDData = [];
+	let IRBData = [];
 	// Ellipse
 	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
 	for (let i=0; i<ids.length; i++) ellData[i] = GEBID("ellForm", ids[i]).value;
@@ -91,16 +92,19 @@ function downloadInput() {
 		for (let i=0; i<plat*(sect+1); i++) LJDData[i+sect+4+2*plat*(sect+1)] = childSeq(tab1, [8+2*plat+parseInt(i/(sect+1)), 1+i%(sect+1), 0]).value; // Young's modulus
 		for (let i=0; i<3*(sect-1); i++) LJDData[i+sect+4+3*plat*(sect+1)] = childSeq(tab1, [9+3*plat+parseInt(i/(sect-1)), 2+i%(sect-1), 0]).value; // fast shizzle
 	} catch (err) {
-		console.error("LJD not prepared");
+		console.log("LJD not prepared");
 		console.error(err);
 	}
-	//console.log(LJDData);
+	// IRB
+	for (let i=0; i<IRBNumSect; i++)
+		for (let j=0; j<7; j++)
+			IRBData[7*i+j] = childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1, 0]).value;
+	//console.log(IRBData);
 	//return;
-
 	// Download it
 	let csv = "";
-	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD"];
-	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData, LJDData];
+	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD", "IRB"];
+	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData, LJDData, IRBData];
 	for (let i=0; i<ids.length; i++) csv += ids[i] + "\n" + allData[i] + "\n";
 	const element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csv));
@@ -122,6 +126,7 @@ function uploadInput(ins) {
 	let fSTAData = ins.split("\n")[17].split(",");
 	let fWDTData = ins.split("\n")[19].split(",");
 	let LJDData = ins.split("\n")[21].split(",");
+	let IRBData = ins.split("\n")[23].split(",");
 	// Ellipse
 	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
 	for (let i=0; i<ellData.length; i++) GEBID("ellForm", ids[i]).value = ellData[i];
@@ -194,11 +199,25 @@ function uploadInput(ins) {
 		ids = ["platesHighIn", "platesLongIn", "TAppLoadIn"];
 		for (let i=0; i<3; i++) GEBID("LJDForm", ids[i]).value = LJDData[i];
 		LJDPrepIns();
+		try {
 		for (let i=0; i<sect+1; i++) childSeq(tab1, [1, i+1, 0]).value = LJDData[i+3]; // x-coord
 		for (let i=0; i<plat*(sect+1); i++) childSeq(tab1, [4+parseInt(i/(sect+1)), 1+i%(sect+1), 0]).value = LJDData[i+sect+4]; // thickness
 		for (let i=0; i<plat*(sect+1); i++) childSeq(tab1, [6+plat+parseInt(i/(sect+1)), 1+i%(sect+1), 0]).value = LJDData[i+sect+4+plat*(sect+1)]; // width
 		for (let i=0; i<plat*(sect+1); i++) childSeq(tab1, [8+2*plat+parseInt(i/(sect+1)), 1+i%(sect+1), 0]).value = LJDData[i+sect+4+2*plat*(sect+1)]; // Young's modulus
 		for (let i=0; i<3*(sect-1); i++) childSeq(tab1, [9+3*plat+parseInt(i/(sect-1)), 2+i%(sect-1), 0]).value = LJDData[i+sect+4+3*plat*(sect+1)]; // fast shizzle
 		LJDFEM();
+		} catch {
+			console.log("LJD input was invalid");
+		}
+	}
+	// IRB
+	{
+		let newNSect = IRBData.length/7;
+		if (newNSect<IRBNumSect) for (let i=IRBNumSect; i>newNSect; i--) IRBRmSect();
+		else for (let i=IRBNumSect; i<newNSect; i++) IRBAddSect();
+		console.log(newNSect, IRBNumSect);
+		for (let i=0; i<IRBNumSect; i++)
+			for (let j=0; j<7; j++)
+				childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1, 0]).value = IRBData[7*i+j];
 	}
 }
