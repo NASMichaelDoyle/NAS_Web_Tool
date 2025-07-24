@@ -611,6 +611,19 @@ function texLJD() {
 	for (let size of [sTSize, sTSize, sTSize, bTSize, mTSize]) tex = tex.replace("<tScale>", size);
 	return tex;
 }
+function texIRB() {
+	let tex = IRBTemplate;
+	tex = tex.replace("<sornot>", IRBNumSect>1?"s are ":" is ");
+	for (let i=0; i<IRBNumSect; i++) {
+		let dumRow = ""+(i+1);
+		for (let j=0; j<9; j++) {
+			let cell = childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1]);
+			dumRow += "&"+(j<7?cell.children[0].value:cell.innerHTML);
+		}
+		tex = tex.replace("<trow>", dumRow+(i==IRBNumSect-1?"":"\\\\\\hline\n<trow>"));
+	}
+	return tex;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -788,6 +801,9 @@ function writeTeX() { // Build TeX document in order from inputs
 			case "LJD":
 				try {tex += texLJD();}
 				catch {alert("Lap Joint Doubler was not computed. Omitting");}
+				break;
+			case "IRB":
+				tex += texIRB();
 				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));

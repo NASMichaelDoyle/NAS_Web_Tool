@@ -2915,6 +2915,79 @@ function M_Mult(IPM) { // Takes an array of matrices, and multiplies them in ord
 	return M;
 }
 
+// Inter Rivet Buckling funcs
+function IRBCalcs(row) {
+	let mat = childSeq(row, [1, 0]).value;
+	let Ec = childSeq(row, [2, 0]).value;
+	let Fcy = childSeq(row, [3, 0]).value;
+	let nc = childSeq(row, [4, 0]).value;
+	let Pitch = childSeq(row, [5, 0]).value;
+	let c = childSeq(row, [6, 0]).value;
+	let tsheet = childSeq(row, [7, 0]).value;
+	let Et = interrivet(1000000*Ec, 1000*Fcy, nc, Pitch, c, tsheet)[0];
+	let Fir = interrivet(1000000*Ec, 1000*Fcy, nc, Pitch, c, tsheet)[1];
+	childSeq(row, [8]).innerHTML = sRound(Et, 0);
+	childSeq(row, [9]).innerHTML = sRound(Fir, 0);
+}
+function interrivet(E, Fcy, nc, pitch, fixity, t) {
+	//------------------------------------------------------------------
+	//Inter rivet buckling based on theory presented in Bruhn page C7.12
+	//------------------------------------------------------------------
+	let Fir1 = 0;
+	let Fir = 1;
+	let Et;
+	while (Fir >= Fir1) {
+	    Fir1 += 1000;
+	    if (Fir1 > 10 * Fcy)  return ["Error No Convergence", "Error No Convergence"];
+    	Et = ETangent(Fir1, Fcy, E, nc);
+    	Fir = Math.PI ** 2 * Et * t ** 2 / (12 * pitch ** 2) * fixity;
+	}
+	Fir1 = Fir - 1000;
+	Fir = Fir1 + 1;
+	while (Fir >= Fir1) {
+    	Fir1 += 100;
+    	if (Fir1 > 10 * Fcy) return ["Error No Convergence", "Error No Convergence"];
+		Et = ETangent(Fir1, Fcy, E, nc);
+	    Fir = Math.PI ** 2 * Et * t ** 2 / (12 * pitch ** 2) * fixity;
+
+	}
+	Fir1 = Fir - 100;
+	Fir = Fir1 + 1;
+	while (Fir >= Fir1) {
+	    Fir1 += 10;
+	    if (Fir1 > 10 * Fcy)  return ["Error No Convergence", "Error No Convergence"];
+	    Et = ETangent(Fir1, Fcy, E, nc);
+	    Fir = Math.PI ** 2 * Et * t ** 2 / (12 * pitch ** 2) * fixity;
+	}
+	Fir1 = Fir - 10;
+	Fir = Fir1 + 1;
+	while (Fir >= Fir1) {
+	    Fir1 += 1;
+	    if (Fir1 > 10 * Fcy) return ["Error No Convergence", "Error No Convergence"];
+	    Et = ETangent(Fir1, Fcy, E, nc);
+	    Fir = Math.PI ** 2 * Et * t ** 2 / (12 * pitch ** 2) * fixity;
+	}
+	Fir1 = Fir - 1;
+	Fir = Fir1 + 0.1;
+	while (Fir >= Fir1) {
+	    Fir1 += 0.1;
+	    if (Fir1 > 10 * Fcy) return ["Error No Convergence", "Error No Convergence"];
+	    Et = ETangent(Fir1, Fcy, E, nc);
+	    Fir = Math.PI ** 2 * Et * t ** 2 / (12 * pitch ** 2) * fixity;
+	}
+	Fir1 = Fir - 0.1;
+	Fir = Fir1 + 0.01;
+	while (Fir >= Fir1) {
+	    Fir1 += 0.01;
+	    if (Fir1 > 10 * Fcy) return ["Error No Convergence", "Error No Convergence"];
+	    Et = ETangent(Fir1, Fcy, E, nc);
+	    Fir = Math.PI ** 2 * Et * t ** 2 / (12 * pitch ** 2) * fixity;
+	}
+	if (Fir > Fcy) Fir = Fcy;
+	Et = ETangent(Fir, Fcy, E, nc);
+	return [Et, Fir];
+}
+
 // Frame funcs
 // STA
 function frameSTACalcs() {
