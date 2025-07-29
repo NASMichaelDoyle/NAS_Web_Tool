@@ -2988,6 +2988,111 @@ function interrivet(E, Fcy, nc, pitch, fixity, t) {
 	return [Et, Fir];
 }
 
+// Section Properties funcs
+function SPCalcs() {
+	SPSketch();
+}
+function SPSketch() {
+	let ctx = GEBID("SPForm", "diaCanv").getContext("2d");
+	let pts = [];
+	let min = [];
+	let max = [];
+	let xSize, ySize, scale, xOff, yOff;
+	ctx.clearRect(0, 0, 520, 520);
+	ctx.beginPath(); // Ignore previous pathing
+	// Get
+	for (let i=0; i<GEBID("SPForm", "IOTab").children.length-2; i++) {
+		pts[i] = new Object();
+		pts[i].x = +childSeq(GEBID("SPForm", "IOTab"), [i+2, 1, 0]).value;
+		pts[i].y = +childSeq(GEBID("SPForm", "IOTab"), [i+2, 2, 0]).value;
+		pts[i].r = +childSeq(GEBID("SPForm", "IOTab"), [i+2, 3, 0]).value;
+		// Calc dimensions
+		if (i==0) { // Initialize
+			min[0] = pts[i].x;
+			min[1] = pts[i].y;
+			max[0] = pts[i].x;
+			max[1] = pts[i].y;
+		}
+		if (pts[i].x < min[0]) min[0] = pts[i].x;
+		if (pts[i].y < min[1]) min[1] = pts[i].y;
+		if (pts[i].x > max[0]) max[0] = pts[i].x;
+		if (pts[i].y > max[1]) max[1] = pts[i].y;
+	}
+	//console.log(pts);
+	// Set dimensions
+	xSize = max[0] - min[0];
+	ySize = max[1] - min[1];
+	if (xSize > ySize) scale = 500/xSize;
+	else scale = 500/ySize;
+	xOff = min[0] + xSize/2;
+	yOff = min[1] + ySize/2;
+	// Draw
+	ctx.moveTo(10 + (pts[0].x-min[0])*scale, 510 - (pts[0].y-min[1])*scale)
+	for (let i=1; i<pts.length; i++) {
+		if (pts[i].r <= 0 || pts[i+1] === undefined) { // Invalid arc? draw straight line
+			ctx.lineTo(10 + (pts[i].x-min[0])*scale, 510 - (pts[i].y-min[1])*scale);
+		} else { // Arcin' time!
+			ctx.arcTo(10 + (pts[i].x-min[0])*scale, 510 - (pts[i].y-min[1])*scale, 10 + (pts[i+1].x-min[0])*scale, 510 - (pts[i+1].y-min[1])*scale, pts[i].r*scale);
+			// Bro, I did ALL THIS WORK just for there to be a built-in method that does it better. *facepalm*
+			// Get unit vectors
+			/* let v1 = [(pts[i].x-pts[i-1].x), (pts[i].y-pts[i-1].y)];
+			let v2 = [(pts[i+1].x-pts[i].x), (pts[i+1].y-pts[i].y)];
+			let mag = Math.sqrt(v1[0]**2 + v1[1]**2);
+			v1[0] /= mag; v1[1] /= mag;
+			mag = Math.sqrt(v2[0]**2 + v2[1]**2);
+			v2[0] /= mag; v2[1] /= mag;
+			let vc = [v2[0]-v1[0], v2[1]-v1[1]]; // Vector from point to centerpoint
+			mag = Math.sqrt(vc[0]**2 + vc[1]**2);
+			vc[0] /= mag; vc[1] /= mag;
+			// Find angle between v1 v2
+			let theta = Math.acos(-v1[0]*v2[0]-v1[1]*v2[1]);
+			// Get scaling factors
+			let h = pts[i].r/Math.sin(theta/2);
+			//let b = pts[i].r/Math.cos(theta/2);
+			// Get line angles & centerpoint
+			let theta1 = lAngle(...v1);
+			let theta2 = lAngle(...v2);
+			let C = [pts[i].x + h*vc[0], pts[i].y + h*vc[1]]
+			// Drawit
+			//let check=theta2>theta1;
+			ctx.arc(10 + (C[0]-min[0])*scale, 510 - (C[1]-min[1])*scale, pts[i].r*scale, -findMod(theta2 + Math.PI, 2*Math.PI), -findMod(theta1, 2*Math.PI));
+			console.log(theta1/Math.PI);
+			console.log(theta2/Math.PI); */
+		}
+	}
+	ctx.stroke();
+}
+function lAngle(x, y) {
+    rAngle = Math.atan(Math.abs(y)/Math.abs(x))
+    if (y>=0 && x>0) return rAngle;
+    else if (y>=0) return Math.PI - rAngle;
+    else if (x>0) return 2*Math.PI - rAngle
+    else return Math.PI + rAngle;
+}
+function findMod(a, b) {
+    let mod;
+    // Handling negative values
+    if (a < 0)
+        mod = -a;
+    else
+        mod =  a;
+    if (b < 0)
+        b = -b;
+
+    // Finding mod by 
+    // repeated subtraction
+    
+    while (mod >= b)
+        mod = mod - b;
+
+    // Sign of result typically 
+    // depends on sign of a.
+    if (a < 0)
+        return -mod;
+
+    return mod;
+}
+
 // Frame funcs
 // STA
 function frameSTACalcs() {

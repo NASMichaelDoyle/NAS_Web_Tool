@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="styles/sortableStyle.css">
 <link rel="stylesheet" href="styles/boltgroupStyle.css">
 <link rel="stylesheet" href="styles/LJD.css">
+<link rel="stylesheet" href="styles/SP.css">
 <style></style>
 <script src="scripts/MultiUtilities.js"></script>
 <!-- Libraries -->
@@ -80,6 +81,7 @@
 		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
 		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
 		<input id="IRBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Inter Rivet Buckling <br>
+		<input id="SPBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Section Properties<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -1905,6 +1907,62 @@
 				}
 				IRBAddSect();
 			</script>
+		</div>
+		<div class="analForm" id="SPForm">
+			<template id="SPInRowTemplate">
+				<tr>
+					<td></td>
+					<td><input type="number" placeholder="Enter X" onchange="SPCalcs()"></td>
+					<td><input type="number" placeholder="Enter Y" onchange="SPCalcs()"></td>
+					<td><input type="number" placeholder="Enter Radius" onchange="SPCalcs()"></td>
+				</tr>
+			</template>
+			<style>
+				#IRBForm input {
+					width: 75px;
+				}
+			</style>
+			
+			<header><h2>Section Properties</h2></header>
+			<div class="formIO">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<table class="inTab" id="IOTab">
+				<colgroup>
+					<col span="1" style="border-right: 1px solid black">
+				</colgroup>
+				<tr style="border-bottom: 1px solid black;">
+					<th>Point</th>
+					<th>X (in)</th>
+					<th>Y (in)</th>
+					<th>Radius (in)</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="SPAddPt()" style="margin-left: 0px;">Add Point</button>
+			<button onclick="SPRmPt()" style="margin-left: 0px;">Remove Point</button>
+			<script>
+				let SPNumPt = 0;
+				function SPAddPt() {
+					let Tab = GEBID("SPForm", "IOTab");//.children[0];
+					const tRow = GEBID("SPForm", "SPInRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++SPNumPt);
+					Tab.appendChild(tRow);
+				}
+				function SPRmPt() {
+					if (SPNumPt <= 1) return;
+					let Tab = GEBID("SPForm", "IOTab");//.children[0];
+					Tab.lastElementChild.remove();
+					SPNumPt--;
+				}
+				for (let i=0; i<4; i++) SPAddPt();
+			</script>
+			</div>
+			<canvas id="diaCanv" style="border: 1px solid black;" width="520" height="520">
+
+			</canvas>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
