@@ -64,7 +64,7 @@ def get_multi_latex():
                 return f"LaTeX compilation failed:\n{error_message}", 500
 
             # Send the generated PDF file back to the user for download
-            return send_file(f"../{pdf_filename}", as_attachment=True, download_name="compiled.pdf")
+            return send_file(f"{pdf_filename}", as_attachment=True, download_name="compiled.pdf")
         except subprocess.TimeoutExpired:
             return "LaTeX compilation timed out.", 500
         except FileNotFoundError as e: # Catch FileNotFoundError specifically here!

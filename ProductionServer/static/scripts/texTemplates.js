@@ -28,9 +28,30 @@ const coverTemplate = `\\documentclass[11pt]{article}
 \\definecolor{gudgreen}{HTML}{90ee90}
 
 % Format setup
-\\setmainfont{Lato}
-\\newfontfamily\\titlfont{Roboto} % FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-\\newfontfamily\\headfont{Lato}
+\\setmainfont[
+    Path = {Lato/},
+    Extension = .ttf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]{Lato}
+\\newfontfamily\\titlfont[
+    Path = {Roboto/static/},
+    Extension = .ttf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]{Roboto} % FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\\newfontfamily\\headfont[
+    Path = {Lato/},
+    Extension = .ttf,
+    UprightFont = *-Regular,
+    BoldFont = *-Bold,
+    ItalicFont = *-Italic,
+    BoldItalicFont = *-BoldItalic
+]{Lato}
 \\sectionfont{\\fontsize{18}{22}\\headfont\\color{darkblue}}
 \\subsectionfont{\\fontsize{16}{20}\\headfont\\color{darkblue}}
 %\\newcolumntype{C}[1]{>{\\centering\\arraybackslash}p{#1}}
@@ -582,7 +603,7 @@ Note:The Ultimate Lug Failure due to tensile rupture is also based on W and Diam
       <outRow16>\\\\\\hline
     \\end{tabular}
     \\caption{Pin failure}
-    \\label{tab:lug15}
+    \\label{tab:lug16}
 \\end{table}
 `
 
@@ -947,7 +968,7 @@ Inputted properties are summarized in table \\ref{tab:fWDT1}.
      \\makebox[\\textwidth]{
     \\scalebox{1}{
     \\begin{tabular}{|c|c|c|c|}
-      \\hline \\multirow{2}{*}{$t$ (in)} & Stiffener & Web & Chord\\\\\\cline{2-4}
+      \\hline \\multirow{2}{30pt}{$t$ (in)} & Stiffener & Web & Chord\\\\\\cline{2-4}
       & <tstiff> & <tweb> & <tch>\\\\\\hline
      \\end{tabular}}}
      \\hfill \\break
