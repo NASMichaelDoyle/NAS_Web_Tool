@@ -3313,12 +3313,12 @@ function SPCalcs() {
 	QLower = 0;
 	QRight = 0;
 	QLeft = 0;
-	/* for (let arr of [ptsU, ptsD, ptsL, ptsR]) {
+	for (let arr of [ptsU, ptsD, ptsL, ptsR]) {
 		arr[arr.length] = new Object();
-		arr[arr.length-1].x = 0;
-		arr[arr.length-1].y = 0;
-	}  */
-	for (let i = 0; i < pts.length-1; i++) {
+		arr[arr.length-1].x = arr[0].x;
+		arr[arr.length-1].y = arr[1].y;
+	}
+	for (let i = 0; i < pts.length; i++) {
 		AUpper += (+ptsU[i + 1].x - ptsU[i].x) * 0.5 * (ptsU[i + 1].y + +ptsU[i].y);
 		ALower += (+ptsD[i + 1].x - ptsD[i].x) * 0.5 * (ptsD[i + 1].y + +ptsD[i].y);
 		ALeft += (+ptsL[i + 1].x - ptsL[i].x) * 0.5 * (ptsL[i + 1].y + +ptsL[i].y);
@@ -3358,6 +3358,7 @@ function SPCalcs() {
 				if (ptsRotated[j].x > cmRight) cmRight = ptsRotated[j].x
 			}
 		}
+	//console.log(ptsU, ptsD, ptsL, ptsR);
 	console.log("\nAupper: ", AUpper, "\nQupper: ", QUpper, "\ncmupper: ", cmUpper, "\nIupper: ", IUpper, "\nAlower: ", ALower, "\nQlower: ", QLower, "\ncmlower: ", cmLower, "\nIlower: ", ILower, "\nAleft: ", ALeft, "\nQleft: ", QLeft, "\ncmleft: ", cmLeft, "\nIleft: ", ILeft, "\nAright: ", ARight, "\nQright: ", QRight, "\ncmright: ", cmRight, "\nIright: ", IRight);
 		//line10:
 
@@ -3493,6 +3494,23 @@ function SPSketch() {
 		}
 	}
 	ctx.lineTo(10 + (pts[0].x-min[0])*scale, 510 - (pts[0].y-min[1])*scale);
+	ctx.stroke();
+
+	// Get CG
+	let area = 0;
+	let May = 0;
+	let Maz = 0;
+	for (let i = 0; i < pts.length-1; i++) {
+		area += (pts[i + 1].x - pts[i].x) * 0.5 * (pts[i + 1].y + pts[i].y);
+		May += (pts[i+1].x - pts[i].x) / 8 * ((pts[i+1].y + pts[i].y) ** 2 + 1 / 3 * (pts[i+1].y - pts[i].y) ** 2);
+		Maz -= (pts[i+1].y - pts[i].y) / 8 * ((pts[i+1].x + pts[i].x) ** 2 + 1 / 3 * (pts[i+1].x - pts[i].x) ** 2);
+	}
+	let cgY = Maz / area;
+	let cgZ = May / area;
+	ctx.beginPath();
+	ctx.strokeStyle = "blue";
+	ctx.moveTo(0, 510 - cgZ*scale);
+	ctx.lineTo(520, 510 - cgZ*scale);
 	ctx.stroke();
 }
 function lAngle(x, y) { // Line angle in [0, 2pi)

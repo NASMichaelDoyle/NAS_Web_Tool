@@ -1914,7 +1914,7 @@
 					<td></td>
 					<td><input type="number" placeholder="Enter X" onchange="SPCalcs()"></td>
 					<td><input type="number" placeholder="Enter Y" onchange="SPCalcs()"></td>
-					<td><input type="number" placeholder="Enter Radius" onchange="SPCalcs()"></td>
+					<td><input type="number" placeholder="(Optional)" onchange="SPCalcs()"></td>
 				</tr>
 			</template>
 			<style>
@@ -1960,9 +1960,50 @@
 				for (let i=0; i<4; i++) SPAddPt();
 			</script>
 			</div>
-			<canvas id="diaCanv" style="border: 1px solid black;" width="520" height="520">
+			<canvas id="diaCanv" style="border: 1px solid black; margin: 0 auto; margin-top: 20px;" width="520" height="520">
 
 			</canvas>
+			<template id="SPOutTemplate">
+				<div style="margin: 10% 10%">
+				<h4 style="border-bottom: 1px solid black;"></h4>
+				<table>
+					<tr>
+						<td style="text-align: right;">A = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">Q = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">C<sub>m</sub> = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">I = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<br>
+					<tr>
+						<td style="text-align: right;">K = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+				</table>
+				</div>
+			</template>
+			<div id="SPOutGrid" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
+
+			</div>
+			<script>
+				let grid = GEBID("SPForm", "SPOutGrid");
+				let tabTemp = GEBID("SPForm", "SPOutTemplate");
+				for (let i=0; i<4; i++) {
+					let tab = tabTemp.content.cloneNode(true).children[0];
+					tab.children[0].innerHTML = ["Upper Section", "Lower Section", "Left Section", "Right Section"][i];
+					childSeq(tab, [2, 0, 3, 0]).innerHTML = "I<sub>"+(i<2?"xx":"yy")+"</sub> = ";
+					grid.appendChild(tab);
+				}
+			</script>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
