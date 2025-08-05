@@ -11,6 +11,7 @@ const coverTemplate = `\\documentclass[11pt]{article}
 \\usepackage{colortbl}
 \\usepackage{gensymb}
 \\usepackage{multirow}
+\\providecommand{\\bigstrutjot}{\\jot}
 \\usepackage{float}
 \\usepackage{amsmath}
 \\usepackage{subcaption}
@@ -393,13 +394,13 @@ Inputted properties are summarized in table \\ref{tab:lug1}. Note the $P_{LUG}$ 
 \\begin{figure}[htbp!]
     \\centering
     \\begin{subfigure}[b]{0.45\\textwidth}
-       \\includegraphics[width=1\\linewidth]{images/lug/lugDia1.png}
+       \\includegraphics[width=1\\linewidth]{static/images/lug/lugDia1.png}
 %        \\caption{Caption for image 1}
 %        \\label{fig:image1}
     \\end{subfigure}
     %\\hfill % Puts space between the subfigures
     \\begin{subfigure}[b]{0.35\\textwidth}
-        \\includegraphics[width=1\\linewidth]{images/lug/lugDia2.png}
+        \\includegraphics[width=1\\linewidth]{static/images/lug/lugDia2.png}
     \\end{subfigure}
     \\caption{Lug diagrams}
     \\label{fig:lug1}
@@ -460,7 +461,7 @@ Note:The Ultimate Lug Failure due to tensile rupture is also based on W and Diam
 
 \\begin{figure}[htbp!]
     \\centering
-       \\includegraphics[width=0.8\\linewidth]{images/lug/lugDia3.png}
+       \\includegraphics[width=0.8\\linewidth]{static/images/lug/lugDia3.png}
     \\caption{Lug geometrical assumptions}
     \\label{fig:lug2}
 \\end{figure}
@@ -518,7 +519,7 @@ Note:The Ultimate Lug Failure due to tensile rupture is also based on W and Diam
 
 \\begin{figure}[htbp!]
     \\centering
-       \\includegraphics[width=0.6\\linewidth]{images/lug/lugDia9.png}
+       \\includegraphics[width=0.6\\linewidth]{static/images/lug/lugDia9.png}
     \\caption{Lug area A1-A4}
     \\label{fig:lug3}
 \\end{figure}
