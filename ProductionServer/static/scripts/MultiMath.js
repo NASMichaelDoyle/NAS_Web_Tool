@@ -2988,6 +2988,544 @@ function interrivet(E, Fcy, nc, pitch, fixity, t) {
 	return [Et, Fir];
 }
 
+// Section Properties funcs
+function SPCalcs() {
+	SPSketch();
+	let inTab = GEBID("SPForm", "IOTab");
+	let forcedAlpha = 0; // Maybe get input for this?
+	let pts = [], inPts = [], ptsRotated = [];
+	//Application.ScreenUpdating = False
+	let i, j, k, calcTmp;
+	let pi_;
+	//let outputYZ = matrixGen(250, 2); //(1 To 250, 1 To 2);
+	//let outputYZRotated = matrixGen(250, 2); //(1 To 250, 1 To 2);
+	let numberPoints;
+	let summation;
+	let nRads = 0;
+	let lineCounter;
+	let theta;
+	let radius;
+	let angleA;
+	let angleB;
+	let orientation;
+	let deltaAngle;
+	let vectorA = []; //(1 To 2)
+	let vectorB = []; //(1 To 2);
+	let extremityA = []; //(1 To 2);
+	let extremityB = []; //(1 To 2);
+	let vectorArcCenter = []; //(1 To 2);
+	let arcCenter = []; //(1 To 2);
+	let vectorExtremityA = []; //(1 To 2);
+	let vectorExtremityB = []; //(1 To 2);
+	let area, May, Maz, inertiaY, inertiaZ, inertiaYZ;
+	let a;
+	let alpha, cgY, cgZ, inertiaYcg, inertiaZcg, inertiaYZcg;
+	let ptsU = [], ptsD = [], ptsL = [], ptsR = []; // 250x2 ???
+	let MaUpper, inertiaUpper, MaLower, inertiaLower, MaLeft, inertiaLeft, MaRight, inertiaRight;
+	let AUpper, ALower, ARight, ALeft, IUpper, ILower, IRight, ILeft, QUpper, QLower, QRight, QLeft;
+	let cmUpper, cmLower, cmRight, cmLeft;
+	let output;
+	/* // Find the number of points
+	summation = 0
+	For i = 50 To 1 Step - 1
+	summation = summation + tableYZR[i].x + tableYZR[i].y
+	    If summation <> 0 Then Exit For
+	Next i
+	numberPoints = i + 1
+	// Find the number of radius
+	numberRadius = 0
+	For i = 1 To numberPoints
+	    If tableYZR(i, 3) <> 0 Then numberRadius = numberRadius + 1
+	Next i
+	If numberRadius > 22 Then
+	sectionProperties = "ERROR TOO MUCH RADIUS - Max 22"
+	    Exit Function
+	End If
+	//When a radius exist create 10 other points which will approximize the radius
+	lineCounter = 1
+	For i = 1 To numberPoints
+	//If there is a radius create 10 other points
+	    If tableYZR(i, 3) <> 0 Then
+	//Find the arc center, the extremities of the arc and the angularity
+	vectorA(1) = tableYZR(i - 1, 1) - tableYZR[i].x
+	vectorA(2) = tableYZR(i - 1, 2) - tableYZR[i].y
+	vectorB(1) = tableYZR[i+1].x - tableYZR[i].x
+	vectorB(2) = tableYZR[i+1].y - tableYZR[i].y
+	theta = Application.Acos((vectorA(1) * vectorB(1) + vectorA(2) * vectorB(2)) / (vector_length(vectorA) * vector_length(vectorB)))
+	radius = tableYZR(i, 3)
+	//Find the arc center
+	vectorArcCenter(1) = radius / Tan(theta / 2) / (vectorA(1) * vectorB(2) - vectorB(1) * vectorA(2)) _
+		* (vectorB(2) * vector_length(vectorA) - vectorA(2) * vector_length(vectorB))
+	vectorArcCenter(2) = radius / Tan(theta / 2) / (vectorA(1) * vectorB(2) - vectorB(1) * vectorA(2)) _
+		* (vectorA(1) * vector_length(vectorB) - vectorB(1) * vector_length(vectorA))
+	arcCenter(1) = tableYZR[i].x + vectorArcCenter(1)
+	arcCenter(2) = tableYZR[i].y + vectorArcCenter(2)
+	//Find the extremities
+	extremityA(1) = tableYZR[i].x + vectorA(1) / vector_length(vectorA) * radius / Tan(theta / 2)
+	extremityA(2) = tableYZR[i].y + vectorA(2) / vector_length(vectorA) * radius / Tan(theta / 2)
+	extremityB(1) = tableYZR[i].x + vectorB(1) / vector_length(vectorB) * radius / Tan(theta / 2)
+	extremityB(2) = tableYZR[i].y + vectorB(2) / vector_length(vectorB) * radius / Tan(theta / 2)
+	//Find the angularity + orientation (CW or CCW)
+	//Angle with vector (1,0)
+	vectorExtremityA(1) = extremityA(1) - arcCenter(1)
+	vectorExtremityA(2) = extremityA(2) - arcCenter(2)
+	vectorExtremityB(1) = extremityB(1) - arcCenter(1)
+	vectorExtremityB(2) = extremityB(2) - arcCenter(2)
+	angleA = Application.Acos(vectorExtremityA(1) / vector_length(vectorExtremityA))
+	        If vectorExtremityA(2) < 0 Then angleA = 2 * pi_ - angleA
+	angleB = Application.Acos(vectorExtremityB(1) / vector_length(vectorExtremityB))
+	        If vectorExtremityB(2) < 0 Then angleB = 2 * pi_ - angleB
+	deltaAngle = angleA - angleB
+	        If deltaAngle < 0 Then
+	            If Abs(deltaAngle) < pi_ Then
+	orientation = -1
+	Else
+	orientation = 1
+	deltaAngle = 2 * pi_ - Abs(deltaAngle)
+	            End If
+	Else
+	            If Abs(deltaAngle) < pi_ Then
+	orientation = 1
+	Else
+	orientation = -1
+	deltaAngle = 2 * pi_ - Abs(deltaAngle)
+        	    End If
+        	End If
+	//Create the points
+        	For j = 0 To 9
+	outputYZ(lineCounter, 1) = arcCenter(1) + radius * Cos(angleA - orientation * Abs(deltaAngle) * j / 9)
+	outputYZ(lineCounter, 2) = arcCenter(2) + radius * Sin(angleA - orientation * Abs(deltaAngle) * j / 9)
+	lineCounter = lineCounter + 1
+	        Next j
+	//If there is no radius create only 1 point
+	Else
+	outputYZ(lineCounter, 1) = tableYZR[i].x
+	outputYZ(lineCounter, 2) = tableYZR[i].y
+	lineCounter = lineCounter + 1
+	    End If
+	Next i
+	For i = lineCounter To 250
+	outputYZ[i].x = 0
+	outputYZ[i].y = 0
+	Next i */
+	for (let i=0; inTab.children[i+2] !== undefined; i++) {
+		inPts[i] = new Object();
+		inPts[i].x = +childSeq(inTab, [i + 2, 1, 0]).value;
+		inPts[i].y = +childSeq(inTab, [i + 2, 2, 0]).value;
+		inPts[i].r = +childSeq(inTab, [i + 2, 3, 0]).value;
+	}
+	for (let i=0; i<inPts.length; i++) {
+		pts[i+9*nRads] = new Object();
+		if (inPts[i].r == 0) {
+			pts[i+9*nRads].x = inPts[i].x;
+			pts[i+9*nRads].y = inPts[i].y;
+		} else { // Add 10 points along curve
+			// Well well well...
+			// Get unit vectors
+			let v1 = [(inPts[i].x-inPts[i-1].x), (inPts[i].y-inPts[i-1].y)];
+			let v2 = [(inPts[i+1].x-inPts[i].x), (inPts[i+1].y-inPts[i].y)];
+			let mag = Math.sqrt(v1[0]**2 + v1[1]**2);
+			v1[0] /= mag; v1[1] /= mag;
+			mag = Math.sqrt(v2[0]**2 + v2[1]**2);
+			v2[0] /= mag; v2[1] /= mag;
+			let vc = [v2[0]-v1[0], v2[1]-v1[1]]; // Vector from point to centerpoint
+			mag = Math.sqrt(vc[0]**2 + vc[1]**2);
+			vc[0] /= mag; vc[1] /= mag;
+			// Find angle between v1 v2
+			let theta = Math.acos(-v1[0]*v2[0]-v1[1]*v2[1]);
+			// Get scaling factors
+			let h = inPts[i].r/Math.sin(theta/2);
+			let b = inPts[i].r/Math.tan(theta/2);
+			// Get tangent & center points
+			let C = [inPts[i].x + h*vc[0], inPts[i].y + h*vc[1]];
+			let T1 = [inPts[i].x - b*v1[0], inPts[i].y - b*v1[1]];
+			let T2 = [inPts[i].x + b*v2[0], inPts[i].y + b*v2[1]];
+			// Angle (of your dangle)
+			let theta1 = lAngle(T1[0] - C[0], T1[1] - C[1]);
+			let theta2 = lAngle(T2[0] - C[0], T2[1] - C[1]);
+			// check for overflow
+			if (theta2-theta1 > Math.PI) theta1 += 2*Math.PI;
+			else if (theta2-theta1 < -Math.PI) theta2 += 2*Math.PI;
+			let deltaTheta = theta2 - theta1;
+			for (let j=0; j<10; j++) {
+				pts[i+j+9*nRads] = new Object();
+				pts[i+j+9*nRads].x = C[0] + inPts[i].r*Math.cos(theta1 + j*deltaTheta/9);
+				pts[i+j+9*nRads].y = C[1] + inPts[i].r*Math.sin(theta1 + j*deltaTheta/9);
+			}
+			nRads++;
+		}
+	}
+	// Find the section properties
+	area = 0;
+	May = 0;
+	Maz = 0;
+	inertiaY = 0;
+	inertiaZ = 0;
+	inertiaYZ = 0;
+	for (let i = 0; i < pts.length-1; i++) {
+		area += (pts[i + 1].x - pts[i].x) * 0.5 * (pts[i + 1].y + pts[i].y);
+		May += (pts[i+1].x - pts[i].x) / 8 * ((pts[i+1].y + pts[i].y) ** 2 + 1 / 3 * (pts[i+1].y - pts[i].y) ** 2);
+		Maz -= (pts[i+1].y - pts[i].y) / 8 * ((pts[i+1].x + pts[i].x) ** 2 + 1 / 3 * (pts[i+1].x - pts[i].x) ** 2);
+		inertiaY += ((pts[i+1].x - pts[i].x) * (pts[i+1].y + pts[i].y) / 24) * ((pts[i+1].y + pts[i].y) ** 2 + (pts[i+1].y - pts[i].y) ** 2);
+		inertiaZ -= ((pts[i+1].y - pts[i].y) * (pts[i+1].x + pts[i].x) / 24) * ((pts[i+1].x + pts[i].x) ** 2 + (pts[i+1].x - pts[i].x) ** 2);
+		inertiaYZ += (pts[i+1].x - pts[i].x) * 1 / 24 * ((pts[i+1].y + pts[i].y) ** 2 * (pts[i+1].x + pts[i].x) + 2 * (pts[i].x * pts[i].y ** 2 + pts[i+1].x * pts[i+1].y ** 2));
+	}
+	cgY = Maz / area;
+	cgZ = May / area;
+	inertiaYcg = inertiaY - area * cgZ ** 2;
+	inertiaZcg = inertiaZ - area * cgY ** 2;
+	inertiaYZcg = inertiaYZ - area * cgY * cgZ;
+	if (Math.abs(inertiaYZcg) < 0.0000000001) alpha = 0;
+	else if (inertiaZcg == inertiaYcg) alpha = (Math.atan(2 * inertiaYZcg / (-1E-20)) / 2) / Math.PI * 180;
+	else alpha = (Math.atan(2 * inertiaYZcg / (inertiaZcg - inertiaYcg)) / 2) / Math.PI * 180;
+	//console.log(area, cgY, cgZ, inertiaYcg, inertiaZcg, inertiaYZcg, alpha);
+	// Calculate the point in the principal axis
+	if (forcedAlpha === "") forcedAlpha = alpha;
+	for (let i = 0; i < pts.length; i++) {
+		ptsRotated[i] = new Object();
+		ptsRotated[i].x = (pts[i].x - cgY) * Math.cos(forcedAlpha / 180 * Math.PI) + (pts[i].y - cgZ) * Math.sin(forcedAlpha / 180 * Math.PI);
+		ptsRotated[i].y = -(pts[i].x - cgY) * Math.sin(forcedAlpha / 180 * Math.PI) + (pts[i].y - cgZ) * Math.cos(forcedAlpha / 180 * Math.PI);
+	}
+
+	for (let i = 0; i < pts.length; i++) {
+	    if (i==0) {
+			j = pts.length-1;
+			k = 1;
+		}
+	    if (i > 0) {
+			j = i - 1;
+			k = i + 1;
+		}
+	    if (i == pts.length - 1) {
+			j = pts.length - 2;
+			k = 0;
+		}
+		// Upper Area
+		ptsU[i] = new Object();
+		if (ptsRotated[i].y >= 0) {
+			ptsU[i].x = ptsRotated[i].x
+			ptsU[i].y = ptsRotated[i].y
+		} else {
+			line20: {
+				if (ptsRotated[j].y > 0)
+					if (ptsRotated[i].x - ptsRotated[j].x == 0) ptsU[i].x = ptsRotated[i].x
+					else {
+						ptsU[i].x = lerp(0, ptsRotated[i].y, ptsRotated[j].y, ptsRotated[i].x, ptsRotated[j].x);
+						break line20;
+					}
+				else ptsU[i].x = ptsRotated[i].x;
+
+				if (ptsRotated[k].y > 0)
+					if (ptsRotated[i].x - ptsRotated[k].x == 0) ptsU[i].x = ptsRotated[i].x;
+					else {
+						ptsU[i].x = lerp(0, ptsRotated[i].y, ptsRotated[k].y, ptsRotated[i].x, ptsRotated[k].x);
+						break line20;
+					}
+				else ptsU[i].x = ptsRotated[i].x;
+			}
+			ptsU[i].y = 0;
+		}
+		// Lower Area
+		ptsD[i] = new Object();
+		if (ptsRotated[i].y <= 0) {
+			ptsD[i].x = ptsRotated[i].x;
+			ptsD[i].y = ptsRotated[i].y;
+		} else {
+			line30: {
+				if (ptsRotated[j].y < 0)
+					if (ptsRotated[i].x - ptsRotated[j].x == 0) ptsD[i].x = ptsRotated[i].x;
+					else {
+						ptsD[i].x = lerp(0, ptsRotated[i].y, ptsRotated[j].y, ptsRotated[i].x, ptsRotated[j].x);
+						break line30;
+					}
+				else ptsD[i].x = ptsRotated[i].x;
+
+				if (ptsRotated[k].y < 0)
+					if (ptsRotated[i].x - ptsRotated[k].x == 0) ptsD[i].x = ptsRotated[i].x;
+					else {
+						ptsD[i].x = lerp(0, ptsRotated[i].y, ptsRotated[k].y, ptsRotated[i].x, ptsRotated[k].x);
+						break line30;
+					}
+				else ptsD[i].x = ptsRotated[i].x;
+			}
+			ptsD[i].y = 0;
+		}
+		// Left Area
+		ptsL[i] = new Object();
+		if (ptsRotated[i].x <= 0) {
+			ptsL[i].x = ptsRotated[i].x;
+			ptsL[i].y = ptsRotated[i].y;
+		} else {
+			line40: {
+				if (ptsRotated[j].x < 0)
+					if (ptsRotated[i].y - ptsRotated[j].y == 0) ptsL[i].y = ptsRotated[i].y;
+					else {
+						ptsL[i].y = lerp(0, ptsRotated[i].x, ptsRotated[j].x, ptsRotated[i].y, ptsRotated[j].y);
+						break line40;
+					}
+				else ptsL[i].y = ptsRotated[i].y;
+
+				if (ptsRotated[k].x < 0)
+					if (ptsRotated[i].y - ptsRotated[k].y == 0) ptsL[i].y = ptsRotated[i].y;
+					else {
+						ptsL[i].y = lerp(0, ptsRotated[i].x, ptsRotated[k].x, ptsRotated[i].y, ptsRotated[k].y);
+						break line40;
+					}
+				else ptsL[i].y = ptsRotated[i].y;
+			}
+			ptsL[i].x = 0;
+		}
+		// Right Area
+		ptsR[i] = new Object();
+		if (ptsRotated[i].x >= 0) {
+			ptsR[i].x = ptsRotated[i].x;
+			ptsR[i].y = ptsRotated[i].y;
+		} else {
+			line50: {
+				if (ptsRotated[j].x > 0)
+					if (ptsRotated[i].y - ptsRotated[j].y == 0) ptsR[i].y = ptsRotated[i].y;
+					else {
+						ptsR[i].y = lerp(0, ptsRotated[i].x, ptsRotated[j].x, ptsRotated[i].y, ptsRotated[j].y);
+						break line50;
+					}
+				else ptsR[i].y = ptsRotated[i].y;
+
+				if (ptsRotated[k].x > 0)
+					if (ptsRotated[i].y - ptsRotated[k].y == 0) ptsR[i].y = ptsRotated[i].y;
+					else {
+						ptsR[i].y = lerp(0, ptsRotated[i].x, ptsRotated[k].x, ptsRotated[i].y, ptsRotated[k].y);
+						break line50;
+					}
+				else ptsR[i].y = ptsRotated[i].y;
+			}
+			ptsR[i].x = 0;
+		}
+	}
+	AUpper = 0;
+	ALower = 0;
+	ARight = 0;
+	ALeft = 0;
+	IUpper = 0;
+	ILower = 0;
+	IRight = 0;
+	ILeft = 0;
+	QUpper = 0;
+	QLower = 0;
+	QRight = 0;
+	QLeft = 0;
+	/* for (let arr of [ptsU, ptsD, ptsL, ptsR]) {
+		arr[arr.length] = new Object();
+		arr[arr.length-1].x = 0;
+		arr[arr.length-1].y = 0;
+	}  */
+	for (let i = 0; i < pts.length-1; i++) {
+		AUpper += (+ptsU[i + 1].x - ptsU[i].x) * 0.5 * (ptsU[i + 1].y + +ptsU[i].y);
+		ALower += (+ptsD[i + 1].x - ptsD[i].x) * 0.5 * (ptsD[i + 1].y + +ptsD[i].y);
+		ALeft += (+ptsL[i + 1].x - ptsL[i].x) * 0.5 * (ptsL[i + 1].y + +ptsL[i].y);
+		ARight += (+ptsR[i + 1].x - ptsR[i].x) * 0.5 * (ptsR[i + 1].y + +ptsR[i].y);
+		QUpper += (+ptsU[i + 1].x - ptsU[i].x) / 8 * ((ptsU[i + 1].y + +ptsU[i].y) ** 2 + 1 / 3 * (ptsU[i + 1].y - ptsU[i].y) ** 2);
+		QLower += (+ptsD[i + 1].x - ptsD[i].x) / 8 * ((ptsD[i + 1].y + +ptsD[i].y) ** 2 + 1 / 3 * (ptsD[i + 1].y - ptsD[i].y) ** 2);
+		QLeft -= (+ptsL[i + 1].y - ptsL[i].y) / 8 * ((ptsL[i + 1].x + +ptsL[i].x) ** 2 + 1 / 3 * (ptsL[i + 1].x - ptsL[i].x) ** 2);
+		QRight -= (+ptsR[i + 1].y - ptsR[i].y) / 8 * ((ptsR[i + 1].x + +ptsR[i].x) ** 2 + 1 / 3 * (ptsR[i + 1].x - ptsR[i].x) ** 2);
+		IUpper += ((+ptsU[i + 1].x - ptsU[i].x) * (ptsU[i + 1].y + ptsU[i].y) / 24) * ((ptsU[i + 1].y + ptsU[i].y) ** 2 + (ptsU[i + 1].y - ptsU[i].y) ** 2);
+		ILower += ((+ptsD[i + 1].x - ptsD[i].x) * (ptsD[i + 1].y + ptsD[i].y) / 24) * ((ptsD[i + 1].y + ptsD[i].y) ** 2 + (ptsD[i + 1].y - ptsD[i].y) ** 2);
+		ILeft -= ((+ptsL[i + 1].y - ptsL[i].y) * (ptsL[i + 1].x + ptsL[i].x) / 24) * ((ptsL[i + 1].x + ptsL[i].x) ** 2 + (ptsL[i + 1].x - ptsL[i].x) ** 2);
+		IRight -= ((+ptsR[i + 1].y - ptsR[i].y) * (ptsR[i + 1].x + ptsR[i].x) / 24) * ((ptsR[i + 1].x + ptsR[i].x) ** 2 + (ptsR[i + 1].x - ptsR[i].x) ** 2);
+	}
+	let check1 = true;
+	for (let i = 0; i < inPts.length; i++) {
+		if (inPts[i].x == 0)
+			if (inPts[i].y == 0)
+				if (inPts[i].r != 0) {check1 = false; break;}
+		cmUpper = -1000;
+		cmLower = 1000;
+		cmLeft = 1000;
+		cmRight = -1000;
+	}
+	if (check1)
+		for (j=0; j<pts.length; j++) {
+			if (ptsRotated[j].y > cmUpper) cmUpper = ptsRotated[j].y
+			if (ptsRotated[j].y < cmLower) cmLower = ptsRotated[j].y
+			if (ptsRotated[j].x < cmLeft) cmLeft = ptsRotated[j].x
+			if (ptsRotated[j].x > cmRight) cmRight = ptsRotated[j].x
+		}
+	else
+		for (j=0; j<ptsRotated.length; j++) {
+			if (ptsRotated[j].x / ptsRotated[0].x + ptsRotated[j].y / ptsRotated[0].y != 2) {
+				if (ptsRotated[j].y > cmUpper) cmUpper = ptsRotated[j].y
+				if (ptsRotated[j].y < cmLower) cmLower = ptsRotated[j].y
+				if (ptsRotated[j].x < cmLeft) cmLeft = ptsRotated[j].x
+				if (ptsRotated[j].x > cmRight) cmRight = ptsRotated[j].x
+			}
+		}
+	console.log("\nAupper: ", AUpper, "\nQupper: ", QUpper, "\ncmupper: ", cmUpper, "\nIupper: ", IUpper, "\nAlower: ", ALower, "\nQlower: ", QLower, "\ncmlower: ", cmLower, "\nIlower: ", ILower, "\nAleft: ", ALeft, "\nQleft: ", QLeft, "\ncmleft: ", cmLeft, "\nIleft: ", ILeft, "\nAright: ", ARight, "\nQright: ", QRight, "\ncmright: ", cmRight, "\nIright: ", IRight);
+		//line10:
+
+
+
+	/* //Provide the output
+	Relet output(1 To 250, 1 To 6)
+	For i = 1 To 250
+		output[i].x = pts[i].x
+		output[i].y = pts[i].y
+		output(i, 3) = ptsRotated[i].x
+		output(i, 4) = ptsRotated[i].y
+		If i > 23 Then
+			output(i, 5) = ""
+			output(i, 6) = ""
+		End If
+	Next i
+	output(1, 5) = "A="
+	output(1, 6) = area
+	output(2, 5) = "Ycg="
+	output(2, 6) = cgY
+	output(3, 5) = "Zcg="
+	output(3, 6) = cgZ
+	output(4, 5) = "Iyycg="
+	output(4, 6) = inertiaYcg
+	output(5, 5) = "Izzcg="
+	output(5, 6) = inertiaZcg
+	output(6, 5) = "Iyzcg="
+	output(6, 6) = inertiaYZcg
+	output(7, 5) = "alpha="
+	output(7, 6) = alpha
+	output(8, 5) = "Aupper="
+	output(8, 6) = AUpper
+	output(9, 5) = "Qupper="
+	output(9, 6) = QUpper
+	output(10, 5) = "Cmupper="
+	output(10, 6) = cmUpper
+	output(11, 5) = "Iyyupper="
+	output(11, 6) = IUpper
+	output(12, 5) = "Alower="
+	output(12, 6) = ALower
+	output(13, 5) = "Qlower="
+	output(13, 6) = QLower
+	output(14, 5) = "Cmlower="
+	output(14, 6) = cmLower
+	output(15, 5) = "Iyylower="
+	output(15, 6) = ILower
+	output(16, 5) = "Aleft="
+	output(16, 6) = ALeft
+	output(17, 5) = "Qleft="
+	output(17, 6) = QLeft
+	output(18, 5) = "Cmleftr="
+	output(18, 6) = cmLeft
+	output(19, 5) = "Izzleft="
+	output(19, 6) = ILeft
+	output(20, 5) = "Aright="
+	output(20, 6) = ARight
+	output(21, 5) = "Qright="
+	output(21, 6) = QRight
+	output(22, 5) = "Cmright="
+	output(22, 6) = cmRight
+	output(23, 5) = "Izzright="
+	output(23, 6) = IRight
+	sectionProperties = output
+	Application.ScreenUpdating = True */
+}
+function SPSketch() {
+	let ctx = GEBID("SPForm", "diaCanv").getContext("2d");
+	let pts = [];
+	let min = [];
+	let max = [];
+	let xSize, ySize, scale, xOff, yOff;
+	ctx.clearRect(0, 0, 520, 520);
+	ctx.beginPath(); // Ignore previous pathing
+	// Get
+	for (let i=0; i<GEBID("SPForm", "IOTab").children.length-2; i++) {
+		pts[i] = new Object();
+		pts[i].x = +childSeq(GEBID("SPForm", "IOTab"), [i+2, 1, 0]).value;
+		pts[i].y = +childSeq(GEBID("SPForm", "IOTab"), [i+2, 2, 0]).value;
+		pts[i].r = +childSeq(GEBID("SPForm", "IOTab"), [i+2, 3, 0]).value;
+		// Calc dimensions
+		if (i==0) { // Initialize
+			min[0] = pts[i].x;
+			min[1] = pts[i].y;
+			max[0] = pts[i].x;
+			max[1] = pts[i].y;
+		}
+		if (pts[i].x < min[0]) min[0] = pts[i].x;
+		if (pts[i].y < min[1]) min[1] = pts[i].y;
+		if (pts[i].x > max[0]) max[0] = pts[i].x;
+		if (pts[i].y > max[1]) max[1] = pts[i].y;
+	}
+	//console.log(pts);
+	// Set dimensions
+	xSize = max[0] - min[0];
+	ySize = max[1] - min[1];
+	if (xSize > ySize) scale = 500/xSize;
+	else scale = 500/ySize;
+	xOff = min[0] + xSize/2;
+	yOff = min[1] + ySize/2;
+	// Draw
+	ctx.moveTo(10 + (pts[0].x-min[0])*scale, 510 - (pts[0].y-min[1])*scale)
+	for (let i=1; i<pts.length; i++) {
+		if (pts[i].r <= 0 || pts[i+1] === undefined) { // Invalid arc? draw straight line
+			ctx.lineTo(10 + (pts[i].x-min[0])*scale, 510 - (pts[i].y-min[1])*scale);
+		} else { // Arcin' time!
+			ctx.arcTo(10 + (pts[i].x-min[0])*scale, 510 - (pts[i].y-min[1])*scale, 10 + (pts[i+1].x-min[0])*scale, 510 - (pts[i+1].y-min[1])*scale, pts[i].r*scale);
+			// Bro, I did ALL THIS WORK just for there to be a built-in method that does it better. *facepalm*
+			// Get unit vectors
+			/* let v1 = [(pts[i].x-pts[i-1].x), (pts[i].y-pts[i-1].y)];
+			let v2 = [(pts[i+1].x-pts[i].x), (pts[i+1].y-pts[i].y)];
+			let mag = Math.sqrt(v1[0]**2 + v1[1]**2);
+			v1[0] /= mag; v1[1] /= mag;
+			mag = Math.sqrt(v2[0]**2 + v2[1]**2);
+			v2[0] /= mag; v2[1] /= mag;
+			let vc = [v2[0]-v1[0], v2[1]-v1[1]]; // Vector from point to centerpoint
+			mag = Math.sqrt(vc[0]**2 + vc[1]**2);
+			vc[0] /= mag; vc[1] /= mag;
+			// Find angle between v1 v2
+			let theta = Math.acos(-v1[0]*v2[0]-v1[1]*v2[1]);
+			// Get scaling factors
+			let h = pts[i].r/Math.sin(theta/2);
+			//let b = pts[i].r/Math.cos(theta/2);
+			// Get line angles & centerpoint
+			let theta1 = lAngle(...v1);
+			let theta2 = lAngle(...v2);
+			let C = [pts[i].x + h*vc[0], pts[i].y + h*vc[1]]
+			// Drawit
+			//let check=theta2>theta1;
+			ctx.arc(10 + (C[0]-min[0])*scale, 510 - (C[1]-min[1])*scale, pts[i].r*scale, -findMod(theta2 + Math.PI, 2*Math.PI), -findMod(theta1, 2*Math.PI));
+			console.log(theta1/Math.PI);
+			console.log(theta2/Math.PI); */
+		}
+	}
+	ctx.lineTo(10 + (pts[0].x-min[0])*scale, 510 - (pts[0].y-min[1])*scale);
+	ctx.stroke();
+}
+function lAngle(x, y) { // Line angle in [0, 2pi)
+    rAngle = Math.atan(Math.abs(y)/Math.abs(x))
+    if (y>=0 && x>0) return rAngle;
+    else if (y>=0) return Math.PI - rAngle;
+    else if (x>0) return 2*Math.PI - rAngle
+    else return Math.PI + rAngle;
+}
+function findMod(a, b) { // Modulo for floats
+    let mod;
+    // Handling negative values
+    if (a < 0)
+        mod = -a;
+    else
+        mod =  a;
+    if (b < 0)
+        b = -b;
+
+    // Finding mod by 
+    // repeated subtraction
+    
+    while (mod >= b)
+        mod = mod - b;
+
+    // Sign of result typically 
+    // depends on sign of a.
+    if (a < 0)
+        return -mod;
+
+    return mod;
+}
+
 // Frame funcs
 // STA
 function frameSTACalcs() {
