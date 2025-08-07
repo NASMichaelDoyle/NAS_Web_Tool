@@ -624,6 +624,40 @@ function texIRB() {
 	}
 	return tex;
 }
+function texSP() {
+	let tex = SPTemplate;
+	let pts = [];
+	let inTab = GEBID("SPForm", "IOTab");
+	for (let i=0; inTab.children[i+2] !== undefined; i++) {
+		pts[i] = [];
+		pts[i][0] = childSeq(inTab, [i + 2, 1, 0]).value;
+		pts[i][1] = childSeq(inTab, [i + 2, 2, 0]).value;
+		pts[i][2] = childSeq(inTab, [i + 2, 3, 0]).value;
+	}
+	let ids = ["AOut", "XcgOut", "YcgOut", "IxxOut", "IyyOut", "IxyOut", "alphaOut", "rhoxOut", "rhoyOut"];
+	let props = [];
+	for (let i=0; i<ids.length; i++) props[i] = GEBID("SPForm", ids[i]).innerHTML;
+	let fAlpha = GEBID("SPForm", "fAlphaIn").value;
+	let sProps = [];
+	for (let i=0; i<4; i++) {
+		sProps[i] = [];
+		for (let j=0; j<5; j++) sProps[i][j] = childSeq(GEBID("SPForm", "SPOutGrid"), [i, 2, 0, j, 1]).innerHTML;
+	}
+	//console.log(pts, props, fAlpha, sProps);
+	
+	for (let i=0; i<pts.length; i++) tex = tex.replace("<ptRow>", "" + (i+1) + "&" + +pts[i][0] + "&" + +pts[i][1] + "&" + pts[i][2] + (i<pts.length-1?"\\\\\\hline\n<ptRow>":""));
+	let propRow = "" + props[0];
+	for (let i=1; i<props.length; i++) propRow += "&" + props[i];
+	tex = tex.replace("<propRow>", propRow);
+	tex = tex.replace("<fAlpha>", (fAlpha===""?"":"Note that for the sake of calculation, alpha is forced to " + fAlpha + " degrees."));
+	ids = ["<upSectRow>", "<dowSectRow>", "<leSectRow>", "<riSectRow>"];
+	for (let i=0; i<4; i++) {
+		propRow = "" + sProps[i][0];
+		for (let j=1; j<5; j++) propRow += "&" + sProps[i][j];
+		tex = tex.replace(ids[i], propRow);
+	}
+	return tex;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -805,6 +839,9 @@ function writeTeX() { // Build TeX document in order from inputs
 			case "IRB":
 				tex += texIRB();
 				break;
+			case "SP":
+				tex += texSP();
+				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));
 				else tex = replaceFromEnd(tex, "%paratop%", texPara(step.replace("paraSort", "")) + "\n\n%paratop%");
@@ -855,6 +892,9 @@ function downloadPDF(debugMode = false) { // Requires a server to convert .tex t
 	}
 	if (GEBID("boltgroupBox").checked) {
 		formData.append("boltgroup_chart_b64png", GEBID("boltgroupForm", "bgChart").toDataURL("image/png"));
+	}
+	if (GEBID("SPBox").checked) {
+		formData.append("sectpropdia_b64png", GEBID("SPForm", "diaCanv").toDataURL("image/png"));
 	}
 	fetch((debugMode ? 'http://localhost:5000': '') + '/get_multi_latex', { // Server address (localhost for development)
 		method: 'POST',
