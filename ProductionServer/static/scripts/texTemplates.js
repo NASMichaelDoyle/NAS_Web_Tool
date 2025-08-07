@@ -1,6 +1,7 @@
 // TITLE --------------------------------------------------------------------------------------------------------
 const coverTemplate = `\\documentclass[11pt]{article}
 \\usepackage{graphicx} % Required for inserting images
+\\usepackage[export]{adjustbox}
 \\usepackage{fontspec}
 \\usepackage[margin=3cm]{geometry}
 \\usepackage{xcolor}
@@ -807,7 +808,71 @@ The following section analyses inter rivet buckling. Data and properties for the
 	\\caption{Inter rivet buckling data}
 	\\label{tab:IRB1}
 \\end{table}
-`
+`;
+
+// Sect props
+const SPTemplate = `
+\\clearpage
+\\section{Section Properties}
+%paratop%
+
+Inputted points are listed in table \\ref{tab:SP1}.
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline \\textbf{Point} & \\textbf{X (in)} & \\textbf{Y (in)} & \\textbf{Radius (in)}\\\\\\hline
+      <ptRow> \\\\\\hline
+     \\end{tabular}}}
+     \\caption{Perimeter points}
+     \\label{tab:SP1}
+\\end{table}
+
+A diagram of the cross section described by these points is seen in figure \\ref{fig:SP1}.
+
+\\begin{figure}[!htb]
+	\\centering
+    \\includegraphics[width=0.8\\linewidth, frame]{temp/sectpropdia_b64png.png}
+    \\caption{Cross section}
+    \\label{fig:SP1}
+\\end{figure}
+
+From the above geometry, the following properties are calculated in table \\ref{tab:SP2}:
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+      \\hline $A$ & $X_{cg}$ & $Y_{cg}$ & $I_{xx\\ cg}$ & $I_{yy\\ cg}$ & $I_{xy\\ cg}$ & $\\alpha$ & $\\rho_x$ & $\\rho_y$\\\\\\hline
+      <propRow> \\\\\\hline
+     \\end{tabular}}}
+     \\caption{Properties}
+     \\label{tab:SP2}
+\\end{table}
+
+Additional properties can be found by analyzing each "section" (above, below, right or left), relative to the center of gravity. These results are calculated in table \\ref{tab:SP3}. <fAlpha>
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline \\multirow{2}{80pt}{\\textbf{Upper Section}} & Area & Q & C\\textsubscript{m} & I\\textsubscript{xx} & K\\\\\\cline{2-6}
+      & <upSectRow>\\\\\\hline
+      \\multirow{2}{80pt}{\\textbf{Lower Section}} & Area & Q & C\\textsubscript{m} & I\\textsubscript{xx} & K\\\\\\cline{2-6}
+      & <dowSectRow>\\\\\\hline
+      \\multirow{2}{80pt}{\\textbf{Left Section}} & Area & Q & C\\textsubscript{m} & I\\textsubscript{yy} & K\\\\\\cline{2-6}
+      & <leSectRow>\\\\\\hline
+      \\multirow{2}{80pt}{\\textbf{Right Section}} & Area & Q & C\\textsubscript{m} & I\\textsubscript{yy} & K\\\\\\cline{2-6}
+      & <riSectRow>\\\\\\hline
+     \\end{tabular}}}
+     \\caption{Section properties}
+     \\label{tab:SP3}
+\\end{table}
+`;
 
 // FRAME STA --------------------------------------------------------------------------------------------------------
 const frameSTATemplate = `
@@ -949,6 +1014,7 @@ Shear buckling analysis seen in table \\ref{tab:fSTA6}, figure \\ref{fig:fSTA2}.
 
 // FRAME WDT --------------------------------------------------------------------------------------------------------
 const frameWDTTemplate = `
+\\clearpage
 \\section{Web Diagonal Tension}
 %paratop%
 

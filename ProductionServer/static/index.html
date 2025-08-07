@@ -1916,7 +1916,7 @@
 					<td></td>
 					<td><input type="number" placeholder="Enter X" onchange="SPCalcs()"></td>
 					<td><input type="number" placeholder="Enter Y" onchange="SPCalcs()"></td>
-					<td><input type="number" placeholder="Enter Radius" onchange="SPCalcs()"></td>
+					<td><input type="number" placeholder="(Optional)" onchange="SPCalcs()"></td>
 				</tr>
 			</template>
 			<style>
@@ -1926,11 +1926,13 @@
 			</style>
 			
 			<header><h2>Section Properties</h2></header>
-			<div class="formIO">
+			<div class="formIO" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
 			<!--<h3>Information</h3>
 			<p style="text-align: center; padding: 5px;">
 				lol
 			</p>-->
+			<div>
+			<h3>Input</h3>
 			<table class="inTab" id="IOTab">
 				<colgroup>
 					<col span="1" style="border-right: 1px solid black">
@@ -1943,8 +1945,55 @@
 				</tr>
 			</table>
 			<br>
-			<button onclick="SPAddPt()" style="margin-left: 0px;">Add Point</button>
-			<button onclick="SPRmPt()" style="margin-left: 0px;">Remove Point</button>
+			<button onclick="SPAddPt(); SPCalcs();" style="margin-left: 0px;">Add Point</button>
+			<button onclick="SPRmPt(); if (SPNumPt>1) SPCalcs();" style="margin-left: 0px;">Remove Point</button>
+			<br><br>
+			<table>
+				<tr>
+					<th>Force Alpha:</th>
+					<td><input id="fAlphaIn" type="number" onchange="SPCalcs()" style="width: 50px;"></td>
+				</tr>
+			</table>
+			<br><br>
+			</div>
+			<table style="margin-left: 40px;">
+				<tr>
+					<td style="text-align: right;">A = </td>
+					<td style="text-align: left;" id="AOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">X<sub>cg</sub> = </td>
+					<td style="text-align: left;" id="XcgOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">Y<sub>cg</sub> = </td>
+					<td style="text-align: left;" id="YcgOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">I<sub>xx cg</sub> = </td>
+					<td style="text-align: left;" id="IxxOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">I<sub>yy cg</sub> = </td>
+					<td style="text-align: left;" id="IyyOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">I<sub>xy cg</sub> = </td>
+					<td style="text-align: left;" id="IxyOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">α = </td>
+					<td style="text-align: left;" id="alphaOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">ρ<sub>x</sub> = </td>
+					<td style="text-align: left;" id="rhoxOut"></td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">ρ<sub>y</sub> = </td>
+					<td style="text-align: left;" id="rhoyOut"></td>
+				</tr>
+			</table>
 			<script>
 				let SPNumPt = 0;
 				function SPAddPt() {
@@ -1962,9 +2011,52 @@
 				for (let i=0; i<4; i++) SPAddPt();
 			</script>
 			</div>
-			<canvas id="diaCanv" style="border: 1px solid black;" width="520" height="520">
+			<div style="display: flex; justify-content: center; align-items: center;">
+			<canvas id="diaCanv" style="border: 1px solid black; margin: 0 auto; margin-top: 20px;" width="520" height="520">
 
 			</canvas>
+			</div>
+			<template id="SPOutTemplate">
+				<div style="margin: 10% 10%">
+				<h4 style="border-bottom: 1px solid black;"></h4>
+				<table>
+					<tr>
+						<td style="text-align: right;">A = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">Q = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">C<sub>m</sub> = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<tr>
+						<td style="text-align: right;">I = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+					<br>
+					<tr>
+						<td style="text-align: right;">K = </td>
+						<td style="text-align: left;"></td>
+					</tr>
+				</table>
+				</div>
+			</template>
+			<div id="SPOutGrid" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
+
+			</div>
+			<script>
+				let grid = GEBID("SPForm", "SPOutGrid");
+				let tabTemp = GEBID("SPForm", "SPOutTemplate");
+				for (let i=0; i<4; i++) {
+					let tab = tabTemp.content.cloneNode(true).children[0];
+					tab.children[0].innerHTML = ["Upper Section", "Lower Section", "Left Section", "Right Section"][i];
+					childSeq(tab, [2, 0, 3, 0]).innerHTML = "I<sub>"+(i<2?"xx":"yy")+"</sub> = ";
+					grid.appendChild(tab);
+				}
+			</script>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>

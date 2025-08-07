@@ -34,6 +34,7 @@ function downloadInput() {
 	let fWDTData = [];
 	let LJDData = [];
 	let IRBData = [];
+	let SPData = [];
 	// Ellipse
 	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
 	for (let i=0; i<ids.length; i++) ellData[i] = GEBID("ellForm", ids[i]).value;
@@ -99,12 +100,14 @@ function downloadInput() {
 	for (let i=0; i<IRBNumSect; i++)
 		for (let j=0; j<7; j++)
 			IRBData[7*i+j] = childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1, 0]).value;
-	//console.log(IRBData);
-	//return;
+	// Sect prop
+	SPData[0] = SPNumPt;
+	for (let i=0; i<3*SPNumPt; i++) SPData[i+1] = childSeq(GEBID("SPForm", "IOTab"), [parseInt(i/3+2), parseInt(i%3+1), 0]).value;
+	SPData[3*SPNumPt+1] = GEBID("SPForm", "fAlphaIn").value;
 	// Download it
 	let csv = "";
-	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD", "IRB"];
-	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData, LJDData, IRBData];
+	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD", "IRB", "Section Properties"];
+	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData, LJDData, IRBData, SPData];
 	for (let i=0; i<ids.length; i++) csv += ids[i] + "\n" + allData[i] + "\n";
 	const element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csv));
@@ -127,6 +130,7 @@ function uploadInput(ins) {
 	let fWDTData = ins.split("\n")[19].split(",");
 	let LJDData = ins.split("\n")[21].split(",");
 	let IRBData = ins.split("\n")[23].split(",");
+	let SPData = ins.split("\n")[25].split(",");
 	// Ellipse
 	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
 	for (let i=0; i<ellData.length; i++) GEBID("ellForm", ids[i]).value = ellData[i];
@@ -215,9 +219,17 @@ function uploadInput(ins) {
 		let newNSect = IRBData.length/7;
 		if (newNSect<IRBNumSect) for (let i=IRBNumSect; i>newNSect; i--) IRBRmSect();
 		else for (let i=IRBNumSect; i<newNSect; i++) IRBAddSect();
-		console.log(newNSect, IRBNumSect);
 		for (let i=0; i<IRBNumSect; i++)
 			for (let j=0; j<7; j++)
 				childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1, 0]).value = IRBData[7*i+j];
+	}
+	// Sect prop
+	{
+		let newNPt = SPData[0];
+		if (newNPt<SPNumPt) for (let i=SPNumPt; i>newNPt; i--) SPRmPt();
+		else for (let i=SPNumPt; i<newNPt; i++) SPAddPt();
+		for (let i=0; i<3*SPNumPt; i++) childSeq(GEBID("SPForm", "IOTab"), [parseInt(i/3+2), parseInt(i%3+1), 0]).value = SPData[i+1];
+		GEBID("SPForm", "fAlphaIn").value = SPData[3*SPNumPt+1];
+		SPCalcs();
 	}
 }
