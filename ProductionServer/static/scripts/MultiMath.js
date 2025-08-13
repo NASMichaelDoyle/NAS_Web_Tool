@@ -194,6 +194,7 @@ function TCCalcs() {
 	let n = +document.getElementById("TCForm").querySelector("#PCIn").value; // Point count
 	
 	const outBox = document.getElementById("OutputBox");
+	const rPackBox = GEBID("rPackForm", "PappIn");
 	
 	// Check for NaN
 	if (isNaN(t) || isNaN(c) || isNaN(Fcy) || isNaN(s) || isNaN(w) || isNaN(n)) {
@@ -222,9 +223,18 @@ function TCCalcs() {
 			P = "error"
 			break;
 	}
-	if (isNaN(P)) outBox.innerHTML = P;
-	else if (s <= 1) outBox.innerHTML = (P * w).toFixed(0);
-	else outBox.innerHTML = (P * n).toFixed(0);
+	if (isNaN(P)) {
+		outBox.innerHTML = P;
+		rPackBox.value = P;
+	}
+	else if (s <= 1) {
+		outBox.innerHTML = (P * w).toFixed(0);
+		rPackBox.value = (P * w).toFixed(0);
+	}
+	else {
+		outBox.innerHTML = (P * n).toFixed(0);
+		rPackBox.value = (P * n).toFixed(0);
+	}
 }
 function Fig4_1Data(t, c, Fcy) {
 	let a, b;
@@ -3399,6 +3409,76 @@ function findMod(a, b) { // Modulo for floats
         return -mod;
 
     return mod;
+}
+
+// Radius Packer funcs
+function rPackCalcs() {
+	let tabIQ = GEBID("rPackForm", "geoInTab"); // tab(le )I(n )Q(uestion)
+	let dummy = [];
+	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value;
+	let [C, e, r, tw, tf, tp, Wp, D] = dummy;
+	tabIQ = GEBID("rPackForm", "fPropTab");
+	dummy = [];
+	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value;
+	let [Ftu_F, Fty_F, Fsu_F, E_F] = dummy;
+	tabIQ = GEBID("rPackForm", "pPropTab");
+	dummy = [];
+	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value;
+	let [Ftu_P, Fty_P, Fsu_P, E_P] = dummy;
+	tabIQ = GEBID("rPackForm", "bPropTab");
+	dummy = [];
+	for (let i=0; childSeq(tabIQ, [0, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [0, i, 1, 0]).value;
+	let [Ptu_B, Psu_B] = dummy;
+	let Papp = +GEBID("rPackForm", "PappIn").value;
+	tabIQ = GEBID("rPackForm", "FBendingTab");
+	dummy = [];
+	for (let i=0; i<3; i++) dummy[i] = +childSeq(tabIQ, [0, i, 1, 0]).value;
+	let [Pf, k, N] = dummy;
+	let torque = +childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value;
+
+	let b = C-tw/2-r;
+	let a = C-b;
+	let I1 = Wp*tf**3/12;
+	let I2 = Wp*tp**3/12;
+	let P_F_allow = Pf*Fty_F/42000*k/N;
+	let M_F_allow = P_F_allow*C/2;
+	let M_F = Papp*C/2*I1*E_F/(I1*E_F + I2*E_P);
+	let MS_F = M_F_allow/M_F - 1;
+	let Mb = Papp*C/2 - M_F;
+	let fb = 6*Mb/((Wp-D)*tp**2);
+	let Fbu = Ftu_P+Fty_P/2;
+	let R1 = 3*Mb/2/C;
+	let R2 = R1*C/e;
+	let fs = Math.max(R1, R2)/tp/(Wp-D);
+	let Rb = fb/Fbu;
+	let Rs = fs/Fsu_P;
+	let MS_P = Math.sqrt(1/(Rb**2 + Rs**2)) - 1;
+	let Pp = R1 + R2;
+	let Ptorque = torque/(0.2*D);
+	let Pf_pry = 3*M_F/2/e;
+	let Pbolt = Pp + Ptorque + Pf_pry + Papp;
+	let MS_B = Ptu_B/Pbolt - 1;
+
+	tabIQ = GEBID("rPackForm", "geoOutTab");
+	dummy = [b, a, I1, I2];
+	let sig = [2, 2, 6, 6];
+	for (let i=0; i<4; i++) childSeq(tabIQ, [1, i, 1]).innerHTML = sRound(dummy[i], sig[i]);
+	tabIQ = GEBID("rPackForm", "FBendingTab");
+	dummy = [P_F_allow, M_F_allow, M_F, MS_F];
+	sig = [4, 4, 5, 6];
+	for (let i=0; i<4; i++) childSeq(tabIQ, [0, i+3, 1]).innerHTML = sRound(dummy[i], sig[i]);
+	childSeq(tabIQ, [0, 6, 1]).style.backgroundColor = (MS_F>0)?"lightgreen":"red";
+	tabIQ = GEBID("rPackForm", "PSBendingTab");
+	dummy = [Mb, fb, Fbu, R1, R2, fs, Rb, Rs, MS_P];
+	sig = [4, 2, 0, 4, 3, 3, 6, 6, 6];
+	for (let i=0; i<9; i++) childSeq(tabIQ, [0, i, 1]).innerHTML = sRound(dummy[i], sig[i]);
+	childSeq(tabIQ, [0, 8, 1]).style.backgroundColor = (MS_P>0)?"lightgreen":"red";
+	tabIQ = GEBID("rPackForm", "BMarginTab");
+	dummy = [Pp, Ptorque, Pf_pry, Pbolt, MS_B];
+	sig = [3, 3, 4, 3, 6];
+	for (let i=0; i<5; i++) childSeq(tabIQ, [0, i+1, 1]).innerHTML = sRound(dummy[i], sig[i]);
+	childSeq(tabIQ, [0, 5, 1]).style.backgroundColor = (MS_B>0)?"lightgreen":"red";
+
 }
 
 // Frame funcs

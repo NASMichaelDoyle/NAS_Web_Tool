@@ -658,6 +658,36 @@ function texSP() {
 	}
 	return tex;
 }
+function texRPack() {
+	let tex = rPackTemplate;
+	let tabIQ = GEBID("rPackForm", "geoInTab"); // tab(le )I(n )Q(uestion)
+	let dummy = [];
+	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value;
+	tabIQ = GEBID("rPackForm", "geoOutTab");
+	for (let i=0; i<4; i++) dummy[i+8] = +childSeq(tabIQ, [1, i, 1]).innerHTML;
+	let dumRow = "" + dummy[0];
+	for (let i=1; i<dummy.length; i++) dumRow += "&" + dummy[i];
+	tex = tex.replace("<geoRow>", dumRow);
+	dummy = [];
+	for (let i=0; i<10; i++) dummy[i] = childSeq(GEBID("rPackForm", ["f", "p", "b"][parseInt(i/4)] + "PropTab"), [1 - parseInt(i/8), i%4, 1, 0]).value;
+	for (let i=0; i<3; i++) {
+		dumRow = "" + dummy[i*4];
+		for (let j=1; j<4 && (i<2 || j<2); /* Le Epic DeMorgan's*/ j++) dumRow += "&" + dummy[i*4 + j];
+		tex = tex.replace("<propRow" + (i+1) + ">", dumRow);
+	}
+	tex = tex.replace("<Papp>", GEBID("rPackForm", "PappIn").value);
+	dummy = [];
+	for (let i=0; i<22; i++) {
+		let dumCell = childSeq(GEBID("rPackForm", ["FBendingTab", "PSBendingTab", "BMarginTab"][+(i>=7) + +(i>=16)]), [0, i - (i>=16?16:i>=7?7:0), 1]);
+		dummy[i] = dumCell.children[0]!==undefined?dumCell.children[0].value:dumCell.innerHTML;
+	}
+	for (let i=0; i<3; i++) {
+		dumRow = "" + dummy[i**2 + 6*i];
+		for (let j=1; j<2*i+7 && (i<2 || j<6); j++) dumRow += "&" + ((j==8 || (i==0 && j==6) || (i==2 && j==5))?"\\cellcolor{"+ ((dummy[i**2 + 6*i + j] > 0)?"gudgreen":"red") +"}{":"") + dummy[i**2 + 6*i + j] + ((j==8 || (i==0 && j==6) || (i==2 && j==5))?"}":"");
+		tex = tex.replace("<msRow" + (i+1) + ">", dumRow);
+	}
+	return tex;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -841,6 +871,9 @@ function writeTeX() { // Build TeX document in order from inputs
 				break;
 			case "SP":
 				tex += texSP();
+				break;
+			case "rPack":
+				tex += texRPack();
 				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));
