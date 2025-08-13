@@ -810,7 +810,7 @@ The following section analyses inter rivet buckling. Data and properties for the
 \\end{table}
 `;
 
-// Sect props
+// Sect props -------------------------------------------------------------------------------------------------------
 const SPTemplate = `
 \\clearpage
 \\section{Section Properties}
@@ -871,6 +871,99 @@ Additional properties can be found by analyzing each "section" (above, below, ri
      \\end{tabular}}}
      \\caption{Section properties}
      \\label{tab:SP3}
+\\end{table}
+`;
+
+// rPack -----------------------------------------------------------------------------------------------------------
+const rPackTemplate = `
+\\clearpage
+\\section{Radius Packer}
+
+%paratop%
+
+A radius packer configuration is herein analysed. A general diagram of the geometry of the configuration is seen in figure \\ref{fig:RP1}.
+
+\\begin{figure}[!htb]
+	\\centering
+    \\includegraphics[width=0.8\\linewidth]{static/images/rPack/rPackGeoDia.png}
+    \\caption{Radius packer geometry diagram}
+    \\label{fig:RP1}
+\\end{figure}
+
+Inputted and calculated geometrical values are summarized in table \\ref{tab:RP1}.
+
+\\begin{table}[h]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \\hline $C$ (in)& $e$ (in) & $r$ (in) & $t_w$ (in) & $t_f$ (in) & $t_p$ (in) & $W_p$ (in) & $D$ (in) & $b$ (in) & $a$ (in) & $I_1$ (in$^4$) & $I_2$ (in$^4$)\\\\\\hline
+      <geoRow>\\\\\\hline
+     \\end{tabular}}}
+     \\caption{Geometry}
+     \\label{tab:RP1}
+\\end{table}
+
+The material properties for the fitting, packer and bolt are summarized in the table \\ref{tab:RP2}.
+
+\\begin{table}[h]
+   \\centering
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline \\multicolumn{4}{|c|}{\\textbf{Fitting}}\\\\\\hline
+      $F_{tu}$ (psi) & $F_{ty}$ (psi) & $F_{su}$ (psi) & $E$ (psi)\\\\\\hline
+      <propRow1>\\\\\\hline
+    \\end{tabular}
+
+     \\vspace{0.5em}
+     
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline\\multicolumn{4}{|c|}{\\textbf{Packer}}\\\\\\hline
+      $F_{tu}$ (psi) & $F_{ty}$ (psi) & $F_{su}$ (psi) & $E$ (psi)\\\\\\hline
+      <propRow2>\\\\\\hline
+     \\end{tabular}
+
+     \\vspace{0.5em}
+
+     \\begin{tabular}{|c|c|}
+      \\hline \\multicolumn{2}{|c|}{\\textbf{Bolt}}\\\\\\hline
+      $P_{tu}$ (lbs) & $P_{su}$ (lbs)\\\\\\hline
+      <propRow3>\\\\\\hline
+    \\end{tabular}
+	\\caption{Material properties}
+	\\label{tab:RP2}
+\\end{table}
+
+Additionally, the applied load is <Papp> for the purpose of calculation.
+
+Given these input properties, the following values and margins of safety are calculated, seen in table \\ref{tab:RP3}.
+
+\\begin{table}[h]
+   \\centering
+    \\begin{tabular}{|c|c|c|c|c|c|c|}
+      \\hline \\multicolumn{7}{|c|}{\\textbf{Flange Bending}}\\\\\\hline
+      $P_f$ (lb) & $k$ & $N$ & $P_f$ allowable (lb) & $M_f$ allowable (lb-in) & $M_f$ (lb-in)& MS\\\\\\hline
+      <msRow1>\\\\\\hline
+    \\end{tabular}
+
+     \\vspace{1em}
+
+     \\makebox[\\linewidth]{
+     \\scalebox{0.8}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+      \\hline\\multicolumn{9}{|c|}{\\textbf{Packer Shear and Bending}}\\\\\\hline
+      $M_b$ & $f_b$ & $F_{bu}$ & $R_1$ & $R_2$ & $f_s$ & $R_b$ & $R_s$ & MS\\\\\\hline
+      <msRow2>\\\\\\hline
+     \\end{tabular}}}
+
+     \\vspace{1em}
+
+     \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline \\multicolumn{6}{|c|}{\\textbf{Bolt Margin}}\\\\\\hline
+      Torque (lb-in) & $P_p$ (lb) & $P_{torque}$ (lb) & $P_{f}$ pry (lb) & $P_{bolt}$ (lb) & MS\\\\\\hline
+      <msRow3>\\\\\\hline
+    \\end{tabular}
+	\\caption{Material properties}
+	\\label{tab:RP3}
 \\end{table}
 `;
 

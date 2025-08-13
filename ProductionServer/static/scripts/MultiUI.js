@@ -61,6 +61,10 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "Inter Rivet Buckling";
 		case "SP":
 			return "Section Properties";
+		case "NACA_TN":
+			return "NACA TN";
+		case "rPack":
+			return "Radius Packer";
 		default:
 			return "Unknown";
 	}
