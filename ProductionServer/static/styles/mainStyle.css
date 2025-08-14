@@ -1,20 +1,30 @@
 * {
 	font-family:Helvetica;
 }
+html {
+	height: 100vh;
+}
 body {
-
+	margin: 0;                  /* Resets default browser margin */
+    padding: 0;
+	height: 100%;
 }
 header {
   background-color: #0b4150;  /* Set the background color */
-  padding: 20px;             /* Add some padding for better appearance */
-  text-align: center;          /* Center the text within the header */
+  padding: 20px;                /* Add some padding for better appearance */
+  text-align: center;           /* Center the text within the header */
   color: white;
 }
 #mainHeader {
   background-color: #a1e8f2;  /* Set the background color */
-  padding: 20px;             /* Add some padding for better appearance */
-  text-align: center;          /* Center the text within the header */
+  padding: 0px;                /* Add some padding for better appearance */
+  text-align: center;           /* Center the text within the header */
   color: #116a75;
+  border-top: 0px; display: grid;
+  grid-template-columns: 1fr 4fr;
+  position: relative; z-index: 99;
+  align-items: center;
+  height: 15%;
 }
 h1 {
 	color: #116a75;
@@ -33,7 +43,8 @@ input[type="checkbox"] {
 	display: grid;
 	grid-template-columns: 20% auto;
 	grid-template-rows: auto;
-	width: 99vw;
+	width: 100%;
+	height: 85%;
 }
 .sidebar {
 	text-align: left;
