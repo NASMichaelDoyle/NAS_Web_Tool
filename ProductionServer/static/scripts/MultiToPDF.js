@@ -677,13 +677,13 @@ function texRPack() {
 	}
 	tex = tex.replace("<Papp>", GEBID("rPackForm", "PappIn").value);
 	dummy = [];
-	for (let i=0; i<22; i++) {
-		let dumCell = childSeq(GEBID("rPackForm", ["FBendingTab", "PSBendingTab", "BMarginTab"][+(i>=7) + +(i>=16)]), [0, i - (i>=16?16:i>=7?7:0), 1]);
+	for (let i=0; i<19; i++) {
+		let dumCell = childSeq(GEBID("rPackForm", ["FBendingTab", "PSBendingTab", "BMarginTab"][+(i>=4) + +(i>=13)]), [0, i - (i>=13?13:i>=4?4:0), 1]);
 		dummy[i] = dumCell.children[0]!==undefined?dumCell.children[0].value:dumCell.innerHTML;
 	}
 	for (let i=0; i<3; i++) {
-		dumRow = "" + dummy[i**2 + 6*i];
-		for (let j=1; j<2*i+7 && (i<2 || j<6); j++) dumRow += "&" + ((j==8 || (i==0 && j==6) || (i==2 && j==5))?"\\cellcolor{"+ ((dummy[i**2 + 6*i + j] > 0)?"gudgreen":"red") +"}{":"") + dummy[i**2 + 6*i + j] + ((j==8 || (i==0 && j==6) || (i==2 && j==5))?"}":"");
+		dumRow = "" + dummy[2.5*i**2 + 1.5*i];
+		for (let j=1; j<5*i+4 && (i<2 || j<6); j++) dumRow += "&" + ((j==8 || (i==0 && j==3) || (i==2 && j==5))?"\\cellcolor{"+ ((dummy[2.5*i**2 + 1.5*i + j] > 0)?"gudgreen":"red") +"}{":"") + dummy[2.5*i**2 + 1.5*i + j] + ((j==8 || (i==0 && j==3) || (i==2 && j==5))?"}":"");
 		tex = tex.replace("<msRow" + (i+1) + ">", dumRow);
 	}
 	return tex;

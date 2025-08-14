@@ -887,7 +887,7 @@ The material properties for the fitting, packer and bolt are summarized in the t
 \\begin{table}[h]
    \\centering
     \\begin{tabular}{|c|c|c|c|}
-      \\hline \\multicolumn{4}{|c|}{\\textbf{Fitting}}\\\\\\hline
+      \\hline \\multicolumn{4}{|c|}{\\textbf{\\cellcolor{tablue}{Fitting}}}\\\\\\hline
       $F_{tu}$ (psi) & $F_{ty}$ (psi) & $F_{su}$ (psi) & $E$ (psi)\\\\\\hline
       <propRow1>\\\\\\hline
     \\end{tabular}
@@ -895,7 +895,7 @@ The material properties for the fitting, packer and bolt are summarized in the t
      \\vspace{0.5em}
      
     \\begin{tabular}{|c|c|c|c|}
-      \\hline\\multicolumn{4}{|c|}{\\textbf{Packer}}\\\\\\hline
+      \\hline\\multicolumn{4}{|c|}{\\textbf{\\cellcolor{tablue}{Packer}}}\\\\\\hline
       $F_{tu}$ (psi) & $F_{ty}$ (psi) & $F_{su}$ (psi) & $E$ (psi)\\\\\\hline
       <propRow2>\\\\\\hline
      \\end{tabular}
@@ -903,7 +903,7 @@ The material properties for the fitting, packer and bolt are summarized in the t
      \\vspace{0.5em}
 
      \\begin{tabular}{|c|c|}
-      \\hline \\multicolumn{2}{|c|}{\\textbf{Bolt}}\\\\\\hline
+      \\hline \\multicolumn{2}{|c|}{\\textbf{\\cellcolor{tablue}{Bolt}}}\\\\\\hline
       $P_{tu}$ (lbs) & $P_{su}$ (lbs)\\\\\\hline
       <propRow3>\\\\\\hline
     \\end{tabular}
@@ -917,9 +917,9 @@ Given these input properties, the following values and margins of safety are cal
 
 \\begin{table}[h]
    \\centering
-    \\begin{tabular}{|c|c|c|c|c|c|c|}
-      \\hline \\multicolumn{7}{|c|}{\\textbf{Flange Bending}}\\\\\\hline
-      $P_f$ (lb) & $k$ & $N$ & $P_f$ allowable (lb) & $M_f$ allowable (lb-in) & $M_f$ (lb-in)& MS\\\\\\hline
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline \\multicolumn{4}{|c|}{\\textbf{\\cellcolor{tablue}{Flange Bending}}}\\\\\\hline
+      $P_f$ allowable (lb) & $M_f$ allowable (lb-in) & $M_f$ (lb-in)& MS\\\\\\hline
       <msRow1>\\\\\\hline
     \\end{tabular}
 
@@ -928,7 +928,7 @@ Given these input properties, the following values and margins of safety are cal
      \\makebox[\\linewidth]{
      \\scalebox{0.8}{
     \\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-      \\hline\\multicolumn{9}{|c|}{\\textbf{Packer Shear and Bending}}\\\\\\hline
+      \\hline\\multicolumn{9}{|c|}{\\textbf{\\cellcolor{tablue}{Packer Shear and Bending}}}\\\\\\hline
       $M_b$ & $f_b$ & $F_{bu}$ & $R_1$ & $R_2$ & $f_s$ & $R_b$ & $R_s$ & MS\\\\\\hline
       <msRow2>\\\\\\hline
      \\end{tabular}}}
@@ -936,7 +936,7 @@ Given these input properties, the following values and margins of safety are cal
      \\vspace{1em}
 
      \\begin{tabular}{|c|c|c|c|c|c|}
-      \\hline \\multicolumn{6}{|c|}{\\textbf{Bolt Margin}}\\\\\\hline
+      \\hline \\multicolumn{6}{|c|}{\\textbf{\\cellcolor{tablue}{Bolt Margin}}}\\\\\\hline
       Torque (lb-in) & $P_p$ (lb) & $P_{torque}$ (lb) & $P_{f}$ pry (lb) & $P_{bolt}$ (lb) & MS\\\\\\hline
       <msRow3>\\\\\\hline
     \\end{tabular}
