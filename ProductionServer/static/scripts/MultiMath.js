@@ -194,7 +194,7 @@ function TCCalcs() {
 	let n = +document.getElementById("TCForm").querySelector("#PCIn").value; // Point count
 	
 	const outBox = document.getElementById("OutputBox");
-	const rPackBox = GEBID("rPackForm", "PappIn");
+	const rPackBox = childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]);
 	
 	// Check for NaN
 	if (isNaN(t) || isNaN(c) || isNaN(Fcy) || isNaN(s) || isNaN(w) || isNaN(n)) {
@@ -3097,19 +3097,18 @@ function SPCalcs() {
 		ptsRotated[i].x = (pts[i].x - cgY) * Math.cos(forcedAlpha / 180 * Math.PI) + (pts[i].y - cgZ) * Math.sin(forcedAlpha / 180 * Math.PI);
 		ptsRotated[i].y = -(pts[i].x - cgY) * Math.sin(forcedAlpha / 180 * Math.PI) + (pts[i].y - cgZ) * Math.cos(forcedAlpha / 180 * Math.PI);
 	}
-
-	for (let i = 0; i < pts.length; i++) {
+	for (let i = 0; i < ptsRotated.length; i++) {
 	    if (i==0) {
-			j = pts.length-1;
+			j = ptsRotated.length-1;
 			k = 1;
 		}
 	    if (i > 0) {
 			j = i - 1;
 			k = i + 1;
 		}
-	    if (i == pts.length - 1) {
-			j = pts.length - 2;
-			k = 0;
+	    if (i == ptsRotated.length - 1) {
+			j = i - 1;
+			k = i;
 		}
 		// Upper Area
 		ptsU[i] = new Object();
@@ -3212,6 +3211,7 @@ function SPCalcs() {
 			ptsR[i].x = 0;
 		}
 	}
+	//console.log("Upper:", ptsU, "Lower:", ptsD, "Left:", ptsL, "Right:", ptsR);
 	AUpper = 0;
 	ALower = 0;
 	ARight = 0;
@@ -3224,11 +3224,11 @@ function SPCalcs() {
 	QLower = 0;
 	QRight = 0;
 	QLeft = 0;
-	for (let arr of [ptsU, ptsD, ptsL, ptsR]) {
+	for (let arr of [ptsU, ptsD, ptsL, ptsR]) { // Format arrays like they are in XLS
 		arr[arr.length] = new Object();
-		arr[arr.length-1].x = arr[0].x;
-		arr[arr.length-1].y = arr[1].y;
-	}
+		arr[arr.length-1].x = arr[arr.length-2].x;
+		arr[arr.length-1].y = arr[arr.length-2].y;
+	} 
 	for (let i = 0; i < pts.length; i++) {
 		AUpper += (+ptsU[i + 1].x - ptsU[i].x) * 0.5 * (ptsU[i + 1].y + +ptsU[i].y);
 		ALower += (+ptsD[i + 1].x - ptsD[i].x) * 0.5 * (ptsD[i + 1].y + +ptsD[i].y);
@@ -3431,16 +3431,15 @@ function rPackCalcs() {
 	let [Ptu_B, Psu_B] = dummy;
 	let Papp = +GEBID("rPackForm", "PappIn").value;
 	tabIQ = GEBID("rPackForm", "FBendingTab");
-	dummy = [];
-	for (let i=0; i<3; i++) dummy[i] = +childSeq(tabIQ, [0, i, 1, 0]).value;
-	let [Pf, k, N] = dummy;
+
+	let P_F_allow = +childSeq(tabIQ, [0, 0, 1, 0]).value;
+
 	let torque = +childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value;
 
 	let b = C-tw/2-r;
 	let a = C-b;
 	let I1 = Wp*tf**3/12;
 	let I2 = Wp*tp**3/12;
-	let P_F_allow = Pf*Fty_F/42000*k/N;
 	let M_F_allow = P_F_allow*C/2;
 	let M_F = Papp*C/2*I1*E_F/(I1*E_F + I2*E_P);
 	let MS_F = M_F_allow/M_F - 1;
@@ -3464,10 +3463,10 @@ function rPackCalcs() {
 	let sig = [2, 2, 6, 6];
 	for (let i=0; i<4; i++) childSeq(tabIQ, [1, i, 1]).innerHTML = sRound(dummy[i], sig[i]);
 	tabIQ = GEBID("rPackForm", "FBendingTab");
-	dummy = [P_F_allow, M_F_allow, M_F, MS_F];
-	sig = [4, 4, 5, 6];
-	for (let i=0; i<4; i++) childSeq(tabIQ, [0, i+3, 1]).innerHTML = sRound(dummy[i], sig[i]);
-	childSeq(tabIQ, [0, 6, 1]).style.backgroundColor = (MS_F>0)?"lightgreen":"red";
+	dummy = [M_F_allow, M_F, MS_F];
+	sig = [4, 5, 6];
+	for (let i=0; i<3; i++) childSeq(tabIQ, [0, i+1, 1]).innerHTML = sRound(dummy[i], sig[i]);
+	childSeq(tabIQ, [0, 3, 1]).style.backgroundColor = (MS_F>0)?"lightgreen":"red";
 	tabIQ = GEBID("rPackForm", "PSBendingTab");
 	dummy = [Mb, fb, Fbu, R1, R2, fs, Rb, Rs, MS_P];
 	sig = [4, 2, 0, 4, 3, 3, 6, 6, 6];

@@ -135,6 +135,389 @@
 			<h2>No Analyses Selected</h2>
 			<p>Select an analysis from the menu on the left</p>
 		</div>
+		<div class="analForm" id="TCForm">
+			<header><h2>Tension Clip</h2></header>
+			<div class="container">
+				<div id="Inputs" class="formIO">
+
+					<h2 style="text-align: center;">Input</h2>
+					<div style="text-align: right; margin: 0 auto; width: 270px;">
+					<span>Clip Type</span>
+					<select id="CTIn" name="CTIn" onchange="TCCalcs()">
+						<option value="SCSA">Single Clad Sheet Angle</option>
+						<option value="SEA">Single Extruded Angle</option>
+						<option value="DCSA">Double Clad Sheet Angles</option>
+						<option value="DEA">Double Extruded Angles</option>
+						<option selected value="Tee">Tee</option>
+					</select><br>
+					<span>t =</span>
+					<input type="text" id="tIn" placeholder="Enter t" onchange="TCCalcs()">
+					<span id="units">in</span><br>
+					<span>c =</span>
+					<input type="text" id="cIn" placeholder="Enter c" onchange="TCCalcs()">
+					<span id="units">in</span><br>
+					<span>Fcy =</span>
+					<input type="text" id="FcyIn" placeholder="Enter Fcy" onchange="TCCalcs()">
+					<span id="units">ksi</span><br>
+					<span>Point Spacing =</span>
+					<input type="text" id="PSIn" placeholder="Enter Point Spacing" onchange="TCCalcs()">
+					<span id="units">in</span><br>
+					<span>Angle Width =</span>
+					<input type="text" id="AWIn" placeholder="Enter Angle Width" onchange="TCCalcs()">
+					<span id="units">in</span><br>
+					<span>Point Count =</span>
+					<input type="text" id="PCIn" placeholder="Enter Point Count" onchange="TCCalcs()">
+					<span id="units">qty</span><br><br>
+					</div>
+					<br><h2>Output</h2>
+					<div style="text-align: center;">
+						<span>P =</span>
+						<table><tr><td id="OutputBox">Enter Values</td></tr></table>
+						<span>lbs</span>
+					</div>
+				</div>
+				<div id="clipTypes">
+					<h2>Clip Types</h2>
+					<div id="CTGrid">
+						<div class="gridItem">
+							<figure>
+								<img src="images/SCSA.png" alt="Single Clad Sheet Angle" style="width:60%;">
+								<figcaption>Single Clad Sheet Angle</figcaption>
+							</figure>
+						</div>
+						<div class="gridItem">
+							<figure>
+								<img src="images/SEA.png " alt="Single Extruded Angle" style="width:60%;">
+								<figcaption>Single Extruded Angle</figcaption>
+							</figure>
+						</div>
+						<div class="gridItem">
+							<figure>
+								<img src="images/DCSA.png" alt="Double Clad Sheet Angles" style="width:80%;">
+								<figcaption>Double Clad Sheet Angles</figcaption>
+							</figure>
+						</div>
+						<div class="gridItem">
+							<figure>
+								<img src="images/Tee.png" alt="Tee">
+								<figcaption>Tee</figcaption>
+							</figure>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="analForm" id="rPackForm">
+			<header><h2>Radius Packer</h2></header>
+			<div id="formContainer" style="display: flex;">
+				<style>
+					#rPackForm .inTab input {
+						width: 80px;
+					}
+					#rPackForm .inTab th {
+						text-align: right;
+					}
+					#rPackForm .inTab tr td:nth-child(2) {
+						text-align: left;
+					}
+					#rPackForm .inTab {
+						margin: 0 auto;
+					}
+					#rPackForm .outTab {
+						margin: 0 auto;
+					}
+					#rPackForm .outTab th {
+						text-align: right;
+					}
+					#rPackForm .outTab input {
+						width: 80px;
+						border-radius: 5px;
+						border: 1px solid black;
+					}
+				</style>
+			<div class="formIO" style="width: 200px;">
+			<h4 style="border-bottom: 1px solid white; text-align: left;">Input Geometry</h4>
+			<table class="inTab" id="geoInTab">
+				<colgroup>
+					<col span="1" style="text-align:right">
+					<col span="1">
+					<col span="1" style="text-align:left">
+				</colgroup>
+				<tr title="Eccentricity">
+					<th>C</th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Edge distance">
+					<th>e</th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Fitting fillet radius">
+					<th>r</th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Web thickness">
+					<th>t<sub>w</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Flange thickness">
+					<th>t<sub>f</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Packer thickness">
+					<th>t<sub>p</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Packer width">
+					<th>W<sub>p</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+				<tr title="Fastener hole diameter">
+					<th>D</th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>in</td>
+				</tr>
+			</table>
+			<h4 style="border-bottom: 1px solid white; text-align: left;">Calculated Geometry</h4>
+			<table class="inTab" id="geoOutTab">
+				<colgroup>
+					<col span="1" style="text-align:right">
+					<col span="1" style="width:95px;">
+					<col span="1" style="text-align:left">
+				</colgroup>
+				<tr title="Packer eccentricity">
+					<th>b</th>
+					<td></td>
+					<td>in</td>
+				</tr>
+				<tr title="C - b">
+					<th>a</th>
+					<td></td>
+					<td>in</td>
+				</tr>
+				<tr title="Flange inertia">
+					<th>I<sub>1</sub></th>
+					<td></td>
+					<td>in<sup>4</sup></td>
+				</tr>
+				<tr title="Packer inertia">
+					<th>I<sub>2</sub></th>
+					<td></td>
+					<td>in<sup>4</sup></td>
+				</tr>
+			</table>
+			<h4 style="border-bottom: 1px solid white; text-align: left;">Material Properties</h4>
+			<h4>Fitting</h4>
+			<table class="inTab" id="fPropTab">
+				<colgroup>
+					<col span="1" style="text-align:right">
+					<col span="1">
+					<col span="1" style="text-align:left">
+				</colgroup>
+				<tr>
+					<th>F<sub>tu</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+				<tr>
+					<th>F<sub>ty</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+				<tr>
+					<th>F<sub>su</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+				<tr>
+					<th>E</th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+			</table>
+			<h4>Packer</h4>
+			<table class="inTab" id="pPropTab">
+				<colgroup>
+					<col span="1" style="text-align:right">
+					<col span="1">
+					<col span="1" style="text-align:left">
+				</colgroup>
+				<tr>
+					<th>F<sub>tu</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+				<tr>
+					<th>F<sub>ty</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+				<tr>
+					<th>F<sub>su</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+				<tr>
+					<th>E</th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>psi</td>
+				</tr>
+			</table>
+			<h4>Bolt</h4>
+			<table class="inTab" id="bPropTab">
+				<tr>
+					<th>P<sub>tu</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>lbs</td>
+				</tr>
+				<tr>
+					<th>P<sub>su</sub></th>
+					<td><input type="number" placeholder="Enter data"></td>
+					<td>lbs</td>
+				</tr>
+			</table>
+			<h4 style="border-bottom: 1px solid white; text-align: left;">Applied Load</h4>
+			<table class="inTab">
+				<tr title="Applied load per side for a tee or total applied load for an angle">
+					<th>P</th>
+					<td><input type="number" placeholder="Enter data" id="PappIn"></td>
+					<td>lb</td>
+				</tr>
+			</table>
+			<br>	
+			</div>
+			<div style="width: auto; flex: 1; text-align: center;">
+				<img src="images/rPack/rPackGeoDia.png" style="width: 90%; max-width: 500px; margin: 0 auto;">
+				<div style="display: flex; padding:10px;">
+					<div style="padding:10px;">
+						<h4 style="border-bottom: 1px solid black;">Flange Bending</h4>
+						<table class="outTab" id="FBendingTab">
+							<tr title="Allowable (Use 'Tension Clip' tool)">
+								<th>P<sub>allowable</sub></th>
+								<td><input type="number" placeholder="Enter data"></td>
+								<td>lb</td>
+							</tr>
+							<tr>
+								<th>M<sub>allowable</sub></th>
+								<td></td>
+								<td>lb-in</td>
+							</tr>
+							<tr title="Distributed bending moment based upon section stiffness">
+								<th>M<sub>flange</sub></th>
+								<td></td>
+								<td>lb-in</td>
+							</tr>
+							<tr>
+								<th>MS</th>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+					<div style="padding:10px;">
+						<h4 style="border-bottom: 1px solid black;">Packer Shear and Bending</h4>
+						<table class="outTab" id="PSBendingTab">
+							<tr>
+								<th>M<sub>b</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>f<sub>b</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>F<sub>bu</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>R<sub>1</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>R<sub>2</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>f<sub>s</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>R<sub>b</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>R<sub>s</sub></th>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>MS</th>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+						
+					<div style="padding:10px;">
+						<h4 style="border-bottom: 1px solid black;">Bolt Margin</h4>
+						<table class="outTab" id="BMarginTab">
+							<tr>
+								<th>Torque</th>
+								<td><input type="number" placeholder="Enter data"></td>
+								<td>lb-in</td>
+							</tr>
+							<tr>
+								<th>P<sub>p</sub></th>
+								<td></td>
+								<td>lb</td>
+							</tr>
+							<tr>
+								<th>P<sub>torque</sub></th>
+								<td></td>
+								<td>lb</td>
+							</tr>
+							<tr>
+								<th>P<sub>f pry</sub></th>
+								<td></td>
+								<td>lb</td>
+							</tr>
+							<tr>
+								<th>P<sub>bolt</sub></th>
+								<td></td>
+								<td>lb</td>
+							</tr>
+							<tr>
+								<th>MS</th>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+						
+					<!-- <canvas id="rPackChart"></canvas> --> <!-- Digitize chart? doesn't seem necessary -->
+					<!-- <img src="images/rPack/lockheed89b.png" style="margin-left: 100px; width: 70%; height: 70%;"> -->
+				</div>
+			</div>
+			</div>
+			<script>
+				GEBID("rPackForm").querySelectorAll("input").forEach(element => {
+ 					element.setAttribute('onchange', 'rPackCalcs()');
+				});
+			</script>
+		</div>
 		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
 			<header><h2>Ellipse Analysis (BETA)</h2></header>
 			<div id="ellContainer">
@@ -340,78 +723,6 @@
 	      </tr>
 		</table>
 			</div>
-			</div>
-		</div>
-		<div class="analForm" id="TCForm">
-			<header><h2>Tension Clip</h2></header>
-			<div class="container">
-				<div id="Inputs" class="formIO">
-
-					<h2 style="text-align: center;">Input</h2>
-					<div style="text-align: right; margin: 0 auto; width: 270px;">
-					<span>Clip Type</span>
-					<select id="CTIn" name="CTIn" onchange="TCCalcs()">
-						<option value="SCSA">Single Clad Sheet Angle</option>
-						<option value="SEA">Single Extruded Angle</option>
-						<option value="DCSA">Double Clad Sheet Angles</option>
-						<option value="DEA">Double Extruded Angles</option>
-						<option selected value="Tee">Tee</option>
-					</select><br>
-					<span>t =</span>
-					<input type="text" id="tIn" placeholder="Enter t" onchange="TCCalcs()">
-					<span id="units">in</span><br>
-					<span>c =</span>
-					<input type="text" id="cIn" placeholder="Enter c" onchange="TCCalcs()">
-					<span id="units">in</span><br>
-					<span>Fcy =</span>
-					<input type="text" id="FcyIn" placeholder="Enter Fcy" onchange="TCCalcs()">
-					<span id="units">ksi</span><br>
-					<span>Point Spacing =</span>
-					<input type="text" id="PSIn" placeholder="Enter Point Spacing" onchange="TCCalcs()">
-					<span id="units">in</span><br>
-					<span>Angle Width =</span>
-					<input type="text" id="AWIn" placeholder="Enter Angle Width" onchange="TCCalcs()">
-					<span id="units">in</span><br>
-					<span>Point Count =</span>
-					<input type="text" id="PCIn" placeholder="Enter Point Count" onchange="TCCalcs()">
-					<span id="units">qty</span><br><br>
-					</div>
-					<br><h2>Output</h2>
-					<div style="text-align: center;">
-						<span>P =</span>
-						<table><tr><td id="OutputBox">Enter Values</td></tr></table>
-						<span>lbs</span>
-					</div>
-				</div>
-				<div id="clipTypes">
-					<h2>Clip Types</h2>
-					<div id="CTGrid">
-						<div class="gridItem">
-							<figure>
-								<img src="images/SCSA.png" alt="Single Clad Sheet Angle" style="width:60%;">
-								<figcaption>Single Clad Sheet Angle</figcaption>
-							</figure>
-						</div>
-						<div class="gridItem">
-							<figure>
-								<img src="images/SEA.png " alt="Single Extruded Angle" style="width:60%;">
-								<figcaption>Single Extruded Angle</figcaption>
-							</figure>
-						</div>
-						<div class="gridItem">
-							<figure>
-								<img src="images/DCSA.png" alt="Double Clad Sheet Angles" style="width:80%;">
-								<figcaption>Double Clad Sheet Angles</figcaption>
-							</figure>
-						</div>
-						<div class="gridItem">
-							<figure>
-								<img src="images/Tee.png" alt="Tee">
-								<figcaption>Tee</figcaption>
-							</figure>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div class="analForm" id="cripForm">
@@ -2099,346 +2410,20 @@
 			<script>
 				let NACA_TNNumStr = 0;
 				function TNAddStr() {
-					let Tab = GEBID("SPForm", "IOTab");//.children[0];
-					const tRow = GEBID("SPForm", "SPInRowTemplate").content.cloneNode(true).firstElementChild;
+					let Tab = GEBID("NACA_TNForm", "IOTab");//.children[0];
+					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
 					childSeq(tRow, [0]).innerHTML = (++NACA_TNNumStr);
 					Tab.appendChild(tRow);
 				}
 				function TNRmStr() {
 					if (NACA_TNNumStr <= 1) return;
-					let Tab = GEBID("SPForm", "IOTab");//.children[0];
+					let Tab = GEBID("NACA_TNForm", "IOTab");//.children[0];
 					Tab.lastElementChild.remove();
 					NACA_TNNumStr--;
 				}
 				TNAddStr();
 			</script>
 			</div>
-		</div>
-		<div class="analForm" id="rPackForm">
-			<header><h2>Radius Packer</h2></header>
-			<div id="formContainer" style="display: flex;">
-				<style>
-					#rPackForm .inTab input {
-						width: 80px;
-					}
-					#rPackForm .inTab th {
-						text-align: right;
-					}
-					#rPackForm .inTab tr td:nth-child(2) {
-						text-align: left;
-					}
-					#rPackForm .inTab {
-						margin: 0 auto;
-					}
-					#rPackForm .outTab {
-						margin: 0 auto;
-					}
-					#rPackForm .outTab th {
-						text-align: right;
-					}
-					#rPackForm .outTab input {
-						width: 80px;
-						border-radius: 5px;
-						border: 1px solid black;
-					}
-				</style>
-			<div class="formIO" style="width: 200px;">
-			<h4 style="border-bottom: 1px solid white; text-align: left;">Input Geometry</h4>
-			<table class="inTab" id="geoInTab">
-				<colgroup>
-					<col span="1" style="text-align:right">
-					<col span="1">
-					<col span="1" style="text-align:left">
-				</colgroup>
-				<tr title="Eccentricity">
-					<th>C</th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Edge distance">
-					<th>e</th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Fitting fillet radius">
-					<th>r</th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Web thickness">
-					<th>t<sub>w</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Flange thickness">
-					<th>t<sub>f</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Packer thickness">
-					<th>t<sub>p</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Packer width">
-					<th>W<sub>p</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-				<tr title="Fastener hole diameter">
-					<th>D</th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>in</td>
-				</tr>
-			</table>
-			<h4 style="border-bottom: 1px solid white; text-align: left;">Calculated Geometry</h4>
-			<table class="inTab" id="geoOutTab">
-				<colgroup>
-					<col span="1" style="text-align:right">
-					<col span="1" style="width:95px;">
-					<col span="1" style="text-align:left">
-				</colgroup>
-				<tr title="Packer eccentricity">
-					<th>b</th>
-					<td></td>
-					<td>in</td>
-				</tr>
-				<tr title="C - b">
-					<th>a</th>
-					<td></td>
-					<td>in</td>
-				</tr>
-				<tr title="Flange inertia">
-					<th>I<sub>1</sub></th>
-					<td></td>
-					<td>in<sup>4</sup></td>
-				</tr>
-				<tr title="Packer inertia">
-					<th>I<sub>2</sub></th>
-					<td></td>
-					<td>in<sup>4</sup></td>
-				</tr>
-			</table>
-			<h4 style="border-bottom: 1px solid white; text-align: left;">Material Properties</h4>
-			<h4>Fitting</h4>
-			<table class="inTab" id="fPropTab">
-				<colgroup>
-					<col span="1" style="text-align:right">
-					<col span="1">
-					<col span="1" style="text-align:left">
-				</colgroup>
-				<tr>
-					<th>F<sub>tu</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-				<tr>
-					<th>F<sub>ty</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-				<tr>
-					<th>F<sub>su</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-				<tr>
-					<th>E</th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-			</table>
-			<h4>Packer</h4>
-			<table class="inTab" id="pPropTab">
-				<colgroup>
-					<col span="1" style="text-align:right">
-					<col span="1">
-					<col span="1" style="text-align:left">
-				</colgroup>
-				<tr>
-					<th>F<sub>tu</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-				<tr>
-					<th>F<sub>ty</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-				<tr>
-					<th>F<sub>su</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-				<tr>
-					<th>E</th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
-				</tr>
-			</table>
-			<h4>Bolt</h4>
-			<table class="inTab" id="bPropTab">
-				<tr>
-					<th>P<sub>tu</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>lbs</td>
-				</tr>
-				<tr>
-					<th>P<sub>su</sub></th>
-					<td><input type="number" placeholder="Enter data"></td>
-					<td>lbs</td>
-				</tr>
-			</table>
-			<h4 style="border-bottom: 1px solid white; text-align: left;">Applied Load</h4>
-			<table class="inTab">
-				<tr title="Applied load per side for a tee or total applied load for an angle">
-					<th>P</th>
-					<td><input type="number" placeholder="Enter data" id="PappIn"></td>
-					<td>lb</td>
-				</tr>
-			</table>
-			<br>	
-			</div>
-			<div style="width: auto; flex: 1; text-align: center;">
-				<img src="images/rPack/rPackGeoDia.png" style="width: 90%; max-width: 500px; margin: 0 auto;">
-				<div style="display: flex; padding:10px;">
-					<div style="padding:10px;">
-						<h4 style="border-bottom: 1px solid black;">Flange Bending</h4>
-						<table class="outTab" id="FBendingTab">
-							<tr title="Allowable (Use 'Tension Clip' tool)">
-								<th>P<sub>flange</sub></th>
-								<td><input type="number" placeholder="Enter data"></td>
-								<td>lb</td>
-							</tr>
-							<tr title="Factor: k=1 for angles, k=2.5 for 2 angles back to back and k=3 for tees">
-								<th>k</th>
-								<td><input type="number" placeholder="Enter data"></td>
-								<td></td>
-							</tr>
-							<tr title="Number of fasteners">
-								<th>N</th>
-								<td><input type="number" placeholder="Enter data"></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>P<sub>allowable</sub></th>
-								<td></td>
-								<td>lb</td>
-							</tr>
-							<tr>
-								<th>M<sub>allowable</sub></th>
-								<td></td>
-								<td>lb-in</td>
-							</tr>
-							<tr title="Distributed bending moment based upon section stiffness">
-								<th>M<sub>flange</sub></th>
-								<td></td>
-								<td>lb-in</td>
-							</tr>
-							<tr>
-								<th>MS</th>
-								<td></td>
-								<td></td>
-							</tr>
-						</table>
-					</div>
-					<div style="padding:10px;">
-						<h4 style="border-bottom: 1px solid black;">Packer Shear and Bending</h4>
-						<table class="outTab" id="PSBendingTab">
-							<tr>
-								<th>M<sub>b</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>f<sub>b</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>F<sub>bu</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>R<sub>1</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>R<sub>2</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>f<sub>s</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>R<sub>b</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>R<sub>s</sub></th>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<th>MS</th>
-								<td></td>
-								<td></td>
-							</tr>
-						</table>
-					</div>
-						
-					<div style="padding:10px;">
-						<h4 style="border-bottom: 1px solid black;">Bolt Margin</h4>
-						<table class="outTab" id="BMarginTab">
-							<tr>
-								<th>Torque</th>
-								<td><input type="number" placeholder="Enter data"></td>
-								<td>lb-in</td>
-							</tr>
-							<tr>
-								<th>P<sub>p</sub></th>
-								<td></td>
-								<td>lb</td>
-							</tr>
-							<tr>
-								<th>P<sub>torque</sub></th>
-								<td></td>
-								<td>lb</td>
-							</tr>
-							<tr>
-								<th>P<sub>f pry</sub></th>
-								<td></td>
-								<td>lb</td>
-							</tr>
-							<tr>
-								<th>P<sub>bolt</sub></th>
-								<td></td>
-								<td>lb</td>
-							</tr>
-							<tr>
-								<th>MS</th>
-								<td></td>
-								<td></td>
-							</tr>
-						</table>
-					</div>
-						
-					<!-- <canvas id="rPackChart"></canvas> --> <!-- Digitize chart? doesn't seem necessary -->
-					<!-- <img src="images/rPack/lockheed89b.png" style="margin-left: 100px; width: 70%; height: 70%;"> -->
-				</div>
-			</div>
-			</div>
-			<script>
-				GEBID("rPackForm").querySelectorAll("input").forEach(element => {
- 					element.setAttribute('onchange', 'rPackCalcs()');
-				});
-			</script>
 		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>

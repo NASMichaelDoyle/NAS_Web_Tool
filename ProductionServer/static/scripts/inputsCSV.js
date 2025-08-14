@@ -115,9 +115,8 @@ function downloadInput() {
 	tabIQ = GEBID("rPackForm", "bPropTab");
 	for (let i=0; childSeq(tabIQ, [0, i]) != undefined; i++) rPackData[i+16] = childSeq(tabIQ, [0, i, 1, 0]).value;
 	rPackData[18] = GEBID("rPackForm", "PappIn").value;
-	tabIQ = GEBID("rPackForm", "FBendingTab");
-	for (let i=0; i<3; i++) rPackData[i+19] = childSeq(tabIQ, [0, i, 1, 0]).value;
-	rPackData[22] = childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value;
+	rPackData[19] = childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]).value;
+	rPackData[20] = childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value;
 	// Download it
 	let csv = "";
 	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD", "IRB", "Section Properties", "Radius Packer"];
@@ -258,9 +257,8 @@ function uploadInput(ins) {
 		tabIQ = GEBID("rPackForm", "bPropTab");
 		for (let i=0; childSeq(tabIQ, [0, i]) != undefined; i++) childSeq(tabIQ, [0, i, 1, 0]).value = rPackData[i+16];
 		GEBID("rPackForm", "PappIn").value = rPackData[18];
-		tabIQ = GEBID("rPackForm", "FBendingTab");
-		for (let i=0; i<3; i++) childSeq(tabIQ, [0, i, 1, 0]).value = rPackData[i+19];
-		childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value = rPackData[22];
+		childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]).value = rPackData[19];
+		childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value = rPackData[20];
 		rPackCalcs();
 	}
 }
