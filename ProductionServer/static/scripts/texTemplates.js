@@ -90,7 +90,7 @@ const coverTemplate = `\\documentclass[11pt]{article}
 
 \\section{Introduction}
 %paratop%
-`
+`;
 
 // ELLIPSE --------------------------------------------------------------------------------------------------------
 const ellTemplate = `
@@ -118,7 +118,7 @@ Graph seen in Figure \\ref{fig:EA1}:
 \\includegraphics[width=1\\linewidth]{temp/ellipse_chart_b64png.png}
 \\caption{Ellipse Graph}
 \\end{figure}
-`
+;`
 
 // TENSION CLIP --------------------------------------------------------------------------------------------------------
 const tcTemplate = `
@@ -198,7 +198,7 @@ Input parameters in Table \\ref{tab:TC1}.
 \\end{table}
 
 The above parameters result in an ultimate allowable load of \\textbf{{\\%POut}}.
-`
+`;
 
 // CRIPPLING --------------------------------------------------------------------------------------------------------
 const cripTemplate = `
@@ -223,7 +223,7 @@ $F_{CY}={\\%Fcy}$, $E_C={\\%Ec}$, data in Table \\ref{tab:crip1}:
 \\end{table}
 
 The ultimate combined allowables evaluate to: \\[F_{CC}={\\%Fcc}, P_{CC}={\\%Pcc}\\]
-`
+`;
 
 // BENDING CRIPPLING --------------------------------------------------------------------------------------------------------
 const bCripTemplate = `
@@ -248,7 +248,7 @@ $F_{CY}={\\%Fcy}$, $E_C={\\%Ec}$, data in Table \\ref{tab:bCrip1}:
 \\end{table}
 
 The maximum allowable moment evaluates to: \\[Max Allowable Moment={\\%MAM}\\]
-`
+`;
 
 // OFB --------------------------------------------------------------------------------------------------------
 const OFBTemplate = `
@@ -281,7 +281,7 @@ Outstanding flange buckling analysis within. Input data in Table \\ref{tab:OFB1}
 	\\caption{Output data}
 	\\label{tab:OFB2}
 \\end{table}
-`
+`;
 
 // FPB --------------------------------------------------------------------------------------------------------
 const FPBTemplate = `
@@ -332,7 +332,7 @@ Flat plate buckling analysis within. Input data in Table \\ref{tab:FPB1}, output
 \\includegraphics[width=1\\linewidth]{temp/FPB_chart3_b64png.png}
 \\caption{Initial Buckling of Flat Plates Under Compression, Bending and Shear}
 \\end{figure}
-`
+`;
 
 // Lug --------------------------------------------------------------------------------------------------------------
 const lugTemplate = `
@@ -585,7 +585,7 @@ Note:The Ultimate Lug Failure due to tensile rupture is also based on W and Diam
     \\caption{Pin failure}
     \\label{tab:lug15}
 \\end{table}
-`
+`;
 
 // Boltgroup
 const boltgroupTemplate = `
@@ -665,7 +665,7 @@ From the above properties, the following can be calculated in table \\ref{tab:bg
 	\\caption{Balance}
 	\\label{tab:bg5}
 \\end{table}
-`
+`;
 
 // Lap Joint Doubler ------------------------------------------------------------------------------------------------
 const LJDTemplate = `
@@ -765,7 +765,7 @@ From the above properties, the loading through every plate and fastener can be c
 	\\caption{Loads}
 	\\label{tab:LJD5}
 \\end{table}
-`
+`;
 
 // Inter Rivet Buckling ------------------------------------------------------------------------------------------------
 const IRBTemplate = `
@@ -1081,7 +1081,7 @@ Shear buckling analysis seen in table \\ref{tab:fSTA6}, figure \\ref{fig:fSTA2}.
     \\includegraphics[width=0.5\\linewidth]{static/images/frame/FrameDia2.png}
     \\caption{ESDU 71005}
 \\end{figure}
-`
+`;
 
 // FRAME WDT --------------------------------------------------------------------------------------------------------
 const frameWDTTemplate = `
@@ -1307,15 +1307,127 @@ Correcting for plasticity,
 	%\\caption{Applied loading}
 	\\label{tab:fWDT7}
 \\end{table}
-`
+`;
 
 // FRAME CC --------------------------------------------------------------------------------------------------------
 const frameCapCompTemplate = `
 
-`
+`;
 
 // FRAME CT --------------------------------------------------------------------------------------------------------
 const frameCapTensTemplate = `
 
-`
+`;
 
+// TN --------------------------------------------------------------------------------------------------------------
+const NACA_TNTemplate = `
+\\clearpage
+\\section{NACA Technical Note}
+
+%paratop%
+
+\\subsection{Background}
+
+The following section calculates several properties for stringers/stiffeners in an aircraft fuselage. Several diagrams are included for context:
+
+\\begin{figure}[H]
+	\\centering
+    \\includegraphics[width=0.7\\linewidth]{static/images/TN/TN1.png}
+    \\caption{Frame section diagram}
+    \\label{fig:TN1}
+\\end{figure}
+
+\\begin{figure}[H]
+	\\centering
+    \\includegraphics[width=0.7\\linewidth]{static/images/TN/TN2.png}
+    \\caption{Frame section diagram}
+    \\label{fig:TN2}
+\\end{figure}
+
+\\begin{figure}[H]
+	\\centering
+    \\includegraphics[width=0.8\\linewidth]{static/images/TN/TN3.png}
+    \\caption{Stringer clip section diagram}
+    \\label{fig:TN3}
+\\end{figure}
+
+\\begin{figure}[H]
+	\\centering
+    \\includegraphics[width=0.8\\linewidth]{static/images/TN/TN4.png}
+    \\caption{Frame bending diagram}
+    \\label{fig:TN4}
+\\end{figure}
+
+\\subsection{Data}
+
+Certain properties are assumed to be constant across all stringers, shown in table \\ref{tab:TN1}.
+
+\\begin{table}[H]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|}
+      \\hline $\\mu$ & $L$ & $P$ & $E$ (psi) & $\\%\\ clamped$\\\\\\hline
+      <UniProps>\\\\\\hline
+     \\end{tabular}}}
+     \\caption{Universal properties}
+     \\label{tab:TN1}
+\\end{table}
+
+A total of <numStr> considered for analysis. Table \\ref{tab:TN2} contains the relevant data for all stringers:
+
+\\begin{table}[H]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{0.7}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \\hline Stringer & Radius (in) & $t_{skin}$ (in) & $A_{str}$ (in$^2$) & $Y_{str}$ (in) & $I_{str}$ (in$^4$) & $W_{bay}$ (in) & $b_{ave}$ (in) & $A_{frame}$ (in$^2$) & Frame factor & $A_{frame}\\prime$ (in$^2$) & NACA Load\\\\\\hline
+      <strRow>\\\\\\hline
+     \\end{tabular}}}
+     \\caption{Stringer data}
+     \\label{tab:TN2}
+\\end{table}
+
+\\subsection{Calculated}
+
+The following values are calculated for the stringer (See table \\ref{tab:TN3}). <TNWarning>
+
+\\begin{table}[H]
+    \\centering
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|}
+      \\hline $s$ & $I_{seg}$ (in$^4$) & $YNA$ (in) & Ratio\\\\\\hline
+      <outRow1>\\\\\\hline
+     \\end{tabular}}}
+     
+    \\vspace{1em}
+    
+    \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+      \\hline $\\alpha$ & $\\rho$ & $\\phi$ & $\\beta$ & $\\theta$ & $\\psi$ & $\\upsilon$ & \\% of 2 dp & $V$\\\\\\hline
+      <outRow2>\\\\\\hline
+     \\end{tabular}}}
+     
+    \\vspace{1em}
+    
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \\hline $y$ (in) & $u$ (in) & $v$ (in) & $w$ (in) & $w$ (lbs/in) & $p$ (psi) & $M_{max}$ (in*lbs) & $M_{center}$ (in*lbs)\\\\\\hline
+      <outRow3>\\\\\\hline
+     \\end{tabular}}}
+     
+      \\vspace{1em}
+      
+     \\makebox[\\textwidth]{
+    \\scalebox{1}{
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline Hoop (psi) & $PR/t$ (psi) & \\% pure hoop & $u_{no\\ frame}$ (in) & \\% press & $V_{ST}$ (lbs)\\\\\\hline
+      <outRow4>\\\\\\hline
+     \\end{tabular}}}
+     \\caption{Calculated data}
+     \\label{tab:TN3}
+\\end{table}
+`;

@@ -688,6 +688,35 @@ function texRPack() {
 	}
 	return tex;
 }
+function texTN() {
+	let tex = NACA_TNTemplate;
+	let tabIQ = GEBID("NACA_TNForm", "LPETab");
+	let dumRow = "" + childSeq(tabIQ, [0, 1, 0, 0]).value;
+	for (let i=1; i<4; i++) dumRow += "&" + childSeq(tabIQ, [0, 1, i, 0]).value;
+	dumRow += "&" + (+childSeq(tabIQ, [0, 1, 4, 0]).value * 100) + "\\%";
+	tex = tex.replace("<UniProps>", dumRow)
+	.replace("<numStr>", TNNumStr + (TNNumStr==1?" stringer was":" stringers were"))
+	.replace("<TNWarning>", TNNumStr>1?"Please note that most properties are calculated with respect to the last stringer added.":"");
+	tabIQ = GEBID("NACA_TNForm", "dataTab");
+	for (let Nstr = 1; Nstr <= TNNumStr; Nstr++) {
+		dumRow = "" + Nstr;
+		for (let i=1; i<12; i++) {
+			let dummy = childSeq(tabIQ, [Nstr, i]);
+			if (!dummy.children[0]) dummy = dummy.innerHTML;
+			else dummy = dummy.children[0].value;
+			dumRow += "&" + dummy;
+		}
+		tex = tex.replace("<strRow>", dumRow + (Nstr<TNNumStr?"\\\\\\hline\n<strRow>":""));
+	}
+	for (let i=1; i<=4; i++) {
+		tabIQ = GEBID("NACA_TNForm", "outTab" + i);
+		dumRow = "" + childSeq(tabIQ, [0, 0, 1]).innerHTML;
+		for (let j=1; childSeq(tabIQ, [0, j, 1]); j++) if (i!=4 || j!=3) dumRow += "&" + ((i==2&&j==7)||(i==4&&(j==2||j==5))?sRound(+childSeq(tabIQ, [0, j, 1]).innerHTML * 100, 0) + "\\%":childSeq(tabIQ, [0, j, 1]).innerHTML);
+		tex = tex.replace("<outRow" + i + ">", dumRow);
+	}
+
+	return tex;
+}
 function texFrameSTA() {
 	let Fcy = GEBID("frameSTAForm", "FcyIn").value;
 	let tf = GEBID("frameSTAForm", "tfIn").value;
@@ -874,6 +903,9 @@ function writeTeX() { // Build TeX document in order from inputs
 				break;
 			case "rPack":
 				tex += texRPack();
+				break;
+			case "NACA_TN":
+				tex += texTN();
 				break;
 			case "para":
 				if (!GEBID(step.replace("Sort", "Form"), "paraTop").checked) tex += texPara(step.replace("paraSort", ""));
