@@ -3480,6 +3480,102 @@ function rPackCalcs() {
 
 }
 
+// NACA TN funcs
+function TNCalcs() {
+	let mu = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 0, 0]).value;
+	let L = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 1, 0]).value;
+	let P = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 2, 0]).value;
+	let E = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 3, 0]).value;
+	let percent_clamped = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 4, 0]).value;
+	let dataTab = GEBID("NACA_TNForm", "dataTab");
+	for (let Nstr = 1; Nstr <= TNNumStr; Nstr++) {
+		let R = +childSeq(dataTab, [Nstr, 1, 0]).value;
+		let tskin = +childSeq(dataTab, [Nstr, 2, 0]).value;
+		let Astr = +childSeq(dataTab, [Nstr, 3, 0]).value;
+		let Ystr = +childSeq(dataTab, [Nstr, 4, 0]).value;
+		let Istr = +childSeq(dataTab, [Nstr, 5, 0]).value;
+		let Wbay = +childSeq(dataTab, [Nstr, 6, 0]).value;
+		let OG_Aframe = +childSeq(dataTab, [Nstr, 8, 0]).value;
+		let FFactor = +childSeq(dataTab, [Nstr, 9, 0]).value;
+
+		let b = Nstr<TNNumStr?Math.max(Wbay, +childSeq(dataTab, [Nstr+1, 6, 0]).value):Wbay;
+		let Aframe = OG_Aframe * FFactor;
+
+		let s = 2*Math.PI*R/b;
+		let YNA = Astr * (Ystr + tskin) / (Astr + tskin * b);
+		let Iseg = Istr + Astr * (Ystr + tskin - YNA)**2 + tskin * b * YNA**2;
+		let Iratio = Istr / Iseg;
+
+		let alpha = 1/(1-mu**2);
+		let rho = tskin / R;
+		let phi = 4*Math.PI**3*s*Istr/L**4;
+		let beta = Aframe / (tskin*L);
+		let theta = R/L;
+		let psi = s*Astr/(2*Math.PI*R*tskin);
+		let upsilon = P/E;
+		
+		let [u, v, w] = press(mu, tskin, Astr, Istr, Aframe, b, L, R, P, E);
+		let y = u + w*2; //(1-Math.cos(2*Math.PI*L/2/L)) == 2    ???
+		let w2 = w*384*E*Iseg / (((1-percent_clamped)*4+1)*L**4);
+		let p = w2 / b;
+		let Mmax = w2 * L**2 / 12;
+		let Mcenter = Mmax/2;
+
+		let Hoop = E*(y/R + mu*v/L)/(1 - mu**2);
+		let PR_t = P*R/tskin;
+		let percent_pure_hoop = 1 - (PR_t-Hoop)/PR_t;
+		let u_noframe = P*R**2/(tskin*E)*(1 + mu/2);
+		let percent_press = 1- (u_noframe - u)/u_noframe;
+		let Vst = percent_press*P*2*(b/2)**2;
+
+		let percent_of_2_dp = p/P;
+		let V = w2*L;
+
+		childSeq(dataTab, [Nstr, 7]).innerHTML = sRound(b, 2);
+		childSeq(dataTab, [Nstr, 10]).innerHTML = sRound(Aframe, 4);
+		childSeq(dataTab, [Nstr, 11]).innerHTML = sRound(V, 0);
+
+		if (Nstr<TNNumStr) continue;
+		// Output others on final iteration
+		let dummy = [sRound(s, 0), sRound(Iseg, 4), sRound(YNA, 4), sRound(Iratio, 2)]
+		for (let i=0; i< dummy.length; i++) childSeq(GEBID("NACA_TNForm", "outTab1"), [0, i, 1]).innerHTML = dummy[i];
+		dummy = [sRound(alpha, 3), rho.toExponential(2), phi.toExponential(2), sRound(beta, 3), sRound(theta, 3), sRound(psi, 3), upsilon.toExponential(2), sRound(percent_of_2_dp, 2), sRound(V, 0)];
+		for (let i=0; i< dummy.length; i++) childSeq(GEBID("NACA_TNForm", "outTab2"), [0, i, 1]).innerHTML = dummy[i];
+		dummy = [y.toExponential(2), u.toExponential(2), v.toExponential(2), w.toExponential(2), sRound(w2, 0), sRound(p, 2), sRound(Mmax, 0), sRound(Mcenter, 0)];
+		for (let i=0; i< dummy.length; i++) childSeq(GEBID("NACA_TNForm", "outTab3"), [0, i, 1]).innerHTML = dummy[i];
+		dummy = [sRound(Hoop, 0), sRound(PR_t, 0), sRound(percent_pure_hoop, 2), "SKIP", sRound(u_noframe, 3), sRound(percent_press, 2), sRound(Vst, 1)];
+		for (let i=0; i< dummy.length; i++) if (dummy[i] !== "SKIP") childSeq(GEBID("NACA_TNForm", "outTab4"), [0, i, 1]).innerHTML = dummy[i];
+	}
+}
+function press(mu, t_sk, A_str, I_str, A_fr, b, L, R, P, E) {
+
+	let alpha = 1 / (1 - mu ** 2);
+	let rho = t_sk / R;
+	let s = 2 * Math.PI * R / b;
+	let phi = 4 * Math.PI * Math.PI * Math.PI * s * I_str / (L ** 4);
+	let beta = A_fr / (t_sk * L);
+	let theta = R / L;
+	let phis = s * A_str / (2 * Math.PI * R * t_sk);
+	let upsilon = P / E;
+
+	let T1 = phi / (rho * alpha);
+	let T2 = phis / alpha;
+	let T3 = beta / alpha;
+	let T4 = upsilon * R / (rho * alpha);
+
+	let u_top = T4 * ((1 + T2) - 0.5 * mu) * (0.5 + T1);
+	let u_bot = (mu ** 2) * (1 - T3) + (3 / 2 + T1) * ((1 + T3) * (1 + T2) - mu ** 2) - (1 + T2);
+	let u = u_top / u_bot;
+
+	let v_top = (1 / theta) * T4 * ((3 / 2 + T1) * (0.5 * (1 + T3) - mu) + mu * (1 - T3) - 1 / 2);
+	let v = v_top / u_bot;
+
+	let w_top = T4 * T3 * (1 + T2 - 0.5 * mu);
+	let w = w_top / u_bot;
+
+	return [u, v, w];
+}
+
 // Frame funcs
 // STA
 function frameSTACalcs() {

@@ -84,7 +84,7 @@
 		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
 		<input id="IRBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Inter Rivet Buckling <br>
 		<input id="SPBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Section Properties<br>
-		<input id="NACA_TNBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> NACA TN<br>
+		<input id="NACA_TNBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> NACA Technical Note<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
 		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
 		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
@@ -122,7 +122,7 @@
 		Not every tool fits every application, inputs and results need to be verified by a qualified engineer.
 	</div>
 	</div>
-	<div id="FormParent" class="formParent" style="margin-top: -1px;">
+	<div id="FormParent" class="formParent">
 		<div id="hiddenCharts">
 			<canvas class="hiddenChart" id="hiddenChart1"></canvas>
 			<canvas class="hiddenChart" id="hiddenChart2"></canvas>
@@ -2368,55 +2368,256 @@
 		<div class="analForm" id="NACA_TNForm">
 			<template id="TNDataRowTemplate">
 				<tr>
-					<td></td>
-					<td><input type="number" placeholder="Enter X" onchange="SPCalcs()"></td>
-					<td><input type="number" placeholder="Enter Y" onchange="SPCalcs()"></td>
-					<td><input type="number" placeholder="(Optional)" onchange="SPCalcs()"></td>
+					<td title="Stringer #"></td>
+					<td title="Actual fuselage radius"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Skin pocket thickness"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer only area"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer center of gravity"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer only inertia"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Bay width"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Max bay size on either side of stringer"></td>
+					<td title="Frame area INCLUDING sheartie"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Frame factor"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Factored Afr"></td>
+					<td title="NACA Load"></td>
 				</tr>
 			</template>
-			
-			<header><h2>NACA TN</h2></header>
-			<div id="formContainer" style="display: flex;">
+			<style>
+				#NACA_TNForm input {
+					width: 60px;
+				}
+				#NACA_TNForm .outTab {
+					align-self: center;
+					padding: 10px;
+				}
+				#NACA_TNForm .outTab th {
+					text-align: right;
+				}
+				#NACA_TNForm .outTab td:nth-child(2) {
+					text-align: center;
+					background-color: #ccffcc;
+					width: 100px;
+				}
+				#NACA_TNForm .outTab td:nth-child(3) {
+					text-align: left;
+				}
+			</style>
+			<header><h2>NACA Technical Note</h2></header>
+			<div id="formContainer" style="display: flex; flex-direction: column;">
 			<div class="formIO" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
 			<!--<h3>Information</h3>
 			<p style="text-align: center; padding: 5px;">
 				lol
 			</p>-->
-			<div style="width: 300px;">
+			<div>
 			<h3>Data</h3>
-			<table class="inTab" id="IOTab">
-				<colgroup>
-					<col span="1" style="border-right: 1px solid black">
-				</colgroup>
-				<tr style="border-bottom: 1px solid black;">
-					<th>Point</th>
-					<th>X (in)</th>
-					<th>Y (in)</th>
-					<th>Radius (in)</th>
+			<table class="inTab" id="LPETab" style="margin: 0 auto">
+				<tr>
+					<th>&mu;</th>
+					<th>L</th>
+					<th>P</th>
+					<th>E (psi)</th>
+					<th>Intercostal ending</th>
+				</tr>
+				<tr>
+					<td title="Poisson's ratio"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Frame pitch"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Pressure applied"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Young's modulus"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Determines amount of support at ends of stringer. (100% for stringers or intercostals of constant section, 0% for Intercostals ending)">
+						<select style="width: 100%;">
+						<option value="0">True</option>
+						<option value="1">False</option>
+					</select></td>
 				</tr>
 			</table>
 			<br>
-			<button onclick="SPAddPt(); SPCalcs();" style="margin-left: 0px;">Add Point</button>
-			<button onclick="SPRmPt(); if (SPNumPt>1) SPCalcs();" style="margin-left: 0px;">Remove Point</button>
+			<table class="inTab" id="dataTab">
+				<tr>
+					<th>Stringer</th>
+					<th>Radius (in)</th>
+					<th>t<sub>skin</sub> (in)</th>
+					<th>A<sub>str</sub> (in<sup>2</sup>)</th>
+					<th>Y<sub>str</sub> (in)</th>
+					<th>I<sub>str</sub> (in<sup>4</sup>)</th>
+					<th>Bay width (in)</th>
+					<th>b<sub>ave</sub> (in)</th>
+					<th>A<sub>frame</sub> (in<sup>2</sup>)</th>
+					<th>Frame Factor</th>
+					<th>Factored Afr (in<sup>2</sup>)</th>
+					<th>NACA Load</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="TNAddStr(); TNCalcs();" style="margin-left: 0px;">Add Stringer</button>
+			<button onclick="TNRmStr(); if (SPNumPt>1) TNCalcs();" style="margin-left: 0px;">Remove Stringer</button>
 			<br>
 			</div>
 			</div>
-			<div>
-				<p>test lol</p>
+			<div style="text-align: center;">
+				<h3>Diagrams</h3>
+				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; max-width: 800px; margin: 0 auto;">
+					<img src="images/TN/TN1.png" style="width: 100%;">
+					<img src="images/TN/TN2.png" style="width: 100%;">
+					<div style="display: flex; flex-direction: column;">
+						<img src="images/TN/TN3.png" style="width: 100%;">
+						<img src="images/TN/TN4.png" style="width: 100%;">
+					</div>
+				</div>
+				<h3>Output</h3>
+				<p id="TNWarning" style="display: none;">Note that most properties are calculated with respect to the last stringer added</p>
+				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+				<table class="outTab" id="outTab1">
+					<tr title="# stringers assuming b pitch">
+						<th>s</th>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr title="">
+						<th>I<sub>seg</sub></th>
+						<td></td>
+						<td>in<sup>4</sup></td>
+					</tr>
+					<tr title="">
+						<th>YNA</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr title="Istr / Iseg">
+						<th>Ratio</th>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab2">
+					<tr>
+						<th>&alpha;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&rho;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&phi;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&beta;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&theta;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&psi;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&upsilon;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>% of 2 dp</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>V</th>
+						<td></td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab3">
+					<tr>
+						<th>y</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>u</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>v</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>w</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>w</th>
+						<td></td>
+						<td>lbs/in</td>
+					</tr>
+					<tr>
+						<th>p</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>M<sub>max</sub></th>
+						<td></td>
+						<td>in&middot;lbs</td>
+					</tr>
+					<tr>
+						<th>M<sub>center</sub></th>
+						<td></td>
+						<td>in&middot;lbs</td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab4">
+					<tr>
+						<th>Hoop</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>PR/t</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>%<sub>pure hoop</sub></th>
+						<td></td>
+					</tr>
+					<tr><td><br></td></tr>
+					<tr>
+						<th>u<sub>no frame</sub></th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>%<sub>press</sub></th>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>V<sub>ST</sub></th>
+						<td></td>
+						<td>lbs</td>
+					</tr>
+				</table>
+				</div>
 			</div>
 			<script>
-				let NACA_TNNumStr = 0;
+				let TNNumStr = 0;
 				function TNAddStr() {
-					let Tab = GEBID("NACA_TNForm", "IOTab");//.children[0];
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
 					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++NACA_TNNumStr);
+					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
 					Tab.appendChild(tRow);
+					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
 				}
 				function TNRmStr() {
-					if (NACA_TNNumStr <= 1) return;
-					let Tab = GEBID("NACA_TNForm", "IOTab");//.children[0];
+					if (TNNumStr <= 1) return;
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
 					Tab.lastElementChild.remove();
-					NACA_TNNumStr--;
+					TNNumStr--;
+					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
 				}
 				TNAddStr();
 			</script>

@@ -36,6 +36,7 @@ function downloadInput() {
 	let IRBData = [];
 	let SPData = [];
 	let rPackData = [];
+	let TNData = []; // *gulp*
 	// Ellipse
 	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
 	for (let i=0; i<ids.length; i++) ellData[i] = GEBID("ellForm", ids[i]).value;
@@ -117,10 +118,18 @@ function downloadInput() {
 	rPackData[18] = GEBID("rPackForm", "PappIn").value;
 	rPackData[19] = childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]).value;
 	rPackData[20] = childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value;
+	// TN
+	tabIQ = GEBID("NACA_TNForm", "LPETab");
+	for (let i=0; i<5; i++) TNData[i] = childSeq(tabIQ, [0, 1, i, 0]).value;
+	TNData[5] = TNNumStr;
+	tabIQ = GEBID("NACA_TNForm", "dataTab");
+	for (let i=0; i<TNNumStr; i++)
+		for (let j=0; j<8; j++)
+			TNData[6 + j + 8*i] = childSeq(tabIQ, [i+1, j+1 + parseInt(j/6), 0]).value;
 	// Download it
 	let csv = "";
-	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD", "IRB", "Section Properties", "Radius Packer"];
-	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData, LJDData, IRBData, SPData, rPackData];
+	ids = ["Ellipse", "TC", "crippling", "bending crippling", "OFB", "FPB", "Lug", "boltgroup", "frame STA", "frame WDT", "LJD", "IRB", "Section Properties", "Radius Packer", "NACA TN"];
+	let allData = [ellData, TCData, cripData, bCripData, OFBData, FPBData, lugData, boltgroupData, fSTAData, fWDTData, LJDData, IRBData, SPData, rPackData, TNData];
 	for (let i=0; i<ids.length; i++) csv += ids[i] + "\n" + allData[i] + "\n";
 	const element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csv));
@@ -145,31 +154,32 @@ function uploadInput(ins) {
 	let IRBData = ins.split("\n")[23].split(",");
 	let SPData = ins.split("\n")[25].split(",");
 	let rPackData = ins.split("\n")[27].split(",");
+	let TNData = ins.split("\n")[29].split(",");
 	// Ellipse
 	let ids = ["Fx", "Fy", "Fxy", "LONG_DIA", "SHORT_DIA"];
 	for (let i=0; i<ellData.length; i++) GEBID("ellForm", ids[i]).value = ellData[i];
-	ellCalcs();
+	try {ellCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// Tension Clip
 	ids = ["tIn", "cIn", "FcyIn", "PSIn", "AWIn", "PCIn"];
 	for (let i=0; i<TCData.length; i++) GEBID("TCForm", ids[i]).value = TCData[i];
-	TCCalcs();
+	try {TCCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// Crippling
 	ids = ["FcyIn", "EcIn", "b1In", "b2In", "t1In", "t2In", "E1In", "E2In"];
 	for (let i=0; i<cripData.length; i++) GEBID("cripForm", ids[i]).value = cripData[i];
-	cripCalcs(false);
+	try {cripCalcs(false);} catch (err) {console.error("It broked lol:\n", err)}
 	// Bending Crippling
 	ids = ["FcyIn", "EcIn", "b1In", "b2In", "t1In", "t2In", "E1In", "E2In", "TypeIn1", "TypeIn2", "Ybar1In", "Ybar2In"];
 	for (let i=0; i<bCripData.length; i++) GEBID("bCripForm", ids[i]).value = bCripData[i];
-	cripCalcs(true);
+	try {cripCalcs(true);} catch (err) {console.error("It broked lol:\n", err)}
 	// OFB
 	GEBID("OFBForm", "ASSIn").checked = OFBData[0];
 	ids = ["materialIn", "EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
 	for (let i=1; i<OFBData.length-1; i++) GEBID("OFBForm", ids[i-1]).value = OFBData[i];
-	OFBcalcs();
+	try {OFBcalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// FPB
 	ids = ["ETIn", "fsIn", "aIn", "bIn", "tIn", "EcIn", "nuIn", "f1In", "f2In"];
 	for (let i=0; i<FPBData.length; i++) GEBID("FPBForm", ids[i]).value = FPBData[i];
-	FPBCalcs();
+	try {FPBCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// Lug
 	for (let i=0; i<22; i++)
 		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab1"), [0, i, 1, 0]).value = lugData[i];
@@ -179,7 +189,7 @@ function uploadInput(ins) {
 		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab3"), [0, i-44, 1, 0]).value = lugData[i];
 	for (let i=48; i<56; i++)
 		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab4"), [0, i-48, 1, 0]).value = lugData[i];
-	lugCalcs();
+	try {lugCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// Boltgroup
 	ids = ["locyIn", "loczIn", "FyIn", "FzIn", "MxIn", "loadCaseIn"];
 	for (let i=0; i<6; i++) GEBID("boltgroupForm", ids[i]).value = boltgroupData[i];
@@ -197,18 +207,18 @@ function uploadInput(ins) {
 	for (let i=dummy.length; childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1]) !== undefined; i++)
 		for (let j=0; j<4; j++) 
 			childSeq(GEBID("boltgroupForm", "inTab"), [0, i+1, j+1, 0]).value = 0;
-	boltgroupCalcs();
+	try {boltgroupCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// frame STA
 	ids = ["FcyIn", "tfIn", "hfIn", "YfIn", "EfIn", "AfIn", "IfIn", "rIn", "LIn", "EskIn", "tskIn", "AstrIn", "IstrIn", "bstrIn", "aIn", "bIn"];
 	for (let i=0; i<16; i++) GEBID("frameSTAForm", ids[i]).value = fSTAData[i];
 	for (let i=16; i<fSTAData.length; i++) childSeq(GEBID("frameSTAForm", "locLoadTable"), [0, parseInt((i-16)/9+1), (i-16)%9+1, 0]).value = fSTAData[i];
-	frameSTACalcs();
+	try {frameSTACalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// frame WDT
 	for (let i=0; i<9; i++) childSeq(GEBID("frameDiagTensForm", "SPICTab"), [0, parseInt(i/3+1), i%3+(i%3==2?2:1), 0]).value = fWDTData[i];
 	for (let i=9; i<18; i++) childSeq(GEBID("frameDiagTensForm", "SPSCTab"), [0, parseInt((i-9)/3+1), (i-9)%3+((i-9)%3==2?2:1), 0]).value = fWDTData[i];
 	ids = ["EIn", "EcIn", "FtuIn", "FcyIn", "FsuIn", "bIn", "hIn", "tstiffIn", "twebIn", "tchordIn", "vIn", "KssIn", "RhIn", "RdIn", "FscrIn", "kIn", "alphaIn", "FsallIn"];
 	for (let i=18; i<fWDTData.length; i++) GEBID("frameDiagTensForm", ids[i-18]).value = fWDTData[i];
-	frameWDTCalcs();
+	try {frameWDTCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// LJD
 	{
 		let plat = +LJDData[0], sect = +LJDData[1];
@@ -244,7 +254,7 @@ function uploadInput(ins) {
 		else for (let i=SPNumPt; i<newNPt; i++) SPAddPt();
 		for (let i=0; i<3*SPNumPt; i++) childSeq(GEBID("SPForm", "IOTab"), [parseInt(i/3+2), parseInt(i%3+1), 0]).value = SPData[i+1];
 		GEBID("SPForm", "fAlphaIn").value = SPData[3*SPNumPt+1];
-		SPCalcs();
+		try {SPCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	}
 	// rPack
 	{
@@ -259,6 +269,18 @@ function uploadInput(ins) {
 		GEBID("rPackForm", "PappIn").value = rPackData[18];
 		childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]).value = rPackData[19];
 		childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value = rPackData[20];
-		rPackCalcs();
+		try {rPackCalcs();} catch (err) {console.error("It broked lol:\n", err)}
+
+		// TN
+		tabIQ = GEBID("NACA_TNForm", "LPETab");
+		for (let i=0; i<5; i++) childSeq(tabIQ, [0, 1, i, 0]).value = TNData[i];
+		let newNStr = TNData[5];
+		if (newNStr<TNNumStr) for (let i=TNNumStr; i>newNStr; i--) TNRmStr();
+		else for (let i=TNNumStr; i<newNStr; i++) TNAddStr();
+		tabIQ = GEBID("NACA_TNForm", "dataTab");
+		for (let i=0; i<TNNumStr; i++)
+			for (let j=0; j<8; j++)
+				childSeq(tabIQ, [i+1, j+1 + parseInt(j/6), 0]).value = TNData[6 + j + 8*i];
+		try {TNCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	}
 }
