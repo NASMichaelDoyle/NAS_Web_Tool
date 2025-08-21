@@ -69,31 +69,35 @@
 	<div style="text-align: right;"><button class="button" onclick="sbToggle()" style=" margin-top: 20px; width: 25px; display: inline-block;">☰</button></div>
 	<div id="sidebarContent">
 		<h2 style="text-align: center;">Analyses</h2>
-		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Clip</h4>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Tension Clip</h4>
 		<input id="TCBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('TCForm'))"> Tension Clip <br>
 		<input id="rPackBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Radius Packer<br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Fuselage Analysis</h4>
+		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
+		<input id="NACA_TNBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> NACA Technical Note<br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Stress Distributions</h4>
+		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Compressive Stability</h4>
+		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
+		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
+		<input id="IRBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Inter Rivet Buckling <br>
+		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Crippling</h4>
 		<input id="cripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('cripForm'))"> Crippling <br>
 		<input id="bCripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('bCripForm'))"> Bending Crippling <br>
-		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Frame Analyses</h4>
-		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
-		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
-		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Miscellaneous</h4>
-		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
-		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
-		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Flat Plate Buckling <br>
-		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Fastener Load Distributions</h4>
 		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
 		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
-		<input id="IRBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Inter Rivet Buckling <br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Lug Analysis</h4>
+		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Section Properties</h4>
 		<input id="SPBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Section Properties<br>
-		<input id="NACA_TNBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> NACA Technical Note<br>
-
-		<div style="display: none;"> <!-- DLC -->
+		<div style="display: none;">
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">WIP</h4>
 		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
 		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br>
-		<input id="NACA_TNBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> NACA TN<br>
-		</div>
+			</div>
+	</div>
 		<br>
 		<span style="display: flex;">
 			<button class="button" style="width: 45%;" onclick="downloadInput()">Download Inputs</button>
