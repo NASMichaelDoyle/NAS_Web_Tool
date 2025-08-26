@@ -381,8 +381,8 @@ function cripCalcs(bending) {
 	else parent = document.getElementById("bCripForm").querySelector("#bendingCrippling");
 	
 	// Idea: iterate through table rows and store data in array
-	let Fcy = +parent.querySelector("#FcyIn").value;
-	let Ec = +parent.querySelector("#EcIn").value;
+	let Fcy = +parent.querySelector("#FcyIn").value * 1000;
+	let Ec = +parent.querySelector("#EcIn").value * 1000000;
 	let Type1;
 	let Type2;
 	let b1 = +parent.querySelector("#b1In").value;
@@ -465,8 +465,8 @@ function OFBcalcs() {
 	let nc = +document.getElementById("OFBForm").querySelector("#ncIn").value;
 	let t = +document.getElementById("OFBForm").querySelector("#tIn").value;
 	let b = +document.getElementById("OFBForm").querySelector("#bIn").value;
-	let F0 = +document.getElementById("OFBForm").querySelector("#F0In").value;
-	let Ff = +document.getElementById("OFBForm").querySelector("#FfIn").value;
+	let F0 = +document.getElementById("OFBForm").querySelector("#F0In").value * 1000;
+	let Ff = +document.getElementById("OFBForm").querySelector("#FfIn").value * 1000;
 	let tWeb = +document.getElementById("OFBForm").querySelector("#twebIn").value;
 	let Hfr = +document.getElementById("OFBForm").querySelector("#HfrIn").value;
 	let LPR = +document.getElementById("OFBForm").querySelector("#LPRIn").value;
@@ -480,6 +480,9 @@ function OFBcalcs() {
 	const F0_Ff = (F0/Ff<-1 && Ff<1) ? -1.00000000001 : F0/Ff;
 	[K, Et, Es, eta, mu_c, Fofb] = fofb(b, t, Ec*1000000, nc, mu, Fcy*1000, F0, Ff, tWeb, Hfr, LPR, ASS);
 	MS = Ff > 0 ? "Tension" : Fofb / -(F0_Ff > 3 ? F0/3 : Ff) - 1;
+	if (!isNaN(Et)) Et /= 1000000;
+	if (!isNaN(Es)) Es /= 1000000;
+	if (!isNaN(Fofb)) Fofb /= 1000;
 	
 	document.getElementById("OFBForm").querySelector("#FoFfOut").innerHTML = !isNaN(F0_Ff) ? F0_Ff.toFixed(2) : F0_Ff;
 	document.getElementById("OFBForm").querySelector("#KOut").innerHTML = !isNaN(K) ? K.toFixed(3) : K;
@@ -604,7 +607,7 @@ function FPBCalcs() {
 	let a = GEBID("FPBForm", "aIn").value;
 	let b = GEBID("FPBForm", "bIn").value;
 	let t = GEBID("FPBForm", "tIn").value;
-	let Ec = GEBID("FPBForm", "EcIn").value;
+	let Ec = +GEBID("FPBForm", "EcIn").value * 1000;
 	let nu = GEBID("FPBForm", "nuIn").value;
 	let f1 = GEBID("FPBForm", "f1In").value;
 	let f2 = GEBID("FPBForm", "f2In").value;
@@ -2995,7 +2998,7 @@ function interrivet(E, Fcy, nc, pitch, fixity, t) {
 	}
 	if (Fir > Fcy) Fir = Fcy;
 	Et = ETangent(Fir, Fcy, E, nc);
-	return [Et, Fir];
+	return [Et/1000000, Fir/1000];
 }
 
 // Section Properties funcs
@@ -3419,11 +3422,11 @@ function rPackCalcs() {
 	let [C, e, r, tw, tf, tp, Wp, D] = dummy;
 	tabIQ = GEBID("rPackForm", "fPropTab");
 	dummy = [];
-	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value;
+	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value * (i<3?1000:1000000);
 	let [Ftu_F, Fty_F, Fsu_F, E_F] = dummy;
 	tabIQ = GEBID("rPackForm", "pPropTab");
 	dummy = [];
-	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value;
+	for (let i=0; childSeq(tabIQ, [1, i]) != undefined; i++) dummy[i] = +childSeq(tabIQ, [1, i, 1, 0]).value * (i<3?1000:1000000);
 	let [Ftu_P, Fty_P, Fsu_P, E_P] = dummy;
 	tabIQ = GEBID("rPackForm", "bPropTab");
 	dummy = [];
@@ -3485,7 +3488,7 @@ function TNCalcs() {
 	let mu = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 0, 0]).value;
 	let L = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 1, 0]).value;
 	let P = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 2, 0]).value;
-	let E = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 3, 0]).value;
+	let E = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 3, 0]).value * 1000000;
 	let percent_clamped = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 4, 0]).value;
 	let dataTab = GEBID("NACA_TNForm", "dataTab");
 	for (let Nstr = 1; Nstr <= TNNumStr; Nstr++) {
@@ -3580,7 +3583,7 @@ function press(mu, t_sk, A_str, I_str, A_fr, b, L, R, P, E) {
 // STA
 function frameSTACalcs() {
 	// inputs
-	let Fcy = +GEBID("frameSTAForm", "FcyIn").value;
+	let Fcy = +GEBID("frameSTAForm", "FcyIn").value * 1000;
 	let tf = +GEBID("frameSTAForm", "tfIn").value;
 	let Hf = +GEBID("frameSTAForm", "hfIn").value;
 	let Yf = +GEBID("frameSTAForm", "YfIn").value;
@@ -3889,6 +3892,11 @@ function frameWDTCalcs() {
 	for (let i=8; i<15; i++) inProps[i+2] = +GEBID("frameDiagTensForm", "inPropTab").children[0].children[i].children[1].children[0].value;
 	let [E, Ec, Ftu, Fcy, Fsu, b, h, tstiff, tweb, tch, v, Pshear, Ich, Ach, estiff, Astiff, Istiff] = inProps;
 	// MUCH cleaner, this file shows my JS competency progression lol
+	E += 1000000;
+	Ec *= 1000000;
+	Ftu *= 1000;
+	Fcy *= 1000;
+	Fsu *= 1000;
 	inProps = [];
 	for (let i=0; i<8; i++) inProps[i] = +childSeq(GEBID("frameDiagTensForm", "inBuckleTab"), [0, i, 1, 0]).value;
 	let [Kss, Rh, Rd, Fscr, fs, k, alpha, Fsall] = inProps 

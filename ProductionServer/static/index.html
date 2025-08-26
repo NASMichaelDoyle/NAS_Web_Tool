@@ -325,22 +325,22 @@
 				<tr>
 					<th>F<sub>tu</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>ty</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>su</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>E</th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>Msi</td>
 				</tr>
 			</table>
 			<h4>Packer</h4>
@@ -353,22 +353,22 @@
 				<tr>
 					<th>F<sub>tu</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>ty</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>su</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>E</th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>Msi</td>
 				</tr>
 			</table>
 			<h4>Bolt</h4>
@@ -733,9 +733,9 @@
 				<div id="crippling" class="formIO">
 					<h2>Input/Output</h2>
 					<span>Fcy =</span>
-					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)">
+					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)" title="(ksi)">
 					<span>Ec =</span>
-					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(false)">
+					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(false)" title="(Msi)">
 					<br><br>
 					<table>
 						<thead>
@@ -793,9 +793,9 @@
 				<div id="bendingCrippling" class="formIO">
 					<h2>Input/Output</h2>
 					<span>Fcy =</span>
-					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)">
+					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(ksi)">
 					<span>Ec =</span>
-					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(true)">
+					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(Msi)">
 					<br><br>
 					<table class="inputTable">
 						<thead>
@@ -882,14 +882,14 @@
 			<tr>
 			<th>Section</th>
 			<th>Material</th>
-			<th>Ec [msi]</th>
+			<th>Ec [Msi]</th>
 			<th>Fcy [ksi]</th>
-			<th>μ</th>
+			<th>&mu;</th>
 			<th>nc</th>
 			<th>t [in]</th>
 			<th>b [in]</th>
-			<th>F<sub>0</sub> [psi]</th>
-			<th>F<sub>f</sub> [psi]</th>
+			<th>F<sub>0</sub> [ksi]</th>
+			<th>F<sub>f</sub> [ksi]</th>
 			<th>t_web [in]</th>
 			<th>H_fr [in]</th>
 			<th>Lst/Pitch Ratio</th>
@@ -929,11 +929,11 @@
 	<th>Section</th>
 	<th>F<sub>0</sub>/F<sub>f</sub></th>
 	<th>K</th>
-	<th>Et [psi]</th>
-	<th>Es [psi]</th>
-	<th>η</th>
-	<th>μ_c [lb/in⋅rad]</th>
-	<th>F<sub>ofb</sub> [psi]</th>
+	<th>Et [Msi]</th>
+	<th>Es [Msi]</th>
+	<th>&eta;</th>
+	<th>&mu;_c [lb/in&dot;rad]</th>
+	<th>F<sub>ofb</sub> [ksi]</th>
 	<th>MS</th>
   </tr>
   <tr>
@@ -1011,7 +1011,7 @@
 						<tr title="Young's modulus">
 							<td style="text-align: right;">E<sub>C</sub></td>
 							<td><input id="EcIn" type="number" placeholder="Ec" onchange="FPBCalcs()"></td>
-							<td style="text-align: left">ksi</td>
+							<td style="text-align: left">Msi</td>
 						</tr>
 						<tr title="Poisson's ratio">
 							<td style="text-align: right;">ν</td>
@@ -2202,8 +2202,8 @@
 					<th>Pitch (in)</th>
 					<th>c</th>
 					<th>t<sub>sheet</sub> (in)</th>
-					<th>E<sub>t</sub> (psi)</th>
-					<th>F<sub>ir</sub> (psi)</th>
+					<th>E<sub>t</sub> (Msi)</th>
+					<th>F<sub>ir</sub> (ksi)</th>
 				</tr>
 			</table>
 			<br>
@@ -2421,7 +2421,7 @@
 					<th>&mu;</th>
 					<th>L</th>
 					<th>P</th>
-					<th>E (psi)</th>
+					<th>E (Msi)</th>
 					<th>Intercostal ending</th>
 				</tr>
 				<tr>
@@ -2637,7 +2637,7 @@
 						<tr title="Frame Fcy">
 							<td style="text-align: right;">F<sub>cy</sub></td>
 							<td><input id="FcyIn" type="number" placeholder="Enter fcy" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="Frame Web Gauge">
 							<td style="text-align: right;">t<sub>frame, web</sub></td>
@@ -3269,27 +3269,27 @@
 						<tr title="">
 							<td style="text-align: right;">E</td>
 							<td><input id="EIn" type="number" placeholder="Enter E" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">Msi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">E<sub>c</sub></td>
 							<td><input id="EcIn" type="number" placeholder="Enter Ec" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">Msi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">F<sub>tu</sub></td>
 							<td><input id="FtuIn" type="number" placeholder="Enter Ftu" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">F<sub>cy</sub></td>
 							<td><input id="FcyIn" type="number" placeholder="Enter Fcy" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">F<sub>su</sub></td>
 							<td><input id="FsuIn" type="number" placeholder="Enter Fsu" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">b</td>
