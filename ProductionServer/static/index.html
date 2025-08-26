@@ -520,6 +520,896 @@
 				});
 			</script>
 		</div>
+		<div class="analForm" id="frameSTAForm">
+			<header><h2>Frame STA Loads</h2></header>
+			<div class="formContainer">
+				<div class="formIO" style="width: 200px; height: auto;">
+					<h2>Input</h2>
+					<table style="margin-left: -5px;">
+						<tr title="Frame Fcy">
+							<td style="text-align: right;">F<sub>cy</sub></td>
+							<td><input id="FcyIn" type="number" placeholder="Enter fcy" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="Frame Web Gauge">
+							<td style="text-align: right;">t<sub>frame, web</sub></td>
+							<td><input id="tfIn" type="number" placeholder="Enter t" onchange="GEBID('frameDiagTensForm', 'twebIn').value = this.value; frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Frame Height">
+							<td style="text-align: right;">H<sub>frame</sub></td>
+							<td><input id="hfIn" type="number" placeholder="Enter h" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Frame C.G. Location">
+							<td style="text-align: right;">Y<sub>frame</sub></td>
+							<td><input id="YfIn" type="number" placeholder="Enter Y" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Frame modulus">
+							<td style="text-align: right;">E<sub>frame</sub></td>
+							<td><input id="EfIn" type="number" placeholder="Enter E" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="Frame Area">
+							<td style="text-align: right;">A<sub>frame</sub></td>
+							<td><input id="AfIn" type="number" placeholder="Enter A" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in<sup>2</sup></td>
+						</tr>
+						<tr title="Frame Inertia">
+							<td style="text-align: right;">I<sub>frame</sub></td>
+							<td><input id="IfIn" type="number" placeholder="Enter I" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in<sup>4</sup></td>
+						</tr>
+						<tr title="Fuselage Radius">
+							<td style="text-align: right;">r</td>
+							<td><input id="rIn" type="number" placeholder="Enter r" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Frame Spacing">
+							<td style="text-align: right;">L</td>
+							<td><input id="LIn" type="number" placeholder="Enter L" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Skin Modulus">
+							<td style="text-align: right;">E<sub>skin</sub></td>
+							<td><input id="EskIn" type="number" placeholder="Enter E" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="Skin Thickness">
+							<td style="text-align: right;">t<sub>skin</sub></td>
+							<td><input id="tskIn" type="number" placeholder="Enter t" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Stringer Area">
+							<td style="text-align: right;">A<sub>str</sub></td>
+							<td><input id="AstrIn" type="number" placeholder="Enter A" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in<sup>2</sup></td>
+						</tr>
+						<tr title="Stringer Inertia">
+							<td style="text-align: right;">I<sub>str</sub></td>
+							<td><input id="IstrIn" type="number" placeholder="Enter I" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in<sup>4</sup></td>
+						</tr>
+						<tr title="Stringer Spacing">
+							<td style="text-align: right;">b<sub>str</sub></td>
+							<td><input id="bstrIn" type="number" placeholder="Enter b" onchange="frameSTACalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr style="border-bottom: 1px solid black"><td><h4>Buckling</h4></td></tr>
+						<tr title="Long Edge">
+							<td style="text-align: right;">a</td>
+							<td><input id="aIn" type="number" placeholder="Enter a" onchange="GEBID('frameDiagTensForm', 'bIn').value = this.value; frameSTACalcs();"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Short Edge">
+							<td style="text-align: right;">b</td>
+							<td><input id="bIn" type="number" placeholder="Enter b" onchange="GEBID('frameDiagTensForm', 'hIn').value = this.value; frameSTACalcs();"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+					</table>
+					<br><p>Mouse over a value or field for more information</p>
+				</div>
+				<div style="flex-grow: 1; text-align: center;">
+					<h2>Output</h2>
+				<div style="display: grid; grid-template-columns: 2fr 8fr">
+					<div id="miscOuts" style="border-right: 1px solid gray;">
+					<h3>Properties</h3>
+					<table style="height: 40%; background-color: #eeeeee; margin: 0 auto;">
+						<tr>
+							<th style="text-align: right">θ<sub>str</sub> =</th>
+							<td style="width: 75px;" id="thetastrOut"></td>
+							<td>deg</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">t<sub>e</sub> =</th>
+							<td id="teOut"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">t' =</th>
+							<td id="tprimeOut"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">i =</th>
+							<td id="iOut"></td>
+							<td>in<sup>3</sup></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">A =</th>
+							<td id="AOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">B =</th>
+							<td id="BOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">L<sub>c</sub> =</th>
+							<td id="LcOut"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">L<sub>r</sub> =</th>
+							<td id="LrOut"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">γ =</th>
+							<td id="gammaOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">L<sub>r</sub>/L<sub>c</sub> =</th>
+							<td id="LrLcOut"></td>
+							<td></td>
+						</tr>
+					</table>
+					</div>
+					<div id="frameTables" style="text-align: center; border-right: 1px solid gray; padding: 5px;">
+					<span style="display: flex; margin: 0 auto; text-align: center;"><h3 style="margin-left: auto;">Load Application</h3> <div class="dropdown" style="margin-right: auto;">
+								<button class="dropbtn">?</button>
+								<div class="dropdown-content">
+									<p>For each frame there exists 9 potential
+									locations of load application. The Table<br>
+									below allows for manual input of Radial
+									Load (P), Tangential Load (S) and Moment (M)<br>
+									at any given location (F). The proceeding
+									table derived the frame loading clockwise<br>
+									from top dead center (theta=0).</p>
+								</div>
+							</div></span><br>
+					<table id="locLoadTable">
+						<tr id="LocRow">
+							<th style="width: 150px">Location =</th>
+							<th>1</th>
+							<th>2</th>
+							<th>3</th>
+							<th>4</th>
+							<th>5</th>
+							<th>6</th>
+							<th>7</th>
+							<th>8</th>
+							<th>9</th>
+						</tr>
+						<tr id="PRow">
+							<th>P (lb) =</th>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+						</tr>
+						<tr id="SRow">
+							<th>S (lb) =</th>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+						</tr>
+						<tr id="MRow">
+							<th>M (in*lb) =</th>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+						</tr>
+						<tr id="PhiRow">
+							<th>Φ (deg) =</th>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+							<td><input type="number" onchange="frameSTACalcs()"></td>
+						</tr>
+					</table>
+					<span><h3>Frame Stresses</h3></span>
+					<table class="outTable" id="frameStresses" style="background-color: #d9d9d9;">
+						<tr>
+							<th style="background-color: white;">Theta</th>
+							<th style="width: 80px; background-color: white;">Axial</th>
+							<th style="width: 80px; background-color: white;">Shear</th>
+							<th style="width: 80px; background-color: white;">Bending</th>
+							<th style="width: 80px; background-color: white;">f/a</th>
+							<th style="width: 80px; background-color: white;">MY/I</th>
+							<th style="width: 100px; background-color: white;">M(H-Y)/I</th>
+							<th style="width: 80px; background-color: white;">f2</th>
+							<th style="width: 80px; background-color: white;">f1</th>
+							<th style="width: 80px; background-color: white;">fs</th>
+						</tr>
+						<tr id="theta0">
+							<td><input type="number" value="0" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta1">
+							<td><input type="number" value="2.15" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta2">
+							<td><input type="number" value="4.30" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta3">
+							<td><input type="number" value="6.45" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta4">
+							<td><input type="number" value="8.60" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta5">
+							<td><input type="number" value="10.75" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta6">
+							<td><input type="number" value="12.90" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta7">
+							<td><input type="number" value="15.05" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta8">
+							<td><input type="number" value="17.20" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta9">
+							<td><input type="number" value="19.35" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta10">
+							<td><input type="number" value="21.50" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta11">
+							<td><input type="number" value="338.50" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta12">
+							<td><input type="number" value="340.65" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta13">
+							<td><input type="number" value="342.80" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta14">
+							<td><input type="number" value="344.95" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta15">
+							<td><input type="number" value="347.10" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta16">
+							<td><input type="number" value="349.25" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta17">
+							<td><input type="number" value="351.40" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta18">
+							<td><input type="number" value="353.55" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta19">
+							<td><input type="number" value="355.70" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr id="theta20">
+							<td><input type="number" value="357.85" style="width: 75px;"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</table>
+					</div>
+				</div>
+				<div>
+					<h3>Buckling Check</h3>
+					<div id="buckleOut" style="display: grid; grid-template-columns: 20% 40% 40%;">
+						<div>
+						<table style="height: 40%; background-color: #eeeeee; margin: 0 auto; margin-bottom: 20px;">
+						<tr>
+							<th style="text-align: right">f<sub>1</sub> =</th>
+							<td style="width: 75px;" id="f1Out"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">f<sub>2</sub> =</th>
+							<td id="f2Out"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">f<sub>1</sub>/f<sub>2</sub> =</th>
+							<td id="f1f2Out"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">a =</th>
+							<td id="aOut"></td>
+							<td>in<sup>3</sup></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">b =</th>
+							<td id="bOut"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">k<sub>b</sub> =</th>
+							<td id="kbOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">K<sub>b</sub> =</th>
+							<td id="KbOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">E<sub>t</sub> =</th>
+							<td id="EtOut"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">E<sub>s</sub> =</th>
+							<td id="EsOut"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">ν =</th>
+							<td id="nuOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">η =</th>
+							<td id="etaOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">F<sub>bcr, el</sub> =</th>
+							<td id="FbcrelOut"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">F<sub>bcr, pl</sub> =</th>
+							<td id="FbcrplOut"></td>
+							<td>psi</td>
+						</tr>
+					</table>
+							<table style="height: 10%; background-color: #eeeeee; margin: 0 auto;">
+						<tr>
+							<th style="text-align: right">k<sub>s</sub> =</th>
+							<td style="width: 75px;" id="ksOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">J =</th>
+							<td style="width: 75px;" id="JOut"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">K<sub>s</sub> =</th>
+							<td id="KsOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">F<sub>scr</sub> =</th>
+							<td id="Fscr1Out"></td>
+							<td>psi</td>
+						</tr>
+					</table>
+					<br>
+					<table style="height: 23%; background-color: #eeeeee; margin: 0 auto;">
+						<tr>
+							<th style="text-align: right">f<sub>s</sub> =</th>
+							<td id="fsOut" style="width: 75px;"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">F<sub>scr</sub> =</th>
+							<td id="Fscr2Out"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">f<sub>b</sub> =</th>
+							<td id="fbOut"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">F<sub>bcr, pl</sub> =</th>
+							<td id="Fbcrpl2Out"></td>
+							<td>psi</td>
+						</tr>
+						<tr>
+							<th style="text-align: right">R<sub>s</sub> =</th>
+							<td id="RsOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">R<sub>b</sub> =</th>
+							<td id="RbOut"></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right">MS =</th>
+							<td id="MSOut"></td>
+							<td></td>
+						</tr>
+					</table>
+						</div>
+						<img src="images/frame/FrameDia1.png" alt="Frame buckle diagram 1" style="width: 85%; margin: 0 auto;">
+						<img src="images/frame/FrameDia2.png" alt="Frame buckle diagram 2" style="width: 85%; margin: 0 auto;">
+
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+		<div class="analForm" id="NACA_TNForm">
+			<template id="TNDataRowTemplate">
+				<tr>
+					<td title="Stringer #"></td>
+					<td title="Actual fuselage radius"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Skin pocket thickness"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer only area"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer center of gravity"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer only inertia"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Bay width"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Max bay size on either side of stringer"></td>
+					<td title="Frame area INCLUDING sheartie"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Frame factor"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Factored Afr"></td>
+					<td title="NACA Load"></td>
+				</tr>
+			</template>
+			<style>
+				#NACA_TNForm input {
+					width: 60px;
+				}
+				#NACA_TNForm .outTab {
+					align-self: center;
+					padding: 10px;
+				}
+				#NACA_TNForm .outTab th {
+					text-align: right;
+				}
+				#NACA_TNForm .outTab td:nth-child(2) {
+					text-align: center;
+					background-color: #ccffcc;
+					width: 100px;
+				}
+				#NACA_TNForm .outTab td:nth-child(3) {
+					text-align: left;
+				}
+			</style>
+			<header><h2>NACA Technical Note</h2></header>
+			<div id="formContainer" style="display: flex; flex-direction: column;">
+			<div class="formIO" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<div>
+			<h3>Data</h3>
+			<table class="inTab" id="LPETab" style="margin: 0 auto">
+				<tr>
+					<th>&mu;</th>
+					<th>L</th>
+					<th>P</th>
+					<th>E (Msi)</th>
+					<th>Intercostal ending</th>
+				</tr>
+				<tr>
+					<td title="Poisson's ratio"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Frame pitch"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Pressure applied"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Young's modulus"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Determines amount of support at ends of stringer. (100% for stringers or intercostals of constant section, 0% for Intercostals ending)">
+						<select style="width: 100%;">
+						<option value="0">True</option>
+						<option value="1">False</option>
+					</select></td>
+				</tr>
+			</table>
+			<br>
+			<table class="inTab" id="dataTab">
+				<tr>
+					<th>Stringer</th>
+					<th>Radius (in)</th>
+					<th>t<sub>skin</sub> (in)</th>
+					<th>A<sub>str</sub> (in<sup>2</sup>)</th>
+					<th>Y<sub>str</sub> (in)</th>
+					<th>I<sub>str</sub> (in<sup>4</sup>)</th>
+					<th>Bay width (in)</th>
+					<th>b<sub>ave</sub> (in)</th>
+					<th>A<sub>frame</sub> (in<sup>2</sup>)</th>
+					<th>Frame Factor</th>
+					<th>Factored Afr (in<sup>2</sup>)</th>
+					<th>NACA Load</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="TNAddStr(); TNCalcs();" style="margin-left: 0px;">Add Stringer</button>
+			<button onclick="TNRmStr(); if (SPNumPt>1) TNCalcs();" style="margin-left: 0px;">Remove Stringer</button>
+			<br>
+			</div>
+			</div>
+			<div style="text-align: center;">
+				<h3>Diagrams</h3>
+				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; max-width: 800px; margin: 0 auto;">
+					<img src="images/TN/TN1.png" style="width: 100%;">
+					<img src="images/TN/TN2.png" style="width: 100%;">
+					<div style="display: flex; flex-direction: column;">
+						<img src="images/TN/TN3.png" style="width: 100%;">
+						<img src="images/TN/TN4.png" style="width: 100%;">
+					</div>
+				</div>
+				<h3>Output</h3>
+				<p id="TNWarning" style="display: none;">Note that most properties are calculated with respect to the last stringer added</p>
+				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+				<table class="outTab" id="outTab1">
+					<tr title="# stringers assuming b pitch">
+						<th>s</th>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr title="">
+						<th>I<sub>seg</sub></th>
+						<td></td>
+						<td>in<sup>4</sup></td>
+					</tr>
+					<tr title="">
+						<th>YNA</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr title="Istr / Iseg">
+						<th>Ratio</th>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab2">
+					<tr>
+						<th>&alpha;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&rho;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&phi;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&beta;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&theta;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&psi;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&upsilon;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>% of 2 dp</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>V</th>
+						<td></td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab3">
+					<tr>
+						<th>y</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>u</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>v</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>w</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>w</th>
+						<td></td>
+						<td>lbs/in</td>
+					</tr>
+					<tr>
+						<th>p</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>M<sub>max</sub></th>
+						<td></td>
+						<td>in&middot;lbs</td>
+					</tr>
+					<tr>
+						<th>M<sub>center</sub></th>
+						<td></td>
+						<td>in&middot;lbs</td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab4">
+					<tr>
+						<th>Hoop</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>PR/t</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>%<sub>pure hoop</sub></th>
+						<td></td>
+					</tr>
+					<tr><td><br></td><td></td></tr>
+					<tr>
+						<th>u<sub>no frame</sub></th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>%<sub>press</sub></th>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>V<sub>ST</sub></th>
+						<td></td>
+						<td>lbs</td>
+					</tr>
+				</table>
+				</div>
+			</div>
+			<script>
+				let TNNumStr = 0;
+				function TNAddStr() {
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
+					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
+					Tab.appendChild(tRow);
+					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
+				}
+				function TNRmStr() {
+					if (TNNumStr <= 1) return;
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
+					Tab.lastElementChild.remove();
+					TNNumStr--;
+					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
+				}
+				TNAddStr();
+			</script>
+			</div>
+		</div>
 		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
 			<header><h2>Ellipse Analysis (BETA)</h2></header>
 			<div id="ellContainer">
@@ -725,138 +1615,6 @@
 	      </tr>
 		</table>
 			</div>
-			</div>
-		</div>
-		<div class="analForm" id="cripForm">
-			<header><h2>Crippling</h2></header>
-			<div class="container">
-				<div id="crippling" class="formIO">
-					<h2>Input/Output</h2>
-					<span>Fcy =</span>
-					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)" title="(ksi)">
-					<span>Ec =</span>
-					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(false)" title="(Msi)">
-					<br><br>
-					<table>
-						<thead>
-							<tr>
-							<th>Flange</th>
-							<th>b</th>
-							<th>t</th>
-							<th>Edges</th>
-							<th>Area</th>
-							<th>Fcc</th>
-							<th>Fcc*A</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td><input id="b1In" placeholder="width" onchange="cripCalcs(false)"></td>
-								<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(false)"></td>
-								<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(false)"></td>
-								<td id="Area1">Enter</td>
-								<td id="Fcc1">Enter</td>
-								<td id="FccA1">Enter</td>
-							</tr>
-								<tr>
-								<td>2</td>
-								<td><input id="b2In" placeholder="width" onchange="cripCalcs(false)"></td>
-								<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(false)"></td>
-								<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(false)"></td>
-								<td id="Area2">Enter</td>
-								<td id="Fcc2">Enter</td>
-								<td id="FccA2">Enter</td>
-							</tr>
-						</tbody>
-					</table>
-					<br>
-					<h2>Combined Allowable</h2>
-					<table class="outTable">
-						<tr>
-							<td>Fcc =</td>
-							<td id="FccOut">Enter Data</td>
-						</tr>
-						<tr>
-							<td>Pcc =</td>
-							<td id="PccOut">Enter Data</td>
-						</tr>
-					</table>
-					<br>
-				</div>
-				<img src="images/cripCurve.png" alt="Crippling Curve" style="margin: 0 auto;">
-			</div>
-		</div>
-		<div class="analForm" id="bCripForm">
-			<header><h2>Bending Crippling</h2></header>
-			<div class="container">
-				<div id="bendingCrippling" class="formIO">
-					<h2>Input/Output</h2>
-					<span>Fcy =</span>
-					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(ksi)">
-					<span>Ec =</span>
-					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(Msi)">
-					<br><br>
-					<table class="inputTable">
-						<thead>
-							<tr>
-							<th>Flange</th>
-							<th>Type</th>
-							<th>b</th>
-							<th>t</th>
-							<th>Edges</th>
-							<th>Ybar</th>
-							<th>Fcc</th>
-							<th>Yi</th>
-							<th>Mo</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-							<td>1</td>
-							<td>
-								<select id="TypeIn1" name="TypeIn1" onchange="cripCalcs(true)">
-									<option value="Chord">Chord</option>
-									<option value="Web">Web</option>
-								</select>
-							</td>
-							<td><input id="b1In" placeholder="width" onchange="cripCalcs(true)"></td>
-							<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(true)"></td>
-							<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(true)"></td>
-							<td><input id="Ybar1In" placeholder="centroid" onchange="cripCalcs(true)"></td>
-							<td id="Fcc1">Enter</td>
-							<td id="Yi1">Enter</td>
-							<td id="Mo1">Enter</td>
-							</tr>
-							<tr>
-							<td>2</td>
-							<td>
-								<select id="TypeIn2" name="TypeIn2" onchange="cripCalcs(true)">
-									<option value="Chord">Chord</option>
-									<option value="Web">Web</option>
-								</select>
-							</td>
-							<td><input id="b2In" placeholder="width" onchange="cripCalcs(true)"></td>
-							<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(true)"></td>
-							<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(true)"></td>
-							<td><input id="Ybar2In" placeholder="centroid" onchange="cripCalcs(true)"></td>
-							<td id="Fcc2">Enter</td>
-							<td id="Yi2">Enter</td>
-							<td id="Mo2">Enter</td>
-							</tr>
-						</tbody>
-					</table>
-					<br>
-					<h2>Maximum Allowable</h2>
-					<table class="outTable">
-						<tr>
-						<td>Max Allowable Moment =</td>
-						<td id="MAMOut">Enter Data</td>
-						</tr>
-					</table>
-					<br>
-				</div>
-				<img src="images/bCripDia.png" alt="Bending Crippling Diagram" style="width:50%;">
 			</div>
 		</div>
 		<div class="analForm" id="OFBForm">
@@ -1130,6 +1888,873 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="analForm" id="IRBForm">
+			<style>
+				#IRBForm input {
+					width: 75px;
+				}
+			</style>
+			<template id="IRBInRowTemplate">
+				<tr>
+					<td></td>
+					<td><input type="number" placeholder="Enter Material" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Ec" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Fcy" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter nc" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Pitch" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter c" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter tsheet" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</template>
+			<header><h2>Inter Rivet Buckling</h2></header>
+			<div class="formIO">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<table class="inTab" id="IOTab">
+				<colgroup>
+					<col span="1" style="border-right: 1px solid black">
+				</colgroup>
+				<tr style="border-bottom: 1px solid black;">
+					<th>Section</th>
+					<th>Material</th>
+					<th>E<sub>c</sub> (Msi)</th>
+					<th>F<sub>cy</sub> (ksi)</th>
+					<th>nc</th>
+					<th>Pitch (in)</th>
+					<th>c</th>
+					<th>t<sub>sheet</sub> (in)</th>
+					<th>E<sub>t</sub> (Msi)</th>
+					<th>F<sub>ir</sub> (ksi)</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="IRBAddSect()" style="margin-left: 0px;">Add Section</button>
+			<button onclick="IRBRmSect()" style="margin-left: 0px;">Remove Section</button>
+			</div>
+			<script>
+				let IRBNumSect = 0;
+				function IRBAddSect() {
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
+					Tab.appendChild(tRow);
+				}
+				function IRBRmSect() {
+					if (IRBNumSect <= 1) return;
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					Tab.lastElementChild.remove();
+					IRBNumSect--;
+				}
+				IRBAddSect();
+			</script>
+		</div>
+		<div class="analForm" id="frameDiagTensForm">
+			<header><h2>Web Diagonal Tension</h2></header>
+			<div class="formContainer">
+			<div class="formIO">
+				<h3>Properties</h3>
+				<table id="inPropTab" style="margin-left: -5px;">
+						<tr title="">
+							<td style="text-align: right;">E</td>
+							<td><input id="EIn" type="number" placeholder="Enter E" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">E<sub>c</sub></td>
+							<td><input id="EcIn" type="number" placeholder="Enter Ec" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">F<sub>tu</sub></td>
+							<td><input id="FtuIn" type="number" placeholder="Enter Ftu" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">F<sub>cy</sub></td>
+							<td><input id="FcyIn" type="number" placeholder="Enter Fcy" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">F<sub>su</sub></td>
+							<td><input id="FsuIn" type="number" placeholder="Enter Fsu" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">b</td>
+							<td><input id="bIn" type="number" placeholder="Enter b" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">h</td>
+							<td><input id="hIn" type="number" placeholder="Enter h" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Thickness">
+							<td style="text-align: right;">t</td>
+							<td><table>
+								<tr>
+									<td>Stiffener</td>
+									<td>Web</td>
+									<td>Chord</td>
+								</tr>
+								<tr>
+									<td><input id="tstiffIn" type="number" placeholder="Stiffener" onchange="frameWDTCalcs()" style="width: 50px"></td>
+									<td><input id="twebIn" type="number" placeholder="Web" onchange="frameWDTCalcs()" style="width: 50px"></td>
+									<td><input id="tchordIn" type="number" placeholder="Chord" onchange="frameWDTCalcs()" style="width: 50px"></td>
+								</tr>
+							</table></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">v</td>
+							<td><input id="vIn" type="number" placeholder="Enter v" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="Max shear in the web">
+							<td style="text-align: right;">P<sub>shear</sub></td>
+							<td><input id="PshearIn" type="number" placeholder="Enter Pshear" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">lbs</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">I<sub>ch</sub></td>
+							<td><input id="IchIn" type="number" placeholder="Enter Ich" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in<sup>4</sup></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">A<sub>ch</sub></td>
+							<td><input id="AchIn" type="number" placeholder="Enter Ach" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in<sup>2</sup></td>
+						</tr>
+						<tr title="Distance of stiffener centroid to web">
+							<td style="text-align: right;">e<sub>stiff</sub></td>
+							<td><input id="estiffIn" type="number" placeholder="Enter estiff" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">A<sub>stiff</sub></td>
+							<td><input id="AstiffIn" type="number" placeholder="Enter Astiff" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in<sup>2</sup></td>
+						</tr>
+						<tr title="">
+							<td style="text-align: right;">I<sub>stiff</sub></td>
+							<td><input id="IstiffIn" type="number" placeholder="Enter Istiff" onchange="frameWDTCalcs()"></td>
+							<td style="text-align: left">in<sup>4</sup></td>
+						</tr>
+					</table>
+				<h3>Buckling</h3>
+				<table id="inBuckleTab" style="margin-left: -5px;">
+					<tr title="">
+						<td style="text-align: right;">K<sub>SS</sub></td>
+						<td><input id="KssIn" type="number" placeholder="Enter Kss" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left"></td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">R<sub>h</sub></td>
+						<td><input id="RhIn" type="number" placeholder="Enter Rh" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left"></td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">R<sub>d</sub></td>
+						<td><input id="RdIn" type="number" placeholder="Enter Rd" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left"></td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">F<sub>scr</sub></td>
+						<td><input id="FscrIn" type="number" placeholder="Enter Fscr" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left">ksi</td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">f<sub>s</sub></td>
+						<td><input id="fsIn" type="number" placeholder="Enter fs" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left"></td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">k<sub></sub></td>
+						<td><input id="kIn" type="number" placeholder="Enter k" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left"></td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">alpha<sub></sub></td>
+						<td><input id="alphaIn" type="number" placeholder="Enter alpha" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left">degrees</td>
+					</tr>
+					<tr title="">
+						<td style="text-align: right;">F<sub>s all</sub></td>
+						<td><input id="FsallIn" type="number" placeholder="Enter Fs all" onchange="frameWDTCalcs()"></td>
+						<td style="text-align: left">ksi</td>
+					</tr>
+				</table>
+			</div>
+			<div style="text-align: center; width: 100%;">
+				<br><h3 style="margin: 0 auto;">Data and Calculations</h3><br>
+				<div>
+					<div style="border: 1px solid black;">
+					<h3>Section Properties - Inner Chord</h3>
+					<table id="SPICTab" class="outTable">
+						<tr>
+							<th>Item</th>
+							<th>b (in)</th>
+							<th>t (in)</th>
+							<th>A (in<sup>2</sup>)</th>
+							<th>z (in)</th>
+							<th>Az (in<sup>3</sup>)</th>
+							<th>Az<sup>2</sup> (in<sup>4</sup>)</th>
+							<th>I<sub>yo</sub> (in<sup>4</sup>)</th>
+						</tr>
+						<tr>
+							<th>1</th>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>2</th>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>3</th>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<th style="border: none;">Totals:</th>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+						</tr>
+					</table>
+					<br>
+					<div style="display: grid; grid-template-columns: 30% 70%; text-align: center; align-items: center; margin: 0 auto; width: 600px;">
+					<table id="SPICOut" style="height: 30%; margin: auto 0; justify-self: start;">
+						<tr>
+							<td>z bar =</td>
+							<td style="width: 80px;"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<td>I<sub>yy</sub> =</td>
+							<td></td>
+							<td>in<sup>4</sup></td>
+						</tr>
+						<tr>
+							<td>A =</td>
+							<td></td>
+							<td>in<sup>2</sup></td>
+						</tr>
+					</table>
+					<img src="images/frame/WDTDia1.png" alt="Chord diagram" style="width: 450px; margin-right: 0; border: 1px solid black;">
+					</div>
+					</div>
+					<br>
+					<div style="border: 1px solid black">
+					<h3>Section Properties - Stringer Clip</h3>
+					<table id="SPSCTab" class="outTable">
+						<tr>
+							<th>Item</th>
+							<th>b (in)</th>
+							<th>t (in)</th>
+							<th>A (in<sup>2</sup>)</th>
+							<th>z (in)</th>
+							<th>Az (in<sup>3</sup>)</th>
+							<th>Az<sup>2</sup> (in<sup>4</sup>)</th>
+							<th>I<sub>yo</sub> (in<sup>4</sup>)</th>
+						</tr>
+						<tr>
+							<th>1</th>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>2</th>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th>3</th>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td><input type="number" onchange="frameWDTCalcs()"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<th style="border: none;">Totals:</th>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+							<td style="border: none;"></td>
+						</tr>
+					</table>
+					<br>
+					<div style="display: grid; grid-template-columns: 50% 50%; text-align: center; align-items: center; margin: 0 auto; width: 400px;">
+					<table id="SPSCOut" style="height: 30%; margin: auto 0; justify-self: start;">
+						<tr>
+							<td>z bar =</td>
+							<td style="width: 80px;"></td>
+							<td>in</td>
+						</tr>
+						<tr>
+							<td>I<sub>yy</sub> =</td>
+							<td></td>
+							<td>in<sup>4</sup></td>
+						</tr>
+						<tr>
+							<td>A =</td>
+							<td></td>
+							<td>in<sup>2</sup></td>
+						</tr>
+					</table>
+					<img src="images/frame/WDTDia2.png" alt="Stringer clip diagram" style="width: 225px; margin-right: 0; border: 1px solid black;">
+					</div>
+					</div>
+					<br>
+					<div style="display: grid; grid-template-columns: 1fr 4fr; max-width: 100%">
+					<table style="border-collapse: collapse; margin: auto auto;">
+					<tr style="height: 20px;">
+						<td style="text-align: right;">min(dc, b) =</td>
+						<td id="mindcbOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;">69420</td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">max(dc, b) =</td>
+						<td id="maxdcbOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Bottom =</td>
+						<td id="bottomOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					</table>
+					<div>
+						<img src="images/frame/WDTDia3.png" alt="Web diagonal tension diagram">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'KssIn').focus()">
+						<td style="text-align: right;">Kss =</td>
+						<td id="KssOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Equation =</td>
+						<td id="equationOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					</table>
+					<div style="width: 100%;">
+						<img src="images/frame/WDTDia4.png" alt="Web diagonal tension diagram" style="width: 500px;">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;">
+						<td style="text-align: right;">tu / t =</td>
+						<td id="tutOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">tf / t =</td>
+						<td id="tftOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'RhIn').focus()">
+						<td style="text-align: right;">Rh =</td>
+						<td id="RhOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
+					</tr>
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'RdIn').focus()">
+						<td style="text-align: right;">Rd =</td>
+						<td id="RdOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
+					</tr>
+					<tr><td><br></td></tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Kss =</td>
+						<td id="Kss2Out" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">E =</td>
+						<td id="EOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">v =</td>
+						<td id="vOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">b =</td>
+						<td id="bOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">dc =</td>
+						<td id="dcOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">t =</td>
+						<td id="tOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Rh =</td>
+						<td id="Rh2Out" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Rd =</td>
+						<td id="Rd2Out" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Fscr/n =</td>
+						<td id="FscrnOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					</table>
+					<div>
+						<img src="images/frame/WDTDia5.png" alt="Web diagonal tension diagram" style="width: 500px;">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'FscrIn').focus()">
+						<td style="text-align: right;">Fscr =</td>
+						<td id="FscrOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
+					</tr>
+					</table>
+					<div>
+						<img src="images/frame/WDTDia6.png" alt="Web diagonal tension diagram" style="width: 500px;">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;">
+						<td style="text-align: right;">fs/Fscr =</td>
+						<td id="fsFscrOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;" onclick="if (!GEBID('frameSTABox').checked) GEBID('frameSTABox').click(); GEBID('frameSTAForm', 'FcyIn').focus()">
+						<td style="text-align: right;">fs =</td>
+						<td id="fsOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
+					</tr>
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'kIn').focus()">
+						<td style="text-align: right;">k =</td>
+						<td id="kOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
+					</tr>
+					</table>
+					<div>
+						<img src="images/frame/WDTDia7.png" alt="Web diagonal tension diagram" style="width: 500px;">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Aue/bt =</td>
+						<td id="AuebtOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">2Af/Ht =</td>
+						<td id="_2AfHtOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					</table>
+					<div>
+						<img src="images/frame/WDTDia8.png" alt="Web diagonal tension diagram" style="width: 500px;">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'alphaIn').focus()">
+						<td style="text-align: right;">alpha =</td>
+						<td id="alphaOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">tan(alpha) =</td>
+						<td id="tanalphaOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">wb =</td>
+						<td id="wbOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					</table>
+					<div>
+						<img src="images/frame/WDTDia9.png" alt="Web diagonal tension diagram" style="width: 500px;">
+					</div>
+					<table style="margin: auto auto;">
+					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'FsallIn').focus()">
+						<td style="text-align: right;">Fsall =</td>
+						<td id="FsallOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
+					</tr>
+					<tr style="height: 20px;">
+						<td style="text-align: right;">Fs_All =</td>
+						<td id="Fs_AllOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
+					</tr>
+					</table>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="analForm" id="cripForm">
+			<header><h2>Crippling</h2></header>
+			<div class="container">
+				<div id="crippling" class="formIO">
+					<h2>Input/Output</h2>
+					<span>Fcy =</span>
+					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)" title="(ksi)">
+					<span>Ec =</span>
+					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(false)" title="(Msi)">
+					<br><br>
+					<table>
+						<thead>
+							<tr>
+							<th>Flange</th>
+							<th>b</th>
+							<th>t</th>
+							<th>Edges</th>
+							<th>Area</th>
+							<th>Fcc</th>
+							<th>Fcc*A</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td><input id="b1In" placeholder="width" onchange="cripCalcs(false)"></td>
+								<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(false)"></td>
+								<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(false)"></td>
+								<td id="Area1">Enter</td>
+								<td id="Fcc1">Enter</td>
+								<td id="FccA1">Enter</td>
+							</tr>
+								<tr>
+								<td>2</td>
+								<td><input id="b2In" placeholder="width" onchange="cripCalcs(false)"></td>
+								<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(false)"></td>
+								<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(false)"></td>
+								<td id="Area2">Enter</td>
+								<td id="Fcc2">Enter</td>
+								<td id="FccA2">Enter</td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2>Combined Allowable</h2>
+					<table class="outTable">
+						<tr>
+							<td>Fcc =</td>
+							<td id="FccOut">Enter Data</td>
+						</tr>
+						<tr>
+							<td>Pcc =</td>
+							<td id="PccOut">Enter Data</td>
+						</tr>
+					</table>
+					<br>
+				</div>
+				<img src="images/cripCurve.png" alt="Crippling Curve" style="margin: 0 auto;">
+			</div>
+		</div>
+		<div class="analForm" id="bCripForm">
+			<header><h2>Bending Crippling</h2></header>
+			<div class="container">
+				<div id="bendingCrippling" class="formIO">
+					<h2>Input/Output</h2>
+					<span>Fcy =</span>
+					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(ksi)">
+					<span>Ec =</span>
+					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(Msi)">
+					<br><br>
+					<table class="inputTable">
+						<thead>
+							<tr>
+							<th>Flange</th>
+							<th>Type</th>
+							<th>b</th>
+							<th>t</th>
+							<th>Edges</th>
+							<th>Ybar</th>
+							<th>Fcc</th>
+							<th>Yi</th>
+							<th>Mo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							<td>1</td>
+							<td>
+								<select id="TypeIn1" name="TypeIn1" onchange="cripCalcs(true)">
+									<option value="Chord">Chord</option>
+									<option value="Web">Web</option>
+								</select>
+							</td>
+							<td><input id="b1In" placeholder="width" onchange="cripCalcs(true)"></td>
+							<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(true)"></td>
+							<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(true)"></td>
+							<td><input id="Ybar1In" placeholder="centroid" onchange="cripCalcs(true)"></td>
+							<td id="Fcc1">Enter</td>
+							<td id="Yi1">Enter</td>
+							<td id="Mo1">Enter</td>
+							</tr>
+							<tr>
+							<td>2</td>
+							<td>
+								<select id="TypeIn2" name="TypeIn2" onchange="cripCalcs(true)">
+									<option value="Chord">Chord</option>
+									<option value="Web">Web</option>
+								</select>
+							</td>
+							<td><input id="b2In" placeholder="width" onchange="cripCalcs(true)"></td>
+							<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(true)"></td>
+							<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(true)"></td>
+							<td><input id="Ybar2In" placeholder="centroid" onchange="cripCalcs(true)"></td>
+							<td id="Fcc2">Enter</td>
+							<td id="Yi2">Enter</td>
+							<td id="Mo2">Enter</td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2>Maximum Allowable</h2>
+					<table class="outTable">
+						<tr>
+						<td>Max Allowable Moment =</td>
+						<td id="MAMOut">Enter Data</td>
+						</tr>
+					</table>
+					<br>
+				</div>
+				<img src="images/bCripDia.png" alt="Bending Crippling Diagram" style="width:50%;">
+			</div>
+		</div>
+		<div class="analForm" id="boltgroupForm">
+			<header><h2>Boltgroup 2D</h2></header>
+			<div class="formIO" style="float: left; width: 270px;">
+				<h3>Applied Load</h3>
+				<table>
+					<tr>
+						<td>Location X</td>
+						<td>Location Y</td>
+						<td>Fx (lb)</td>
+						<td>Fy (lb)</td>
+					</tr>
+					<tr>
+						<td><input id="locyIn" type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
+						<td><input id="loczIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input id="FyIn" type="number" placeholder="Enter Fx" onchange="boltgroupCalcs()"></td>
+						<td><input id="FzIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
+					</tr>
+					<tr>
+						<td>Mz (in*lb)</td>
+						<td>Load Case</td>
+					</tr>
+					<tr>
+						<td><input id="MxIn" type="number" placeholder="Enter Mz" onchange="boltgroupCalcs()"></td>
+						<td><input id="loadCaseIn" type="number" placeholder="Enter Case" onchange="boltgroupCalcs()"></td>
+					</tr>
+				</table>
+				<template id="bgInRowTemplate">
+					<tr>
+						<td></td>
+						<td><input type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Xeff" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Yeff" onchange="boltgroupCalcs()"></td>
+					</tr>
+				</template>
+				<template id="bgOutRowTemplate">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</template>
+				<table id="inTab">
+					<tr>
+						<td>Fastener</td>
+						<td>X (in)</td>
+						<td>Y (in)</td>
+						<td title="X efficiency">X<sub>eff</sub></td>
+						<td title="Y efficiency">Y<sub>eff</sub></td>
+					</tr>
+				</table>
+				<br>
+				<button onclick="BGAddFast()" style="margin-left: 0px;">Add Fastener</button>
+				<button onclick="BGRmFast()" style="margin-left: 0px;">Remove Fastener</button>
+			</div>
+			<div style="text-align: center;">
+				<h2>Output</h2>
+				<table style="margin: 0 auto; border-collapse: collapse;">
+					<tr>
+						<td style="border: 1px solid black;">Xcg</td>
+						<td style="border: 1px solid black;">Ycg</td>
+						<td style="border: 1px solid black;">Mz_cg</td>
+						<td style="border: 1px solid black;">Iz</td>
+					</tr>
+					<tr>
+						<td id="YcgOut" style="border: 1px solid black;"></td>
+						<td id="ZcgOut" style="border: 1px solid black;"></td>
+						<td id="MxcgOut" style="border: 1px solid black;"></td>
+						<td id="IxOut" style="border: 1px solid black;"></td>
+					</tr>
+				</table>
+				<br>
+				<canvas id="bgChart" style="margin: 0 auto; width: 500px;"></canvas>
+				<br>
+				<table id="outTab" class="outTable">
+					<tr>
+						<td>Fastener</td>
+						<td>X (in)</td>
+						<td>Y (in)</td>
+						<td>Px_Fx (lb)</td>
+						<td>Py_Fy (lb)</td>
+						<td>Px_Mz (lb)</td>
+						<td>Py_Mz (lb)</td>
+						<td>Px (lb)</td>
+						<td>Py (lb)</td>
+						<td>P (lb)</td>
+					</tr>
+				</table>
+				<table style="margin: 0 auto;">
+					<tr>
+						<td>Balance:</td>
+						<td style="text-align: right;">Px<sub>total</sub> =</td>
+						<td id="PyTotOut"></td>
+						<td style="text-align: left;">(lb)</td>
+						<td style="text-align: right;">Py<sub>total</sub> =</td>
+						<td id="PzTotOut"></td>
+						<td style="text-align: left;">(lb)</td>
+						<td style="text-align: right;">Mz<sub>total</sub> =</td>
+						<td id="MxTotOut"></td>
+						<td style="text-align: left;">(in-lb)</td>
+					</tr>
+				</table>
+			</div>
+			<script>
+					let BGNumFast = 0;
+					function BGAddFast() {
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
+						inTab.appendChild(tRow);
+						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
+						outTab.appendChild(tRowOut);
+					}
+					function BGRmFast() {
+						if (BGNumFast < 2) return;
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						inTab.lastElementChild.remove();
+						outTab.lastElementChild.remove();
+						BGNumFast--;
+						boltgroupCalcs();
+					}
+					for (let i=0; i<4; i++) {
+						BGAddFast();
+					}
+			</script>
+		</div>
+		<div class="analForm" id="LJDForm"> <!-- Full functionality implemented, but alot was hidden for simplicity -->
+			<template id="LJDinTabInTemplate">
+				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
+			</template>
+			<template id="LJDinTabBorRTemplate">
+				<select style="width: 100%; background-color: transparent;">
+					<option value="B">Bolt</option>
+					<option value="R">Rivet</option>
+				</select>
+			</template>
+			<template id="LJDinTabFastTypeTemplate">
+			<div class="CSContainer">
+				Fastener
+				<select style="width: 100%; background-color: transparent; display: none;">
+					<option value="1">Single</option>
+					<option value="2">Double</option>
+					<option value="N">N-group</option>
+					<option value="SW">Spot Weld</option>
+					<option value="0">None</option>
+				</select>
+				<dialog>
+					<h2>Enter number of Fasteners</h2>
+					<input type="number" autofocus style="text-align: center;"><br>
+					<div class="dialog-buttons" style="margin: 0 auto;">
+						<button id="cnlBtn">Cancel</button>
+						<button id="okBtn">OK</button>
+					</div>
+				</dialog>
+			</div>
+			</template>
+			<header><h2>Lap Joint Doubler</h2></header>
+			<div class="formIO">
+			<h3>Instructions</h3>
+			<p style="text-align: center; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+				<br>Then press "Prepare" to generate the input tables.<br><br>
+				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
+				<!--<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.--><br><br>
+				Once everything has been inputted, press "Compute" to calculate loads.<br><br>
+				Hover over certain fields for more information.
+			</p>
+			<h3>Setup</h3>
+			<table class="inTab">
+				<tr>
+					<td># of Plates High</td>
+					<td># of Plates Long</td>
+					<td style="width: 15%; display:none;"></td>
+					<td style="display:none;">Fast Flex H - Huth</td>
+					<td style="display:none;">Spotweld K</td>
+					<td>Total Applied Load</td>
+					<td style="display:none;">Matrix Output</td>
+				</tr>
+				<tr>
+					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
+					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
+					<td style="display:none;"></td>
+					<td style="display:none;"><select id="FastFlexIn" name="FastFlexIn" onchange="">
+						<option value="H">Huth</option>
+						<option value="NotH">Other</option>
+					</select></td>
+					<td style="display:none;"><input id="SWKIn" type="number" placeholder="Enter K"></td>
+					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
+					<td style="display:none;"><select id="matrixIn" name="matrixIn" onchange="">
+						<option value="1">True</option>
+						<option value="0" selected="1">False</option>
+					</select></td>
+				</tr>
+			</table>
+			<br>
+			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
+			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
+			<br>
+			</div>
+			<h2 style="text-align: center;">Input</h2>
+			<table class="inTab2" id="inTab1"></table>
+			<br>
+			<table class="inTab2" id="inTab2"></table>
+			<h2 style="text-align: center;">Output</h2>
+			<table class="inTab2" id="outTab"></table>
+			<br>
+			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
 		</div>
 		<div class="analForm" id="lugForm">
 			<header><h2>Lug Analysis (WIP)</h2></header>
@@ -1946,287 +3571,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="analForm" id="boltgroupForm">
-			<header><h2>Boltgroup 2D</h2></header>
-			<div class="formIO" style="float: left; width: 270px;">
-				<h3>Applied Load</h3>
-				<table>
-					<tr>
-						<td>Location X</td>
-						<td>Location Y</td>
-						<td>Fx (lb)</td>
-						<td>Fy (lb)</td>
-					</tr>
-					<tr>
-						<td><input id="locyIn" type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
-						<td><input id="loczIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
-						<td><input id="FyIn" type="number" placeholder="Enter Fx" onchange="boltgroupCalcs()"></td>
-						<td><input id="FzIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
-					</tr>
-					<tr>
-						<td>Mz (in*lb)</td>
-						<td>Load Case</td>
-					</tr>
-					<tr>
-						<td><input id="MxIn" type="number" placeholder="Enter Mz" onchange="boltgroupCalcs()"></td>
-						<td><input id="loadCaseIn" type="number" placeholder="Enter Case" onchange="boltgroupCalcs()"></td>
-					</tr>
-				</table>
-				<template id="bgInRowTemplate">
-					<tr>
-						<td></td>
-						<td><input type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Xeff" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Yeff" onchange="boltgroupCalcs()"></td>
-					</tr>
-				</template>
-				<template id="bgOutRowTemplate">
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</template>
-				<table id="inTab">
-					<tr>
-						<td>Fastener</td>
-						<td>X (in)</td>
-						<td>Y (in)</td>
-						<td title="X efficiency">X<sub>eff</sub></td>
-						<td title="Y efficiency">Y<sub>eff</sub></td>
-					</tr>
-				</table>
-				<br>
-				<button onclick="BGAddFast()" style="margin-left: 0px;">Add Fastener</button>
-				<button onclick="BGRmFast()" style="margin-left: 0px;">Remove Fastener</button>
-			</div>
-			<div style="text-align: center;">
-				<h2>Output</h2>
-				<table style="margin: 0 auto; border-collapse: collapse;">
-					<tr>
-						<td style="border: 1px solid black;">Xcg</td>
-						<td style="border: 1px solid black;">Ycg</td>
-						<td style="border: 1px solid black;">Mz_cg</td>
-						<td style="border: 1px solid black;">Iz</td>
-					</tr>
-					<tr>
-						<td id="YcgOut" style="border: 1px solid black;"></td>
-						<td id="ZcgOut" style="border: 1px solid black;"></td>
-						<td id="MxcgOut" style="border: 1px solid black;"></td>
-						<td id="IxOut" style="border: 1px solid black;"></td>
-					</tr>
-				</table>
-				<br>
-				<canvas id="bgChart" style="margin: 0 auto; width: 500px;"></canvas>
-				<br>
-				<table id="outTab" class="outTable">
-					<tr>
-						<td>Fastener</td>
-						<td>X (in)</td>
-						<td>Y (in)</td>
-						<td>Px_Fx (lb)</td>
-						<td>Py_Fy (lb)</td>
-						<td>Px_Mz (lb)</td>
-						<td>Py_Mz (lb)</td>
-						<td>Px (lb)</td>
-						<td>Py (lb)</td>
-						<td>P (lb)</td>
-					</tr>
-				</table>
-				<table style="margin: 0 auto;">
-					<tr>
-						<td>Balance:</td>
-						<td style="text-align: right;">Px<sub>total</sub> =</td>
-						<td id="PyTotOut"></td>
-						<td style="text-align: left;">(lb)</td>
-						<td style="text-align: right;">Py<sub>total</sub> =</td>
-						<td id="PzTotOut"></td>
-						<td style="text-align: left;">(lb)</td>
-						<td style="text-align: right;">Mz<sub>total</sub> =</td>
-						<td id="MxTotOut"></td>
-						<td style="text-align: left;">(in-lb)</td>
-					</tr>
-				</table>
-			</div>
-			<script>
-					let BGNumFast = 0;
-					function BGAddFast() {
-						let inTab = GEBID("boltgroupForm", "inTab").children[0];
-						let outTab = GEBID("boltgroupForm", "outTab").children[0];
-						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
-						inTab.appendChild(tRow);
-						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
-						outTab.appendChild(tRowOut);
-					}
-					function BGRmFast() {
-						if (BGNumFast < 2) return;
-						let inTab = GEBID("boltgroupForm", "inTab").children[0];
-						let outTab = GEBID("boltgroupForm", "outTab").children[0];
-						inTab.lastElementChild.remove();
-						outTab.lastElementChild.remove();
-						BGNumFast--;
-						boltgroupCalcs();
-					}
-					for (let i=0; i<4; i++) {
-						BGAddFast();
-					}
-			</script>
-		</div>
-		<div class="analForm" id="LJDForm"> <!-- Full functionality implemented, but alot was hidden for simplicity -->
-			<template id="LJDinTabInTemplate">
-				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
-			</template>
-			<template id="LJDinTabBorRTemplate">
-				<select style="width: 100%; background-color: transparent;">
-					<option value="B">Bolt</option>
-					<option value="R">Rivet</option>
-				</select>
-			</template>
-			<template id="LJDinTabFastTypeTemplate">
-			<div class="CSContainer">
-				Fastener
-				<select style="width: 100%; background-color: transparent; display: none;">
-					<option value="1">Single</option>
-					<option value="2">Double</option>
-					<option value="N">N-group</option>
-					<option value="SW">Spot Weld</option>
-					<option value="0">None</option>
-				</select>
-				<dialog>
-					<h2>Enter number of Fasteners</h2>
-					<input type="number" autofocus style="text-align: center;"><br>
-					<div class="dialog-buttons" style="margin: 0 auto;">
-						<button id="cnlBtn">Cancel</button>
-						<button id="okBtn">OK</button>
-					</div>
-				</dialog>
-			</div>
-			</template>
-			<header><h2>Lap Joint Doubler</h2></header>
-			<div class="formIO">
-			<h3>Instructions</h3>
-			<p style="text-align: center; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
-				<br>Then press "Prepare" to generate the input tables.<br><br>
-				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
-				<!--<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.--><br><br>
-				Once everything has been inputted, press "Compute" to calculate loads.<br><br>
-				Hover over certain fields for more information.
-			</p>
-			<h3>Setup</h3>
-			<table class="inTab">
-				<tr>
-					<td># of Plates High</td>
-					<td># of Plates Long</td>
-					<td style="width: 15%; display:none;"></td>
-					<td style="display:none;">Fast Flex H - Huth</td>
-					<td style="display:none;">Spotweld K</td>
-					<td>Total Applied Load</td>
-					<td style="display:none;">Matrix Output</td>
-				</tr>
-				<tr>
-					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
-					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
-					<td style="display:none;"></td>
-					<td style="display:none;"><select id="FastFlexIn" name="FastFlexIn" onchange="">
-						<option value="H">Huth</option>
-						<option value="NotH">Other</option>
-					</select></td>
-					<td style="display:none;"><input id="SWKIn" type="number" placeholder="Enter K"></td>
-					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
-					<td style="display:none;"><select id="matrixIn" name="matrixIn" onchange="">
-						<option value="1">True</option>
-						<option value="0" selected="1">False</option>
-					</select></td>
-				</tr>
-			</table>
-			<br>
-			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
-			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
-			<br>
-			</div>
-			<h2 style="text-align: center;">Input</h2>
-			<table class="inTab2" id="inTab1"></table>
-			<br>
-			<table class="inTab2" id="inTab2"></table>
-			<h2 style="text-align: center;">Output</h2>
-			<table class="inTab2" id="outTab"></table>
-			<br>
-			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
-		</div>
-		<div class="analForm" id="IRBForm">
-			<style>
-				#IRBForm input {
-					width: 75px;
-				}
-			</style>
-			<template id="IRBInRowTemplate">
-				<tr>
-					<td></td>
-					<td><input type="number" placeholder="Enter Material" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter Ec" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter Fcy" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter nc" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter Pitch" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter c" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter tsheet" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td></td>
-					<td></td>
-				</tr>
-			</template>
-			<header><h2>Inter Rivet Buckling</h2></header>
-			<div class="formIO">
-			<!--<h3>Information</h3>
-			<p style="text-align: center; padding: 5px;">
-				lol
-			</p>-->
-			<table class="inTab" id="IOTab">
-				<colgroup>
-					<col span="1" style="border-right: 1px solid black">
-				</colgroup>
-				<tr style="border-bottom: 1px solid black;">
-					<th>Section</th>
-					<th>Material</th>
-					<th>E<sub>c</sub> (Msi)</th>
-					<th>F<sub>cy</sub> (ksi)</th>
-					<th>nc</th>
-					<th>Pitch (in)</th>
-					<th>c</th>
-					<th>t<sub>sheet</sub> (in)</th>
-					<th>E<sub>t</sub> (Msi)</th>
-					<th>F<sub>ir</sub> (ksi)</th>
-				</tr>
-			</table>
-			<br>
-			<button onclick="IRBAddSect()" style="margin-left: 0px;">Add Section</button>
-			<button onclick="IRBRmSect()" style="margin-left: 0px;">Remove Section</button>
-			</div>
-			<script>
-				let IRBNumSect = 0;
-				function IRBAddSect() {
-					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
-					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
-					Tab.appendChild(tRow);
-				}
-				function IRBRmSect() {
-					if (IRBNumSect <= 1) return;
-					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
-					Tab.lastElementChild.remove();
-					IRBNumSect--;
-				}
-				IRBAddSect();
-			</script>
-		</div>
 		<div class="analForm" id="SPForm">
 			<template id="SPInRowTemplate">
 				<tr>
@@ -2369,1350 +3713,6 @@
 					grid.appendChild(tab);
 				}
 			</script>
-		</div>
-		<div class="analForm" id="NACA_TNForm">
-			<template id="TNDataRowTemplate">
-				<tr>
-					<td title="Stringer #"></td>
-					<td title="Actual fuselage radius"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Skin pocket thickness"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Stringer only area"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Stringer center of gravity"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Stringer only inertia"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Bay width"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Max bay size on either side of stringer"></td>
-					<td title="Frame area INCLUDING sheartie"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Frame factor"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Factored Afr"></td>
-					<td title="NACA Load"></td>
-				</tr>
-			</template>
-			<style>
-				#NACA_TNForm input {
-					width: 60px;
-				}
-				#NACA_TNForm .outTab {
-					align-self: center;
-					padding: 10px;
-				}
-				#NACA_TNForm .outTab th {
-					text-align: right;
-				}
-				#NACA_TNForm .outTab td:nth-child(2) {
-					text-align: center;
-					background-color: #ccffcc;
-					width: 100px;
-				}
-				#NACA_TNForm .outTab td:nth-child(3) {
-					text-align: left;
-				}
-			</style>
-			<header><h2>NACA Technical Note</h2></header>
-			<div id="formContainer" style="display: flex; flex-direction: column;">
-			<div class="formIO" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-			<!--<h3>Information</h3>
-			<p style="text-align: center; padding: 5px;">
-				lol
-			</p>-->
-			<div>
-			<h3>Data</h3>
-			<table class="inTab" id="LPETab" style="margin: 0 auto">
-				<tr>
-					<th>&mu;</th>
-					<th>L</th>
-					<th>P</th>
-					<th>E (Msi)</th>
-					<th>Intercostal ending</th>
-				</tr>
-				<tr>
-					<td title="Poisson's ratio"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Frame pitch"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Pressure applied"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Young's modulus"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Determines amount of support at ends of stringer. (100% for stringers or intercostals of constant section, 0% for Intercostals ending)">
-						<select style="width: 100%;">
-						<option value="0">True</option>
-						<option value="1">False</option>
-					</select></td>
-				</tr>
-			</table>
-			<br>
-			<table class="inTab" id="dataTab">
-				<tr>
-					<th>Stringer</th>
-					<th>Radius (in)</th>
-					<th>t<sub>skin</sub> (in)</th>
-					<th>A<sub>str</sub> (in<sup>2</sup>)</th>
-					<th>Y<sub>str</sub> (in)</th>
-					<th>I<sub>str</sub> (in<sup>4</sup>)</th>
-					<th>Bay width (in)</th>
-					<th>b<sub>ave</sub> (in)</th>
-					<th>A<sub>frame</sub> (in<sup>2</sup>)</th>
-					<th>Frame Factor</th>
-					<th>Factored Afr (in<sup>2</sup>)</th>
-					<th>NACA Load</th>
-				</tr>
-			</table>
-			<br>
-			<button onclick="TNAddStr(); TNCalcs();" style="margin-left: 0px;">Add Stringer</button>
-			<button onclick="TNRmStr(); if (SPNumPt>1) TNCalcs();" style="margin-left: 0px;">Remove Stringer</button>
-			<br>
-			</div>
-			</div>
-			<div style="text-align: center;">
-				<h3>Diagrams</h3>
-				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; max-width: 800px; margin: 0 auto;">
-					<img src="images/TN/TN1.png" style="width: 100%;">
-					<img src="images/TN/TN2.png" style="width: 100%;">
-					<div style="display: flex; flex-direction: column;">
-						<img src="images/TN/TN3.png" style="width: 100%;">
-						<img src="images/TN/TN4.png" style="width: 100%;">
-					</div>
-				</div>
-				<h3>Output</h3>
-				<p id="TNWarning" style="display: none;">Note that most properties are calculated with respect to the last stringer added</p>
-				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
-				<table class="outTab" id="outTab1">
-					<tr title="# stringers assuming b pitch">
-						<th>s</th>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr title="">
-						<th>I<sub>seg</sub></th>
-						<td></td>
-						<td>in<sup>4</sup></td>
-					</tr>
-					<tr title="">
-						<th>YNA</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr title="Istr / Iseg">
-						<th>Ratio</th>
-						<td></td>
-						<td></td>
-					</tr>
-				</table>
-				<table class="outTab" id="outTab2">
-					<tr>
-						<th>&alpha;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&rho;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&phi;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&beta;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&theta;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&psi;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&upsilon;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>% of 2 dp</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>V</th>
-						<td></td>
-					</tr>
-				</table>
-				<table class="outTab" id="outTab3">
-					<tr>
-						<th>y</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>u</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>v</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>w</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>w</th>
-						<td></td>
-						<td>lbs/in</td>
-					</tr>
-					<tr>
-						<th>p</th>
-						<td></td>
-						<td>psi</td>
-					</tr>
-					<tr>
-						<th>M<sub>max</sub></th>
-						<td></td>
-						<td>in&middot;lbs</td>
-					</tr>
-					<tr>
-						<th>M<sub>center</sub></th>
-						<td></td>
-						<td>in&middot;lbs</td>
-					</tr>
-				</table>
-				<table class="outTab" id="outTab4">
-					<tr>
-						<th>Hoop</th>
-						<td></td>
-						<td>psi</td>
-					</tr>
-					<tr>
-						<th>PR/t</th>
-						<td></td>
-						<td>psi</td>
-					</tr>
-					<tr>
-						<th>%<sub>pure hoop</sub></th>
-						<td></td>
-					</tr>
-					<tr><td><br></td><td></td></tr>
-					<tr>
-						<th>u<sub>no frame</sub></th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>%<sub>press</sub></th>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>V<sub>ST</sub></th>
-						<td></td>
-						<td>lbs</td>
-					</tr>
-				</table>
-				</div>
-			</div>
-			<script>
-				let TNNumStr = 0;
-				function TNAddStr() {
-					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
-					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
-					Tab.appendChild(tRow);
-					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
-				}
-				function TNRmStr() {
-					if (TNNumStr <= 1) return;
-					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
-					Tab.lastElementChild.remove();
-					TNNumStr--;
-					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
-				}
-				TNAddStr();
-			</script>
-			</div>
-		</div>
-		<div class="analForm" id="frameSTAForm">
-			<header><h2>Frame STA Loads</h2></header>
-			<div class="formContainer">
-				<div class="formIO" style="width: 200px; height: auto;">
-					<h2>Input</h2>
-					<table style="margin-left: -5px;">
-						<tr title="Frame Fcy">
-							<td style="text-align: right;">F<sub>cy</sub></td>
-							<td><input id="FcyIn" type="number" placeholder="Enter fcy" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">ksi</td>
-						</tr>
-						<tr title="Frame Web Gauge">
-							<td style="text-align: right;">t<sub>frame, web</sub></td>
-							<td><input id="tfIn" type="number" placeholder="Enter t" onchange="GEBID('frameDiagTensForm', 'twebIn').value = this.value; frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Frame Height">
-							<td style="text-align: right;">H<sub>frame</sub></td>
-							<td><input id="hfIn" type="number" placeholder="Enter h" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Frame C.G. Location">
-							<td style="text-align: right;">Y<sub>frame</sub></td>
-							<td><input id="YfIn" type="number" placeholder="Enter Y" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Frame modulus">
-							<td style="text-align: right;">E<sub>frame</sub></td>
-							<td><input id="EfIn" type="number" placeholder="Enter E" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">Msi</td>
-						</tr>
-						<tr title="Frame Area">
-							<td style="text-align: right;">A<sub>frame</sub></td>
-							<td><input id="AfIn" type="number" placeholder="Enter A" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in<sup>2</sup></td>
-						</tr>
-						<tr title="Frame Inertia">
-							<td style="text-align: right;">I<sub>frame</sub></td>
-							<td><input id="IfIn" type="number" placeholder="Enter I" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in<sup>4</sup></td>
-						</tr>
-						<tr title="Fuselage Radius">
-							<td style="text-align: right;">r</td>
-							<td><input id="rIn" type="number" placeholder="Enter r" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Frame Spacing">
-							<td style="text-align: right;">L</td>
-							<td><input id="LIn" type="number" placeholder="Enter L" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Skin Modulus">
-							<td style="text-align: right;">E<sub>skin</sub></td>
-							<td><input id="EskIn" type="number" placeholder="Enter E" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">Msi</td>
-						</tr>
-						<tr title="Skin Thickness">
-							<td style="text-align: right;">t<sub>skin</sub></td>
-							<td><input id="tskIn" type="number" placeholder="Enter t" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Stringer Area">
-							<td style="text-align: right;">A<sub>str</sub></td>
-							<td><input id="AstrIn" type="number" placeholder="Enter A" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in<sup>2</sup></td>
-						</tr>
-						<tr title="Stringer Inertia">
-							<td style="text-align: right;">I<sub>str</sub></td>
-							<td><input id="IstrIn" type="number" placeholder="Enter I" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in<sup>4</sup></td>
-						</tr>
-						<tr title="Stringer Spacing">
-							<td style="text-align: right;">b<sub>str</sub></td>
-							<td><input id="bstrIn" type="number" placeholder="Enter b" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr style="border-bottom: 1px solid black"><td><h4>Buckling</h4></td></tr>
-						<tr title="Long Edge">
-							<td style="text-align: right;">a</td>
-							<td><input id="aIn" type="number" placeholder="Enter a" onchange="GEBID('frameDiagTensForm', 'bIn').value = this.value; frameSTACalcs();"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Short Edge">
-							<td style="text-align: right;">b</td>
-							<td><input id="bIn" type="number" placeholder="Enter b" onchange="GEBID('frameDiagTensForm', 'hIn').value = this.value; frameSTACalcs();"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-					</table>
-					<br><p>Mouse over a value or field for more information</p>
-				</div>
-				<div style="flex-grow: 1; text-align: center;">
-					<h2>Output</h2>
-				<div style="display: grid; grid-template-columns: 2fr 8fr">
-					<div id="miscOuts" style="border-right: 1px solid gray;">
-					<h3>Properties</h3>
-					<table style="height: 40%; background-color: #eeeeee; margin: 0 auto;">
-						<tr>
-							<th style="text-align: right">θ<sub>str</sub> =</th>
-							<td style="width: 75px;" id="thetastrOut"></td>
-							<td>deg</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">t<sub>e</sub> =</th>
-							<td id="teOut"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">t' =</th>
-							<td id="tprimeOut"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">i =</th>
-							<td id="iOut"></td>
-							<td>in<sup>3</sup></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">A =</th>
-							<td id="AOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">B =</th>
-							<td id="BOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">L<sub>c</sub> =</th>
-							<td id="LcOut"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">L<sub>r</sub> =</th>
-							<td id="LrOut"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">γ =</th>
-							<td id="gammaOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">L<sub>r</sub>/L<sub>c</sub> =</th>
-							<td id="LrLcOut"></td>
-							<td></td>
-						</tr>
-					</table>
-					</div>
-					<div id="frameTables" style="text-align: center; border-right: 1px solid gray; padding: 5px;">
-					<span style="display: flex; margin: 0 auto; text-align: center;"><h3 style="margin-left: auto;">Load Application</h3> <div class="dropdown" style="margin-right: auto;">
-								<button class="dropbtn">?</button>
-								<div class="dropdown-content">
-									<p>For each frame there exists 9 potential
-									locations of load application. The Table<br>
-									below allows for manual input of Radial
-									Load (P), Tangential Load (S) and Moment (M)<br>
-									at any given location (F). The proceeding
-									table derived the frame loading clockwise<br>
-									from top dead center (theta=0).</p>
-								</div>
-							</div></span><br>
-					<table id="locLoadTable">
-						<tr id="LocRow">
-							<th style="width: 150px">Location =</th>
-							<th>1</th>
-							<th>2</th>
-							<th>3</th>
-							<th>4</th>
-							<th>5</th>
-							<th>6</th>
-							<th>7</th>
-							<th>8</th>
-							<th>9</th>
-						</tr>
-						<tr id="PRow">
-							<th>P (lb) =</th>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-						</tr>
-						<tr id="SRow">
-							<th>S (lb) =</th>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-						</tr>
-						<tr id="MRow">
-							<th>M (in*lb) =</th>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-						</tr>
-						<tr id="PhiRow">
-							<th>Φ (deg) =</th>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-							<td><input type="number" onchange="frameSTACalcs()"></td>
-						</tr>
-					</table>
-					<span><h3>Frame Stresses</h3></span>
-					<table class="outTable" id="frameStresses" style="background-color: #d9d9d9;">
-						<tr>
-							<th style="background-color: white;">Theta</th>
-							<th style="width: 80px; background-color: white;">Axial</th>
-							<th style="width: 80px; background-color: white;">Shear</th>
-							<th style="width: 80px; background-color: white;">Bending</th>
-							<th style="width: 80px; background-color: white;">f/a</th>
-							<th style="width: 80px; background-color: white;">MY/I</th>
-							<th style="width: 100px; background-color: white;">M(H-Y)/I</th>
-							<th style="width: 80px; background-color: white;">f2</th>
-							<th style="width: 80px; background-color: white;">f1</th>
-							<th style="width: 80px; background-color: white;">fs</th>
-						</tr>
-						<tr id="theta0">
-							<td><input type="number" value="0" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta1">
-							<td><input type="number" value="2.15" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta2">
-							<td><input type="number" value="4.30" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta3">
-							<td><input type="number" value="6.45" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta4">
-							<td><input type="number" value="8.60" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta5">
-							<td><input type="number" value="10.75" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta6">
-							<td><input type="number" value="12.90" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta7">
-							<td><input type="number" value="15.05" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta8">
-							<td><input type="number" value="17.20" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta9">
-							<td><input type="number" value="19.35" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta10">
-							<td><input type="number" value="21.50" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta11">
-							<td><input type="number" value="338.50" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta12">
-							<td><input type="number" value="340.65" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta13">
-							<td><input type="number" value="342.80" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta14">
-							<td><input type="number" value="344.95" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta15">
-							<td><input type="number" value="347.10" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta16">
-							<td><input type="number" value="349.25" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta17">
-							<td><input type="number" value="351.40" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta18">
-							<td><input type="number" value="353.55" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta19">
-							<td><input type="number" value="355.70" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr id="theta20">
-							<td><input type="number" value="357.85" style="width: 75px;"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</table>
-					</div>
-				</div>
-				<div>
-					<h3>Buckling Check</h3>
-					<div id="buckleOut" style="display: grid; grid-template-columns: 20% 40% 40%;">
-						<div>
-						<table style="height: 40%; background-color: #eeeeee; margin: 0 auto; margin-bottom: 20px;">
-						<tr>
-							<th style="text-align: right">f<sub>1</sub> =</th>
-							<td style="width: 75px;" id="f1Out"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">f<sub>2</sub> =</th>
-							<td id="f2Out"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">f<sub>1</sub>/f<sub>2</sub> =</th>
-							<td id="f1f2Out"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">a =</th>
-							<td id="aOut"></td>
-							<td>in<sup>3</sup></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">b =</th>
-							<td id="bOut"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">k<sub>b</sub> =</th>
-							<td id="kbOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">K<sub>b</sub> =</th>
-							<td id="KbOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">E<sub>t</sub> =</th>
-							<td id="EtOut"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">E<sub>s</sub> =</th>
-							<td id="EsOut"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">ν =</th>
-							<td id="nuOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">η =</th>
-							<td id="etaOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">F<sub>bcr, el</sub> =</th>
-							<td id="FbcrelOut"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">F<sub>bcr, pl</sub> =</th>
-							<td id="FbcrplOut"></td>
-							<td>psi</td>
-						</tr>
-					</table>
-							<table style="height: 10%; background-color: #eeeeee; margin: 0 auto;">
-						<tr>
-							<th style="text-align: right">k<sub>s</sub> =</th>
-							<td style="width: 75px;" id="ksOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">J =</th>
-							<td style="width: 75px;" id="JOut"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">K<sub>s</sub> =</th>
-							<td id="KsOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">F<sub>scr</sub> =</th>
-							<td id="Fscr1Out"></td>
-							<td>psi</td>
-						</tr>
-					</table>
-					<br>
-					<table style="height: 23%; background-color: #eeeeee; margin: 0 auto;">
-						<tr>
-							<th style="text-align: right">f<sub>s</sub> =</th>
-							<td id="fsOut" style="width: 75px;"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">F<sub>scr</sub> =</th>
-							<td id="Fscr2Out"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">f<sub>b</sub> =</th>
-							<td id="fbOut"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">F<sub>bcr, pl</sub> =</th>
-							<td id="Fbcrpl2Out"></td>
-							<td>psi</td>
-						</tr>
-						<tr>
-							<th style="text-align: right">R<sub>s</sub> =</th>
-							<td id="RsOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">R<sub>b</sub> =</th>
-							<td id="RbOut"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th style="text-align: right">MS =</th>
-							<td id="MSOut"></td>
-							<td></td>
-						</tr>
-					</table>
-						</div>
-						<img src="images/frame/FrameDia1.png" alt="Frame buckle diagram 1" style="width: 85%; margin: 0 auto;">
-						<img src="images/frame/FrameDia2.png" alt="Frame buckle diagram 2" style="width: 85%; margin: 0 auto;">
-
-					</div>
-				</div>
-				</div>
-			</div>
-		</div>
-		<div class="analForm" id="frameDiagTensForm">
-			<header><h2>Web Diagonal Tension</h2></header>
-			<div class="formContainer">
-			<div class="formIO">
-				<h3>Properties</h3>
-				<table id="inPropTab" style="margin-left: -5px;">
-						<tr title="">
-							<td style="text-align: right;">E</td>
-							<td><input id="EIn" type="number" placeholder="Enter E" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">Msi</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">E<sub>c</sub></td>
-							<td><input id="EcIn" type="number" placeholder="Enter Ec" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">Msi</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">F<sub>tu</sub></td>
-							<td><input id="FtuIn" type="number" placeholder="Enter Ftu" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">ksi</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">F<sub>cy</sub></td>
-							<td><input id="FcyIn" type="number" placeholder="Enter Fcy" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">ksi</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">F<sub>su</sub></td>
-							<td><input id="FsuIn" type="number" placeholder="Enter Fsu" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">ksi</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">b</td>
-							<td><input id="bIn" type="number" placeholder="Enter b" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">h</td>
-							<td><input id="hIn" type="number" placeholder="Enter h" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Thickness">
-							<td style="text-align: right;">t</td>
-							<td><table>
-								<tr>
-									<td>Stiffener</td>
-									<td>Web</td>
-									<td>Chord</td>
-								</tr>
-								<tr>
-									<td><input id="tstiffIn" type="number" placeholder="Stiffener" onchange="frameWDTCalcs()" style="width: 50px"></td>
-									<td><input id="twebIn" type="number" placeholder="Web" onchange="frameWDTCalcs()" style="width: 50px"></td>
-									<td><input id="tchordIn" type="number" placeholder="Chord" onchange="frameWDTCalcs()" style="width: 50px"></td>
-								</tr>
-							</table></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">v</td>
-							<td><input id="vIn" type="number" placeholder="Enter v" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left"></td>
-						</tr>
-						<tr title="Max shear in the web">
-							<td style="text-align: right;">P<sub>shear</sub></td>
-							<td><input id="PshearIn" type="number" placeholder="Enter Pshear" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">lbs</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">I<sub>ch</sub></td>
-							<td><input id="IchIn" type="number" placeholder="Enter Ich" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in<sup>4</sup></td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">A<sub>ch</sub></td>
-							<td><input id="AchIn" type="number" placeholder="Enter Ach" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in<sup>2</sup></td>
-						</tr>
-						<tr title="Distance of stiffener centroid to web">
-							<td style="text-align: right;">e<sub>stiff</sub></td>
-							<td><input id="estiffIn" type="number" placeholder="Enter estiff" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">A<sub>stiff</sub></td>
-							<td><input id="AstiffIn" type="number" placeholder="Enter Astiff" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in<sup>2</sup></td>
-						</tr>
-						<tr title="">
-							<td style="text-align: right;">I<sub>stiff</sub></td>
-							<td><input id="IstiffIn" type="number" placeholder="Enter Istiff" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">in<sup>4</sup></td>
-						</tr>
-					</table>
-				<h3>Buckling</h3>
-				<table id="inBuckleTab" style="margin-left: -5px;">
-					<tr title="">
-						<td style="text-align: right;">K<sub>SS</sub></td>
-						<td><input id="KssIn" type="number" placeholder="Enter Kss" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left"></td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">R<sub>h</sub></td>
-						<td><input id="RhIn" type="number" placeholder="Enter Rh" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left"></td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">R<sub>d</sub></td>
-						<td><input id="RdIn" type="number" placeholder="Enter Rd" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left"></td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">F<sub>scr</sub></td>
-						<td><input id="FscrIn" type="number" placeholder="Enter Fscr" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left">ksi</td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">f<sub>s</sub></td>
-						<td><input id="fsIn" type="number" placeholder="Enter fs" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left"></td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">k<sub></sub></td>
-						<td><input id="kIn" type="number" placeholder="Enter k" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left"></td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">alpha<sub></sub></td>
-						<td><input id="alphaIn" type="number" placeholder="Enter alpha" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left">degrees</td>
-					</tr>
-					<tr title="">
-						<td style="text-align: right;">F<sub>s all</sub></td>
-						<td><input id="FsallIn" type="number" placeholder="Enter Fs all" onchange="frameWDTCalcs()"></td>
-						<td style="text-align: left">ksi</td>
-					</tr>
-				</table>
-			</div>
-			<div style="text-align: center; width: 100%;">
-				<br><h3 style="margin: 0 auto;">Data and Calculations</h3><br>
-				<div>
-					<div style="border: 1px solid black;">
-					<h3>Section Properties - Inner Chord</h3>
-					<table id="SPICTab" class="outTable">
-						<tr>
-							<th>Item</th>
-							<th>b (in)</th>
-							<th>t (in)</th>
-							<th>A (in<sup>2</sup>)</th>
-							<th>z (in)</th>
-							<th>Az (in<sup>3</sup>)</th>
-							<th>Az<sup>2</sup> (in<sup>4</sup>)</th>
-							<th>I<sub>yo</sub> (in<sup>4</sup>)</th>
-						</tr>
-						<tr>
-							<th>1</th>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th>2</th>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th>3</th>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<th style="border: none;">Totals:</th>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-						</tr>
-					</table>
-					<br>
-					<div style="display: grid; grid-template-columns: 30% 70%; text-align: center; align-items: center; margin: 0 auto; width: 600px;">
-					<table id="SPICOut" style="height: 30%; margin: auto 0; justify-self: start;">
-						<tr>
-							<td>z bar =</td>
-							<td style="width: 80px;"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<td>I<sub>yy</sub> =</td>
-							<td></td>
-							<td>in<sup>4</sup></td>
-						</tr>
-						<tr>
-							<td>A =</td>
-							<td></td>
-							<td>in<sup>2</sup></td>
-						</tr>
-					</table>
-					<img src="images/frame/WDTDia1.png" alt="Chord diagram" style="width: 450px; margin-right: 0; border: 1px solid black;">
-					</div>
-					</div>
-					<br>
-					<div style="border: 1px solid black">
-					<h3>Section Properties - Stringer Clip</h3>
-					<table id="SPSCTab" class="outTable">
-						<tr>
-							<th>Item</th>
-							<th>b (in)</th>
-							<th>t (in)</th>
-							<th>A (in<sup>2</sup>)</th>
-							<th>z (in)</th>
-							<th>Az (in<sup>3</sup>)</th>
-							<th>Az<sup>2</sup> (in<sup>4</sup>)</th>
-							<th>I<sub>yo</sub> (in<sup>4</sup>)</th>
-						</tr>
-						<tr>
-							<th>1</th>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th>2</th>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th>3</th>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td><input type="number" onchange="frameWDTCalcs()"></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<th style="border: none;">Totals:</th>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-							<td style="border: none;"></td>
-						</tr>
-					</table>
-					<br>
-					<div style="display: grid; grid-template-columns: 50% 50%; text-align: center; align-items: center; margin: 0 auto; width: 400px;">
-					<table id="SPSCOut" style="height: 30%; margin: auto 0; justify-self: start;">
-						<tr>
-							<td>z bar =</td>
-							<td style="width: 80px;"></td>
-							<td>in</td>
-						</tr>
-						<tr>
-							<td>I<sub>yy</sub> =</td>
-							<td></td>
-							<td>in<sup>4</sup></td>
-						</tr>
-						<tr>
-							<td>A =</td>
-							<td></td>
-							<td>in<sup>2</sup></td>
-						</tr>
-					</table>
-					<img src="images/frame/WDTDia2.png" alt="Stringer clip diagram" style="width: 225px; margin-right: 0; border: 1px solid black;">
-					</div>
-					</div>
-					<br>
-					<div style="display: grid; grid-template-columns: 1fr 4fr; max-width: 100%">
-					<table style="border-collapse: collapse; margin: auto auto;">
-					<tr style="height: 20px;">
-						<td style="text-align: right;">min(dc, b) =</td>
-						<td id="mindcbOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;">69420</td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">max(dc, b) =</td>
-						<td id="maxdcbOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Bottom =</td>
-						<td id="bottomOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					</table>
-					<div>
-						<img src="images/frame/WDTDia3.png" alt="Web diagonal tension diagram">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'KssIn').focus()">
-						<td style="text-align: right;">Kss =</td>
-						<td id="KssOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Equation =</td>
-						<td id="equationOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					</table>
-					<div style="width: 100%;">
-						<img src="images/frame/WDTDia4.png" alt="Web diagonal tension diagram" style="width: 500px;">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;">
-						<td style="text-align: right;">tu / t =</td>
-						<td id="tutOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">tf / t =</td>
-						<td id="tftOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'RhIn').focus()">
-						<td style="text-align: right;">Rh =</td>
-						<td id="RhOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
-					</tr>
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'RdIn').focus()">
-						<td style="text-align: right;">Rd =</td>
-						<td id="RdOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
-					</tr>
-					<tr><td><br></td></tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Kss =</td>
-						<td id="Kss2Out" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">E =</td>
-						<td id="EOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">v =</td>
-						<td id="vOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">b =</td>
-						<td id="bOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">dc =</td>
-						<td id="dcOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">t =</td>
-						<td id="tOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Rh =</td>
-						<td id="Rh2Out" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Rd =</td>
-						<td id="Rd2Out" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Fscr/n =</td>
-						<td id="FscrnOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					</table>
-					<div>
-						<img src="images/frame/WDTDia5.png" alt="Web diagonal tension diagram" style="width: 500px;">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'FscrIn').focus()">
-						<td style="text-align: right;">Fscr =</td>
-						<td id="FscrOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
-					</tr>
-					</table>
-					<div>
-						<img src="images/frame/WDTDia6.png" alt="Web diagonal tension diagram" style="width: 500px;">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;">
-						<td style="text-align: right;">fs/Fscr =</td>
-						<td id="fsFscrOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;" onclick="if (!GEBID('frameSTABox').checked) GEBID('frameSTABox').click(); GEBID('frameSTAForm', 'FcyIn').focus()">
-						<td style="text-align: right;">fs =</td>
-						<td id="fsOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
-					</tr>
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'kIn').focus()">
-						<td style="text-align: right;">k =</td>
-						<td id="kOut" style="border: 1px solid gray; background-color: #ccffcc;"></td>
-					</tr>
-					</table>
-					<div>
-						<img src="images/frame/WDTDia7.png" alt="Web diagonal tension diagram" style="width: 500px;">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Aue/bt =</td>
-						<td id="AuebtOut" style="border: 1px solid gray; background-color: #ffcc99; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">2Af/Ht =</td>
-						<td id="_2AfHtOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					</table>
-					<div>
-						<img src="images/frame/WDTDia8.png" alt="Web diagonal tension diagram" style="width: 500px;">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'alphaIn').focus()">
-						<td style="text-align: right;">alpha =</td>
-						<td id="alphaOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">tan(alpha) =</td>
-						<td id="tanalphaOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">wb =</td>
-						<td id="wbOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					</table>
-					<div>
-						<img src="images/frame/WDTDia9.png" alt="Web diagonal tension diagram" style="width: 500px;">
-					</div>
-					<table style="margin: auto auto;">
-					<tr style="height: 20px;" onclick="GEBID('frameDiagTensForm', 'FsallIn').focus()">
-						<td style="text-align: right;">Fsall =</td>
-						<td id="FsallOut" style="border: 1px solid gray; background-color: #ccffcc; width: 80px;"></td>
-					</tr>
-					<tr style="height: 20px;">
-						<td style="text-align: right;">Fs_All =</td>
-						<td id="Fs_AllOut" style="border: 1px solid gray; background-color: #ffcc99;"></td>
-					</tr>
-					</table>
-					</div>
-				</div>
-			</div>
-			</div>
 		</div>
 		<div class="analForm" id="frameCapCompForm">
 			<header><h2>Cap Compression</h2></header>

@@ -3892,7 +3892,7 @@ function frameWDTCalcs() {
 	for (let i=8; i<15; i++) inProps[i+2] = +GEBID("frameDiagTensForm", "inPropTab").children[0].children[i].children[1].children[0].value;
 	let [E, Ec, Ftu, Fcy, Fsu, b, h, tstiff, tweb, tch, v, Pshear, Ich, Ach, estiff, Astiff, Istiff] = inProps;
 	// MUCH cleaner, this file shows my JS competency progression lol
-	E += 1000000;
+	E *= 1000000;
 	Ec *= 1000000;
 	Ftu *= 1000;
 	Fcy *= 1000;
