@@ -327,22 +327,22 @@
 				<tr>
 					<th>F<sub>tu</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>ty</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>su</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>E</th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>Msi</td>
 				</tr>
 			</table>
 			<h4>Packer</h4>
@@ -355,22 +355,22 @@
 				<tr>
 					<th>F<sub>tu</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>ty</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>F<sub>su</sub></th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>ksi</td>
 				</tr>
 				<tr>
 					<th>E</th>
 					<td><input type="number" placeholder="Enter data"></td>
-					<td>psi</td>
+					<td>Msi</td>
 				</tr>
 			</table>
 			<h4>Bolt</h4>
@@ -522,138 +522,6 @@
 				});
 			</script>
 		</div>
-		<div class="analForm" id="cripForm">
-			<header><h2>Crippling</h2></header>
-			<div class="container">
-				<div id="crippling" class="formIO">
-					<h2>Input/Output</h2>
-					<span>Fcy =</span>
-					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)">
-					<span>Ec =</span>
-					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(false)">
-					<br><br>
-					<table>
-						<thead>
-							<tr>
-							<th>Flange</th>
-							<th>b</th>
-							<th>t</th>
-							<th>Edges</th>
-							<th>Area</th>
-							<th>Fcc</th>
-							<th>Fcc*A</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td><input id="b1In" placeholder="width" onchange="cripCalcs(false)"></td>
-								<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(false)"></td>
-								<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(false)"></td>
-								<td id="Area1">Enter</td>
-								<td id="Fcc1">Enter</td>
-								<td id="FccA1">Enter</td>
-							</tr>
-								<tr>
-								<td>2</td>
-								<td><input id="b2In" placeholder="width" onchange="cripCalcs(false)"></td>
-								<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(false)"></td>
-								<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(false)"></td>
-								<td id="Area2">Enter</td>
-								<td id="Fcc2">Enter</td>
-								<td id="FccA2">Enter</td>
-							</tr>
-						</tbody>
-					</table>
-					<br>
-					<h2>Combined Allowable</h2>
-					<table class="outTable">
-						<tr>
-							<td>Fcc =</td>
-							<td id="FccOut">Enter Data</td>
-						</tr>
-						<tr>
-							<td>Pcc =</td>
-							<td id="PccOut">Enter Data</td>
-						</tr>
-					</table>
-					<br>
-				</div>
-				<img src="images/cripCurve.png" alt="Crippling Curve" style="margin: 0 auto;">
-			</div>
-		</div>
-		<div class="analForm" id="bCripForm">
-			<header><h2>Bending Crippling</h2></header>
-			<div class="container">
-				<div id="bendingCrippling" class="formIO">
-					<h2>Input/Output</h2>
-					<span>Fcy =</span>
-					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)">
-					<span>Ec =</span>
-					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(true)">
-					<br><br>
-					<table class="inputTable">
-						<thead>
-							<tr>
-							<th>Flange</th>
-							<th>Type</th>
-							<th>b</th>
-							<th>t</th>
-							<th>Edges</th>
-							<th>Ybar</th>
-							<th>Fcc</th>
-							<th>Yi</th>
-							<th>Mo</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-							<td>1</td>
-							<td>
-								<select id="TypeIn1" name="TypeIn1" onchange="cripCalcs(true)">
-									<option value="Chord">Chord</option>
-									<option value="Web">Web</option>
-								</select>
-							</td>
-							<td><input id="b1In" placeholder="width" onchange="cripCalcs(true)"></td>
-							<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(true)"></td>
-							<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(true)"></td>
-							<td><input id="Ybar1In" placeholder="centroid" onchange="cripCalcs(true)"></td>
-							<td id="Fcc1">Enter</td>
-							<td id="Yi1">Enter</td>
-							<td id="Mo1">Enter</td>
-							</tr>
-							<tr>
-							<td>2</td>
-							<td>
-								<select id="TypeIn2" name="TypeIn2" onchange="cripCalcs(true)">
-									<option value="Chord">Chord</option>
-									<option value="Web">Web</option>
-								</select>
-							</td>
-							<td><input id="b2In" placeholder="width" onchange="cripCalcs(true)"></td>
-							<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(true)"></td>
-							<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(true)"></td>
-							<td><input id="Ybar2In" placeholder="centroid" onchange="cripCalcs(true)"></td>
-							<td id="Fcc2">Enter</td>
-							<td id="Yi2">Enter</td>
-							<td id="Mo2">Enter</td>
-							</tr>
-						</tbody>
-					</table>
-					<br>
-					<h2>Maximum Allowable</h2>
-					<table class="outTable">
-						<tr>
-						<td>Max Allowable Moment =</td>
-						<td id="MAMOut">Enter Data</td>
-						</tr>
-					</table>
-					<br>
-				</div>
-				<img src="images/bCripDia.png" alt="Bending Crippling Diagram" style="width:50%;">
-			</div>
-		</div>
 		<div class="analForm" id="frameSTAForm">
 			<header><h2>Frame STA Loads</h2></header>
 			<div class="formContainer">
@@ -663,7 +531,7 @@
 						<tr title="Frame Fcy">
 							<td style="text-align: right;">F<sub>cy</sub></td>
 							<td><input id="FcyIn" type="number" placeholder="Enter fcy" onchange="frameSTACalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="Frame Web Gauge">
 							<td style="text-align: right;">t<sub>frame, web</sub></td>
@@ -1287,6 +1155,807 @@
 				</div>
 			</div>
 		</div>
+		<div class="analForm" id="NACA_TNForm">
+			<template id="TNDataRowTemplate">
+				<tr>
+					<td title="Stringer #"></td>
+					<td title="Actual fuselage radius"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Skin pocket thickness"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer only area"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer center of gravity"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Stringer only inertia"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Bay width"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Max bay size on either side of stringer"></td>
+					<td title="Frame area INCLUDING sheartie"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Frame factor"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
+					<td title="Factored Afr"></td>
+					<td title="NACA Load"></td>
+				</tr>
+			</template>
+			<style>
+				#NACA_TNForm input {
+					width: 60px;
+				}
+				#NACA_TNForm .outTab {
+					align-self: center;
+					padding: 10px;
+				}
+				#NACA_TNForm .outTab th {
+					text-align: right;
+				}
+				#NACA_TNForm .outTab td:nth-child(2) {
+					text-align: center;
+					background-color: #ccffcc;
+					width: 100px;
+				}
+				#NACA_TNForm .outTab td:nth-child(3) {
+					text-align: left;
+				}
+			</style>
+			<header><h2>NACA Technical Note</h2></header>
+			<div id="formContainer" style="display: flex; flex-direction: column;">
+			<div class="formIO" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<div>
+			<h3>Data</h3>
+			<table class="inTab" id="LPETab" style="margin: 0 auto">
+				<tr>
+					<th>&mu;</th>
+					<th>L</th>
+					<th>P</th>
+					<th>E (Msi)</th>
+					<th>Intercostal ending</th>
+				</tr>
+				<tr>
+					<td title="Poisson's ratio"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Frame pitch"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Pressure applied"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Young's modulus"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
+					<td title="Determines amount of support at ends of stringer. (100% for stringers or intercostals of constant section, 0% for Intercostals ending)">
+						<select style="width: 100%;">
+						<option value="0">True</option>
+						<option value="1">False</option>
+					</select></td>
+				</tr>
+			</table>
+			<br>
+			<table class="inTab" id="dataTab">
+				<tr>
+					<th>Stringer</th>
+					<th>Radius (in)</th>
+					<th>t<sub>skin</sub> (in)</th>
+					<th>A<sub>str</sub> (in<sup>2</sup>)</th>
+					<th>Y<sub>str</sub> (in)</th>
+					<th>I<sub>str</sub> (in<sup>4</sup>)</th>
+					<th>Bay width (in)</th>
+					<th>b<sub>ave</sub> (in)</th>
+					<th>A<sub>frame</sub> (in<sup>2</sup>)</th>
+					<th>Frame Factor</th>
+					<th>Factored Afr (in<sup>2</sup>)</th>
+					<th>NACA Load</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="TNAddStr(); TNCalcs();" style="margin-left: 0px;">Add Stringer</button>
+			<button onclick="TNRmStr(); if (SPNumPt>1) TNCalcs();" style="margin-left: 0px;">Remove Stringer</button>
+			<br>
+			</div>
+			</div>
+			<div style="text-align: center;">
+				<h3>Diagrams</h3>
+				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; max-width: 800px; margin: 0 auto;">
+					<img src="images/TN/TN1.png" style="width: 100%;">
+					<img src="images/TN/TN2.png" style="width: 100%;">
+					<div style="display: flex; flex-direction: column;">
+						<img src="images/TN/TN3.png" style="width: 100%;">
+						<img src="images/TN/TN4.png" style="width: 100%;">
+					</div>
+				</div>
+				<h3>Output</h3>
+				<p id="TNWarning" style="display: none;">Note that most properties are calculated with respect to the last stringer added</p>
+				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+				<table class="outTab" id="outTab1">
+					<tr title="# stringers assuming b pitch">
+						<th>s</th>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr title="">
+						<th>I<sub>seg</sub></th>
+						<td></td>
+						<td>in<sup>4</sup></td>
+					</tr>
+					<tr title="">
+						<th>YNA</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr title="Istr / Iseg">
+						<th>Ratio</th>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab2">
+					<tr>
+						<th>&alpha;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&rho;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&phi;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&beta;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&theta;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&psi;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>&upsilon;</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>% of 2 dp</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>V</th>
+						<td></td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab3">
+					<tr>
+						<th>y</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>u</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>v</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>w</th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>w</th>
+						<td></td>
+						<td>lbs/in</td>
+					</tr>
+					<tr>
+						<th>p</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>M<sub>max</sub></th>
+						<td></td>
+						<td>in&middot;lbs</td>
+					</tr>
+					<tr>
+						<th>M<sub>center</sub></th>
+						<td></td>
+						<td>in&middot;lbs</td>
+					</tr>
+				</table>
+				<table class="outTab" id="outTab4">
+					<tr>
+						<th>Hoop</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>PR/t</th>
+						<td></td>
+						<td>psi</td>
+					</tr>
+					<tr>
+						<th>%<sub>pure hoop</sub></th>
+						<td></td>
+					</tr>
+					<tr><td><br></td><td></td></tr>
+					<tr>
+						<th>u<sub>no frame</sub></th>
+						<td></td>
+						<td>in</td>
+					</tr>
+					<tr>
+						<th>%<sub>press</sub></th>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>V<sub>ST</sub></th>
+						<td></td>
+						<td>lbs</td>
+					</tr>
+				</table>
+				</div>
+			</div>
+			<script>
+				let TNNumStr = 0;
+				function TNAddStr() {
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
+					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
+					Tab.appendChild(tRow);
+					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
+				}
+				function TNRmStr() {
+					if (TNNumStr <= 1) return;
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
+					Tab.lastElementChild.remove();
+					TNNumStr--;
+					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
+				}
+				TNAddStr();
+			</script>
+			</div>
+		</div>
+		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
+			<header><h2>Ellipse Analysis (BETA)</h2></header>
+			<div id="ellContainer">
+			<div id="Inputs" class="formIO">
+				<h2>Inputs</h2>
+				<span>Fx</span>
+				<input type="text" id="Fx" placeholder="Enter Fx"><br>
+				<span>Fy</span>
+				<input type="text" id="Fy" placeholder="Enter Fy"><br>
+				<span>Fxy</span>
+				<input type="text" id="Fxy" placeholder="Enter Fxy"><br>
+				<span>Long r</span>
+				<input type="text" id="LONG_DIA" placeholder="Enter Long Radius"><br>
+				<span>Short r</span>
+				<input type="text" id="SHORT_DIA" placeholder="Enter Short Radius"><br><br>
+				<button onclick="ellCalcs()">Run</button>
+			</div>
+			<div id="Outputs">
+				<h2>Outputs</h2>
+				<canvas id="myChart" width="80%" height="40%"></canvas>
+				<table>
+		  <tr id="tableHeader">
+			<th>η (Deg)</th>
+			<th>η (Rad)</th>
+			<th>Fε</th>
+			<th>Fη</th>
+			<th>Fεη</th>
+	      </tr>
+		  <tr id="eta0">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta15">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta30">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta45">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta60">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta75">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta90">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta105">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta120">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta135">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta150">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta165">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta180">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta195">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta210">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta225">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta240">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta255">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta270">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta285">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta300">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta315">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta330">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta345">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		  <tr id="eta360">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+	      </tr>
+		</table>
+			</div>
+			</div>
+		</div>
+		<div class="analForm" id="OFBForm">
+			<header><h2>Outstanding Flange Buckling</h2></header>
+<div class="container">
+	<div id="IO" class="formIO">
+	<h2>Outstanding Flange Buckling</h2>
+	<h3>Input</h3>
+	<table style="background-color: #ccffff;">
+	  <tr style="height: 20px;">
+	    <th style="width: 20px;"><input id="ASSIn" type="checkbox" value="ASS" onchange="OFBcalcs()"></th>
+		<td style="width: 400px">Assume Simply Supported (Rotational stiffness u_c is set to 0 and web rigidity is neglected)</td>
+	  </tr>
+	</table>
+	<table>
+	<colgroup>
+	<col span="1" style="border-right: 1px solid black">
+    </colgroup>
+	<colgroup>
+	<col span="1" style="width: 110px">
+    </colgroup>
+		<thead>
+			<tr>
+			<th>Section</th>
+			<th>Material</th>
+			<th>Ec [msi]</th>
+			<th>Fcy [ksi]</th>
+			<th>&mu;</th>
+			<th>nc</th>
+			<th>t [in]</th>
+			<th>b [in]</th>
+			<th>F<sub>0</sub> [ksi]</th>
+			<th>F<sub>f</sub> [ksi]</th>
+			<th>t_web [in]</th>
+			<th>H_fr [in]</th>
+			<th>Lst/Pitch Ratio</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			<td>1</td>
+			<td><select id="materialIn" onchange="OFBcalcs()">
+				<option value="7475_T7351">7475-T7351</option>
+			</select></td>
+			<td><input type="number" id="EcIn" placeholder="Enter Ec" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="FcyIn" placeholder="Enter Fcy" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="muIn" placeholder="Enter &mu;" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="ncIn" placeholder="Enter nc" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="tIn" placeholder="Enter t" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="bIn" placeholder="Enter b" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="F0In" placeholder="Enter F0" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="FfIn" placeholder="Enter Ff" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="twebIn" placeholder="Enter tweb" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="HfrIn" placeholder="Enter H fr" onchange="OFBcalcs()"></td>
+			<td><input type="number" id="LPRIn" placeholder="Enter LPR" onchange="OFBcalcs()"></td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<h3>Output</h3>
+<table class="outTable">
+  <colgroup>
+	<col span="1" style="border-right: 1px solid black">
+  </colgroup>
+  <colgroup><col span="6"></colgroup>
+  <colgroup>
+	<col span="2" style="border-left: 1px solid black; background-color: #99ccff;">
+  </colgroup>
+  <tr>
+	<th>Section</th>
+	<th>F<sub>0</sub>/F<sub>f</sub></th>
+	<th>K</th>
+	<th>Et [Msi]</th>
+	<th>Es [Msi]</th>
+	<th>&eta;</th>
+	<th>&mu;_c [lb/in&dot;rad]</th>
+	<th>F<sub>ofb</sub> [ksi]</th>
+	<th>MS</th>
+  </tr>
+  <tr>
+    <td>1</td>
+	<td id="FoFfOut">Enter Data</td>
+	<td id="KOut">Enter Data</td>
+	<td id="EtOut">Enter Data</td>
+	<td id="EsOut">Enter Data</td>
+	<td id="etaOut">Enter Data</td>
+	<td id="mu_cOut">Enter Data</td>
+	<td id="FofbOut">Enter Data</td>
+	<td id="MSOut">Enter Data</td>
+  </tr>
+</table>
+<br>
+	<!-- 	<button onclick="downloadTexFile()">Download TeX</button>
+		<button id="pdfButton" onclick="downloadPDF()">Download PDF</button>
+ -->	</div>
+	<img src="images/OFB_diagram.png" alt="OFB diagram">
+</div>
+		</div>
+		<div class="analForm" id="FPBForm">
+			<header><h2>Flat Plate Buckling</h2></header>
+			<div class="formContainer" id="FPBContainer">
+				<div class="formIO" style="width: 300px;">
+					<h2>Input</h2>
+					<table style="margin-left: 5px;">
+						<!-- <colgroup>
+							<col span="1" style="text-align: right;">
+							<col span="1" style="">
+							<col span="1" style="text-align: left">
+						</colgroup> -->
+						<tr title="Which edges are clamped/simply supported">
+							<td style="text-align: right;">Edge Type</td>
+							<td><select id="ETIn" name="ETIn" onchange="FPBCalcs()">
+								<option value="AECC">All Edges CC</option>
+								<option value="LECC">Long Edges CC</option>
+								<option value="SECC">Short Edges CC</option>
+								<option value="1LECC">One Long Edge CC</option>
+								<option value="1SECC">One Short Edge CC</option>
+								<option value="AESS">All Edges SS</option>
+							</select></td>
+							<td style="text-align: left" title=""><div class="dropdown">
+								<button class="dropbtn">?</button>
+								<div class="dropdown-content">
+									<img src="images/FPB/AEC.png" alt="All edges clamped">
+									<img src="images/FPB/LEC.png" alt="Long edges clamped">
+									<img src="images/FPB/SEC.png" alt="Short edges clamped">
+									<img src="images/FPB/OLEC.png" alt="One long edge clamped">
+									<img src="images/FPB/OSEC.png" alt="One short edge clamped">
+									<img src="images/FPB/AESS.png" alt="All edges simply supportd">
+								</div>
+							</div></td>
+						</tr>
+						<tr title="Applied shear stress">
+							<td style="text-align: right;">f<sub>S</sub></td>
+							<td><input id="fsIn" type="number" placeholder="Enter fs" onchange="FPBCalcs()"></td>
+							<td style="text-align: left">ksi</td>
+						</tr>
+						<tr title="Long edge">
+							<td style="text-align: right;">a</td>
+							<td><input id="aIn" type="number" placeholder="Enter a" onchange="FPBCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Short edge">
+							<td style="text-align: right;">b</td>
+							<td><input id="bIn" type="number" placeholder="Enter b" onchange="FPBCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Plate thickness">
+							<td style="text-align: right;">t</td>
+							<td><input id="tIn" type="number" placeholder="Enter t" onchange="FPBCalcs()"></td>
+							<td style="text-align: left">in</td>
+						</tr>
+						<tr title="Young's modulus">
+							<td style="text-align: right;">E<sub>C</sub></td>
+							<td><input id="EcIn" type="number" placeholder="Ec" onchange="FPBCalcs()"></td>
+							<td style="text-align: left">Msi</td>
+						</tr>
+						<tr title="Poisson's ratio">
+							<td style="text-align: right;">&nu;</td>
+							<td><input id="nuIn" type="number" placeholder="Enter &nu;" onchange="FPBCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="Compression stress component">
+							<td style="text-align: right;">f<sub>1</sub></td>
+							<td><input id="f1In" type="number" placeholder="Enter f1" onchange="FPBCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+						<tr title="Compression or tension stress component">
+							<td style="text-align: right;">f<sub>2</sub></td>
+							<td><input id="f2In" type="number" placeholder="Enter f2" onchange="FPBCalcs()"></td>
+							<td style="text-align: left"></td>
+						</tr>
+					</table>
+					<br><p>Mouse over a value or field for more information</p>
+					<h4>Diagrams</h4>
+					<img src="images/FPB/FPB_diagram.png" alt="FPB Diagram" style="margin: 20px auto;">
+					<img src="images/FPB/FPBDia1.png" alt="FPB Diagram 1" style="margin: 20px auto; width: 90%;">
+				</div>
+				<div style="flex-grow: 1; text-align: center;">
+					<h2>Output</h2>
+					<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; padding: 20px; margin-top: -40px;">
+						<div>
+							<h3>Shear Buckling Alone</h3>
+							<table style="margin: 0 auto;">
+								<tr title="Plate aspect ratio">
+									<td style="text-align: right;">a/b =</td>
+									<td id="abOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Shear buckling coefficient">
+									<td style="text-align: right;">K<sub>S</sub> =</td>
+									<td id="KsOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Shear buckling strength">
+									<td style="text-align: right;">F<sub>SCR</sub> =</td>
+									<td id="FscrOut">Enter Data</td>
+									<td style="text-align: left">ksi</td>
+								</tr>
+								<tr title="Margin of safety">
+									<td style="text-align: right;">MS =</td>
+									<td id="MS_SBAOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+							</table>
+						</div>
+						<div>
+							<h3>Compression/Bending Buckling Alone</h3>
+							<table style="margin: 0 auto;">
+								<tr title="Stress ratio">
+									<td style="text-align: right;">f<sub>2</sub>/f<sub>1</sub> =</td>
+									<td id="f2f1Out">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Compression buckling coefficient">
+									<td style="text-align: right;">K<sub>C</sub> =</td>
+									<td id="KcOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Compression buckling strength">
+									<td style="text-align: right;">F<sub>CR</sub> =</td>
+									<td id="FcrOut">Enter Data</td>
+									<td style="text-align: left">ksi</td>
+								</tr>
+								<tr title="Margin of safety">
+									<td style="text-align: right;">MS =</td>
+									<td id="MS_CBBAOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+							</table>
+						</div>
+						<div>
+							<h3>Margin due to Combined Loading</h3>
+							<table style="margin: 0 auto;">
+								<tr title="Reserve factor (shear)">
+									<td style="text-align: right;">f<sub>S</sub>/F<sub>SCR</sub> =</td>
+									<td id="fsFscrOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Reserve factor (compression)">
+									<td style="text-align: right;">f<sub>1</sub>/F<sub>CR</sub> =</td>
+									<td id="f1FcrOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Stress ratio">
+									<td style="text-align: right;">f<sub>2</sub>/f<sub>1</sub> =</td>
+									<td id="f2f1_MCLOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+								<tr title="Margin of safety">
+									<td style="text-align: right;">MS =</td>
+									<td id="MS_MCLOut">Enter Data</td>
+									<td style="text-align: left"></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<h2>Data</h2>
+					<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; padding: 20px; margin-top: -40px;">
+						<div style="padding: 10px;">
+							<h5>Buckling Stress Coefficients for Flat Plates Loaded in Uniform Shear</h5>
+							<canvas id="FPBChart1" style="height: 500px"></canvas>
+						</div>
+						<div style="padding: 10px;">
+							<h5>Buckling Stress Coefficients for Flat Plates Under Bending, Compression or Tension</h5>
+							<canvas id="FPBChart2"></canvas>
+						</div>
+						<div style="padding: 10px;">
+							<h5>Initial Buckling of Flat Plates Under Compression, Bending and Shear</h5>
+							<canvas id="FPBChart3"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="analForm" id="IRBForm">
+			<style>
+				#IRBForm input {
+					width: 75px;
+				}
+			</style>
+			<template id="IRBInRowTemplate">
+				<tr>
+					<td></td>
+					<td><input type="number" placeholder="Enter Material" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Ec" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Fcy" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter nc" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter Pitch" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter c" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><input type="number" placeholder="Enter tsheet" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</template>
+			<header><h2>Inter Rivet Buckling</h2></header>
+			<div class="formIO">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<table class="inTab" id="IOTab">
+				<colgroup>
+					<col span="1" style="border-right: 1px solid black">
+				</colgroup>
+				<tr style="border-bottom: 1px solid black;">
+					<th>Section</th>
+					<th>Material</th>
+					<th>E<sub>c</sub> (Msi)</th>
+					<th>F<sub>cy</sub> (ksi)</th>
+					<th>nc</th>
+					<th>Pitch (in)</th>
+					<th>c</th>
+					<th>t<sub>sheet</sub> (in)</th>
+					<th>E<sub>t</sub> (Msi)</th>
+					<th>F<sub>ir</sub> (ksi)</th>
+				</tr>
+			</table>
+			<br>
+			<button onclick="IRBAddSect()" style="margin-left: 0px;">Add Section</button>
+			<button onclick="IRBRmSect()" style="margin-left: 0px;">Remove Section</button>
+			</div>
+			<script>
+				let IRBNumSect = 0;
+				function IRBAddSect() {
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
+					Tab.appendChild(tRow);
+				}
+				function IRBRmSect() {
+					if (IRBNumSect <= 1) return;
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					Tab.lastElementChild.remove();
+					IRBNumSect--;
+				}
+				IRBAddSect();
+			</script>
+		</div>
 		<div class="analForm" id="frameDiagTensForm">
 			<header><h2>Web Diagonal Tension</h2></header>
 			<div class="formContainer">
@@ -1296,27 +1965,27 @@
 						<tr title="">
 							<td style="text-align: right;">E</td>
 							<td><input id="EIn" type="number" placeholder="Enter E" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">Msi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">E<sub>c</sub></td>
 							<td><input id="EcIn" type="number" placeholder="Enter Ec" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">Msi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">F<sub>tu</sub></td>
 							<td><input id="FtuIn" type="number" placeholder="Enter Ftu" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">F<sub>cy</sub></td>
 							<td><input id="FcyIn" type="number" placeholder="Enter Fcy" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">F<sub>su</sub></td>
 							<td><input id="FsuIn" type="number" placeholder="Enter Fsu" onchange="frameWDTCalcs()"></td>
-							<td style="text-align: left">psi</td>
+							<td style="text-align: left">ksi</td>
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">b</td>
@@ -1741,484 +2410,354 @@
 			</div>
 			</div>
 		</div>
-		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
-			<header><h2>Ellipse Analysis (BETA)</h2></header>
-			<div id="ellContainer">
-			<div id="Inputs" class="formIO">
-				<h2>Inputs</h2>
-				<span>Fx</span>
-				<input type="text" id="Fx" placeholder="Enter Fx"><br>
-				<span>Fy</span>
-				<input type="text" id="Fy" placeholder="Enter Fy"><br>
-				<span>Fxy</span>
-				<input type="text" id="Fxy" placeholder="Enter Fxy"><br>
-				<span>Long r</span>
-				<input type="text" id="LONG_DIA" placeholder="Enter Long Radius"><br>
-				<span>Short r</span>
-				<input type="text" id="SHORT_DIA" placeholder="Enter Short Radius"><br><br>
-				<button onclick="ellCalcs()">Run</button>
-			</div>
-			<div id="Outputs">
-				<h2>Outputs</h2>
-				<canvas id="myChart" width="80%" height="40%"></canvas>
-				<table>
-		  <tr id="tableHeader">
-			<th>η (Deg)</th>
-			<th>η (Rad)</th>
-			<th>Fε</th>
-			<th>Fη</th>
-			<th>Fεη</th>
-	      </tr>
-		  <tr id="eta0">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta15">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta30">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta45">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta60">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta75">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta90">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta105">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta120">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta135">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta150">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta165">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta180">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta195">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta210">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta225">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta240">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta255">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta270">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta285">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta300">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta315">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta330">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta345">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		  <tr id="eta360">
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-	      </tr>
-		</table>
-			</div>
-			</div>
-		</div>
-		<div class="analForm" id="OFBForm">
-			<header><h2>Outstanding Flange Buckling</h2></header>
-<div class="container">
-	<div id="IO" class="formIO">
-	<h2>Outstanding Flange Buckling</h2>
-	<h3>Input</h3>
-	<table style="background-color: #ccffff;">
-	  <tr style="height: 20px;">
-	    <th style="width: 20px;"><input id="ASSIn" type="checkbox" value="ASS" onchange="OFBcalcs()"></th>
-		<td style="width: 400px">Assume Simply Supported (Rotational stiffness u_c is set to 0 and web rigidity is neglected)</td>
-	  </tr>
-	</table>
-	<table>
-	<colgroup>
-	<col span="1" style="border-right: 1px solid black">
-    </colgroup>
-	<colgroup>
-	<col span="1" style="width: 110px">
-    </colgroup>
-		<thead>
-			<tr>
-			<th>Section</th>
-			<th>Material</th>
-			<th>Ec [msi]</th>
-			<th>Fcy [ksi]</th>
-			<th>μ</th>
-			<th>nc</th>
-			<th>t [in]</th>
-			<th>b [in]</th>
-			<th>F<sub>0</sub> [psi]</th>
-			<th>F<sub>f</sub> [psi]</th>
-			<th>t_web [in]</th>
-			<th>H_fr [in]</th>
-			<th>Lst/Pitch Ratio</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-			<td>1</td>
-			<td><select id="materialIn" onchange="OFBcalcs()">
-				<option value="7475_T7351">7475-T7351</option>
-			</select></td>
-			<td><input type="number" id="EcIn" placeholder="Enter Ec" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="FcyIn" placeholder="Enter Fcy" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="muIn" placeholder="Enter μ" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="ncIn" placeholder="Enter nc" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="tIn" placeholder="Enter t" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="bIn" placeholder="Enter b" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="F0In" placeholder="Enter F0" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="FfIn" placeholder="Enter Ff" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="twebIn" placeholder="Enter tweb" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="HfrIn" placeholder="Enter H fr" onchange="OFBcalcs()"></td>
-			<td><input type="number" id="LPRIn" placeholder="Enter LPR" onchange="OFBcalcs()"></td>
-			</tr>
-		</tbody>
-	</table>
-	<br>
-	<h3>Output</h3>
-<table class="outTable">
-  <colgroup>
-	<col span="1" style="border-right: 1px solid black">
-  </colgroup>
-  <colgroup><col span="6"></colgroup>
-  <colgroup>
-	<col span="2" style="border-left: 1px solid black; background-color: #99ccff;">
-  </colgroup>
-  <tr>
-	<th>Section</th>
-	<th>F<sub>0</sub>/F<sub>f</sub></th>
-	<th>K</th>
-	<th>Et [psi]</th>
-	<th>Es [psi]</th>
-	<th>η</th>
-	<th>μ_c [lb/in⋅rad]</th>
-	<th>F<sub>ofb</sub> [psi]</th>
-	<th>MS</th>
-  </tr>
-  <tr>
-    <td>1</td>
-	<td id="FoFfOut">Enter Data</td>
-	<td id="KOut">Enter Data</td>
-	<td id="EtOut">Enter Data</td>
-	<td id="EsOut">Enter Data</td>
-	<td id="etaOut">Enter Data</td>
-	<td id="mu_cOut">Enter Data</td>
-	<td id="FofbOut">Enter Data</td>
-	<td id="MSOut">Enter Data</td>
-  </tr>
-</table>
-<br>
-	<!-- 	<button onclick="downloadTexFile()">Download TeX</button>
-		<button id="pdfButton" onclick="downloadPDF()">Download PDF</button>
- -->	</div>
-	<img src="images/OFB_diagram.png" alt="OFB diagram">
-</div>
-		</div>
-		<div class="analForm" id="FPBForm">
-			<header><h2>Flat Plate Buckling</h2></header>
-			<div class="formContainer" id="FPBContainer">
-				<div class="formIO" style="width: 300px;">
-					<h2>Input</h2>
-					<table style="margin-left: 5px;">
-						<!-- <colgroup>
-							<col span="1" style="text-align: right;">
-							<col span="1" style="">
-							<col span="1" style="text-align: left">
-						</colgroup> -->
-						<tr title="Which edges are clamped/simply supported">
-							<td style="text-align: right;">Edge Type</td>
-							<td><select id="ETIn" name="ETIn" onchange="FPBCalcs()">
-								<option value="AECC">All Edges CC</option>
-								<option value="LECC">Long Edges CC</option>
-								<option value="SECC">Short Edges CC</option>
-								<option value="1LECC">One Long Edge CC</option>
-								<option value="1SECC">One Short Edge CC</option>
-								<option value="AESS">All Edges SS</option>
-							</select></td>
-							<td style="text-align: left" title=""><div class="dropdown">
-								<button class="dropbtn">?</button>
-								<div class="dropdown-content">
-									<img src="images/FPB/AEC.png" alt="All edges clamped">
-									<img src="images/FPB/LEC.png" alt="Long edges clamped">
-									<img src="images/FPB/SEC.png" alt="Short edges clamped">
-									<img src="images/FPB/OLEC.png" alt="One long edge clamped">
-									<img src="images/FPB/OSEC.png" alt="One short edge clamped">
-									<img src="images/FPB/AESS.png" alt="All edges simply supportd">
-								</div>
-							</div></td>
+		<div class="analForm" id="cripForm">
+			<header><h2>Crippling</h2></header>
+			<div class="container">
+				<div id="crippling" class="formIO">
+					<h2>Input/Output</h2>
+					<span>Fcy =</span>
+					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)" title="(ksi)">
+					<span>Ec =</span>
+					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(false)" title="(Msi)">
+					<br><br>
+					<table>
+						<thead>
+							<tr>
+							<th>Flange</th>
+							<th>b</th>
+							<th>t</th>
+							<th>Edges</th>
+							<th>Area</th>
+							<th>Fcc</th>
+							<th>Fcc*A</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td><input id="b1In" placeholder="width" onchange="cripCalcs(false)"></td>
+								<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(false)"></td>
+								<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(false)"></td>
+								<td id="Area1">Enter</td>
+								<td id="Fcc1">Enter</td>
+								<td id="FccA1">Enter</td>
+							</tr>
+								<tr>
+								<td>2</td>
+								<td><input id="b2In" placeholder="width" onchange="cripCalcs(false)"></td>
+								<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(false)"></td>
+								<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(false)"></td>
+								<td id="Area2">Enter</td>
+								<td id="Fcc2">Enter</td>
+								<td id="FccA2">Enter</td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2>Combined Allowable</h2>
+					<table class="outTable">
+						<tr>
+							<td>Fcc =</td>
+							<td id="FccOut">Enter Data</td>
 						</tr>
-						<tr title="Applied shear stress">
-							<td style="text-align: right;">f<sub>S</sub></td>
-							<td><input id="fsIn" type="number" placeholder="Enter fs" onchange="FPBCalcs()"></td>
-							<td style="text-align: left">ksi</td>
-						</tr>
-						<tr title="Long edge">
-							<td style="text-align: right;">a</td>
-							<td><input id="aIn" type="number" placeholder="Enter a" onchange="FPBCalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Short edge">
-							<td style="text-align: right;">b</td>
-							<td><input id="bIn" type="number" placeholder="Enter b" onchange="FPBCalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Plate thickness">
-							<td style="text-align: right;">t</td>
-							<td><input id="tIn" type="number" placeholder="Enter t" onchange="FPBCalcs()"></td>
-							<td style="text-align: left">in</td>
-						</tr>
-						<tr title="Young's modulus">
-							<td style="text-align: right;">E<sub>C</sub></td>
-							<td><input id="EcIn" type="number" placeholder="Ec" onchange="FPBCalcs()"></td>
-							<td style="text-align: left">ksi</td>
-						</tr>
-						<tr title="Poisson's ratio">
-							<td style="text-align: right;">ν</td>
-							<td><input id="nuIn" type="number" placeholder="Enter ν" onchange="FPBCalcs()"></td>
-							<td style="text-align: left"></td>
-						</tr>
-						<tr title="Compression stress component">
-							<td style="text-align: right;">f<sub>1</sub></td>
-							<td><input id="f1In" type="number" placeholder="Enter f1" onchange="FPBCalcs()"></td>
-							<td style="text-align: left"></td>
-						</tr>
-						<tr title="Compression or tension stress component">
-							<td style="text-align: right;">f<sub>2</sub></td>
-							<td><input id="f2In" type="number" placeholder="Enter f2" onchange="FPBCalcs()"></td>
-							<td style="text-align: left"></td>
+						<tr>
+							<td>Pcc =</td>
+							<td id="PccOut">Enter Data</td>
 						</tr>
 					</table>
-					<br><p>Mouse over a value or field for more information</p>
-					<h4>Diagrams</h4>
-					<img src="images/FPB/FPB_diagram.png" alt="FPB Diagram" style="margin: 20px auto;">
-					<img src="images/FPB/FPBDia1.png" alt="FPB Diagram 1" style="margin: 20px auto; width: 90%;">
+					<br>
 				</div>
-				<div style="flex-grow: 1; text-align: center;">
-					<h2>Output</h2>
-					<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; padding: 20px; margin-top: -40px;">
-						<div>
-							<h3>Shear Buckling Alone</h3>
-							<table style="margin: 0 auto;">
-								<tr title="Plate aspect ratio">
-									<td style="text-align: right;">a/b =</td>
-									<td id="abOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Shear buckling coefficient">
-									<td style="text-align: right;">K<sub>S</sub> =</td>
-									<td id="KsOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Shear buckling strength">
-									<td style="text-align: right;">F<sub>SCR</sub> =</td>
-									<td id="FscrOut">Enter Data</td>
-									<td style="text-align: left">ksi</td>
-								</tr>
-								<tr title="Margin of safety">
-									<td style="text-align: right;">MS =</td>
-									<td id="MS_SBAOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-							</table>
-						</div>
-						<div>
-							<h3>Compression/Bending Buckling Alone</h3>
-							<table style="margin: 0 auto;">
-								<tr title="Stress ratio">
-									<td style="text-align: right;">f<sub>2</sub>/f<sub>1</sub> =</td>
-									<td id="f2f1Out">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Compression buckling coefficient">
-									<td style="text-align: right;">K<sub>C</sub> =</td>
-									<td id="KcOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Compression buckling strength">
-									<td style="text-align: right;">F<sub>CR</sub> =</td>
-									<td id="FcrOut">Enter Data</td>
-									<td style="text-align: left">ksi</td>
-								</tr>
-								<tr title="Margin of safety">
-									<td style="text-align: right;">MS =</td>
-									<td id="MS_CBBAOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-							</table>
-						</div>
-						<div>
-							<h3>Margin due to Combined Loading</h3>
-							<table style="margin: 0 auto;">
-								<tr title="Reserve factor (shear)">
-									<td style="text-align: right;">f<sub>S</sub>/F<sub>SCR</sub> =</td>
-									<td id="fsFscrOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Reserve factor (compression)">
-									<td style="text-align: right;">f<sub>1</sub>/F<sub>CR</sub> =</td>
-									<td id="f1FcrOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Stress ratio">
-									<td style="text-align: right;">f<sub>2</sub>/f<sub>1</sub> =</td>
-									<td id="f2f1_MCLOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-								<tr title="Margin of safety">
-									<td style="text-align: right;">MS =</td>
-									<td id="MS_MCLOut">Enter Data</td>
-									<td style="text-align: left"></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-					<h2>Data</h2>
-					<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: auto; padding: 20px; margin-top: -40px;">
-						<div style="padding: 10px;">
-							<h5>Buckling Stress Coefficients for Flat Plates Loaded in Uniform Shear</h5>
-							<canvas id="FPBChart1" style="height: 500px"></canvas>
-						</div>
-						<div style="padding: 10px;">
-							<h5>Buckling Stress Coefficients for Flat Plates Under Bending, Compression or Tension</h5>
-							<canvas id="FPBChart2"></canvas>
-						</div>
-						<div style="padding: 10px;">
-							<h5>Initial Buckling of Flat Plates Under Compression, Bending and Shear</h5>
-							<canvas id="FPBChart3"></canvas>
-						</div>
-					</div>
-				</div>
+				<img src="images/cripCurve.png" alt="Crippling Curve" style="margin: 0 auto;">
 			</div>
+		</div>
+		<div class="analForm" id="bCripForm">
+			<header><h2>Bending Crippling</h2></header>
+			<div class="container">
+				<div id="bendingCrippling" class="formIO">
+					<h2>Input/Output</h2>
+					<span>Fcy =</span>
+					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(ksi)">
+					<span>Ec =</span>
+					<input id="EcIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(Msi)">
+					<br><br>
+					<table class="inputTable">
+						<thead>
+							<tr>
+							<th>Flange</th>
+							<th>Type</th>
+							<th>b</th>
+							<th>t</th>
+							<th>Edges</th>
+							<th>Ybar</th>
+							<th>Fcc</th>
+							<th>Yi</th>
+							<th>Mo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							<td>1</td>
+							<td>
+								<select id="TypeIn1" name="TypeIn1" onchange="cripCalcs(true)">
+									<option value="Chord">Chord</option>
+									<option value="Web">Web</option>
+								</select>
+							</td>
+							<td><input id="b1In" placeholder="width" onchange="cripCalcs(true)"></td>
+							<td><input id="t1In" placeholder="thickness" onchange="cripCalcs(true)"></td>
+							<td><input id="E1In" placeholder="# edges" onchange="cripCalcs(true)"></td>
+							<td><input id="Ybar1In" placeholder="centroid" onchange="cripCalcs(true)"></td>
+							<td id="Fcc1">Enter</td>
+							<td id="Yi1">Enter</td>
+							<td id="Mo1">Enter</td>
+							</tr>
+							<tr>
+							<td>2</td>
+							<td>
+								<select id="TypeIn2" name="TypeIn2" onchange="cripCalcs(true)">
+									<option value="Chord">Chord</option>
+									<option value="Web">Web</option>
+								</select>
+							</td>
+							<td><input id="b2In" placeholder="width" onchange="cripCalcs(true)"></td>
+							<td><input id="t2In" placeholder="thickness" onchange="cripCalcs(true)"></td>
+							<td><input id="E2In" placeholder="# edges" onchange="cripCalcs(true)"></td>
+							<td><input id="Ybar2In" placeholder="centroid" onchange="cripCalcs(true)"></td>
+							<td id="Fcc2">Enter</td>
+							<td id="Yi2">Enter</td>
+							<td id="Mo2">Enter</td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2>Maximum Allowable</h2>
+					<table class="outTable">
+						<tr>
+						<td>Max Allowable Moment =</td>
+						<td id="MAMOut">Enter Data</td>
+						</tr>
+					</table>
+					<br>
+				</div>
+				<img src="images/bCripDia.png" alt="Bending Crippling Diagram" style="width:50%;">
+			</div>
+		</div>
+		<div class="analForm" id="boltgroupForm">
+			<header><h2>Boltgroup 2D</h2></header>
+			<div class="formIO" style="float: left; width: 270px;">
+				<h3>Applied Load</h3>
+				<table>
+					<tr>
+						<td>Location X</td>
+						<td>Location Y</td>
+						<td>Fx (lb)</td>
+						<td>Fy (lb)</td>
+					</tr>
+					<tr>
+						<td><input id="locyIn" type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
+						<td><input id="loczIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input id="FyIn" type="number" placeholder="Enter Fx" onchange="boltgroupCalcs()"></td>
+						<td><input id="FzIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
+					</tr>
+					<tr>
+						<td>Mz (in*lb)</td>
+						<td>Load Case</td>
+					</tr>
+					<tr>
+						<td><input id="MxIn" type="number" placeholder="Enter Mz" onchange="boltgroupCalcs()"></td>
+						<td><input id="loadCaseIn" type="number" placeholder="Enter Case" onchange="boltgroupCalcs()"></td>
+					</tr>
+				</table>
+				<template id="bgInRowTemplate">
+					<tr>
+						<td></td>
+						<td><input type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Xeff" onchange="boltgroupCalcs()"></td>
+						<td><input type="number" placeholder="Enter Yeff" onchange="boltgroupCalcs()"></td>
+					</tr>
+				</template>
+				<template id="bgOutRowTemplate">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</template>
+				<table id="inTab">
+					<tr>
+						<td>Fastener</td>
+						<td>X (in)</td>
+						<td>Y (in)</td>
+						<td title="X efficiency">X<sub>eff</sub></td>
+						<td title="Y efficiency">Y<sub>eff</sub></td>
+					</tr>
+				</table>
+				<br>
+				<button onclick="BGAddFast()" style="margin-left: 0px;">Add Fastener</button>
+				<button onclick="BGRmFast()" style="margin-left: 0px;">Remove Fastener</button>
+			</div>
+			<div style="text-align: center;">
+				<h2>Output</h2>
+				<table style="margin: 0 auto; border-collapse: collapse;">
+					<tr>
+						<td style="border: 1px solid black;">Xcg</td>
+						<td style="border: 1px solid black;">Ycg</td>
+						<td style="border: 1px solid black;">Mz_cg</td>
+						<td style="border: 1px solid black;">Iz</td>
+					</tr>
+					<tr>
+						<td id="YcgOut" style="border: 1px solid black;"></td>
+						<td id="ZcgOut" style="border: 1px solid black;"></td>
+						<td id="MxcgOut" style="border: 1px solid black;"></td>
+						<td id="IxOut" style="border: 1px solid black;"></td>
+					</tr>
+				</table>
+				<br>
+				<canvas id="bgChart" style="margin: 0 auto; width: 500px;"></canvas>
+				<br>
+				<table id="outTab" class="outTable">
+					<tr>
+						<td>Fastener</td>
+						<td>X (in)</td>
+						<td>Y (in)</td>
+						<td>Px_Fx (lb)</td>
+						<td>Py_Fy (lb)</td>
+						<td>Px_Mz (lb)</td>
+						<td>Py_Mz (lb)</td>
+						<td>Px (lb)</td>
+						<td>Py (lb)</td>
+						<td>P (lb)</td>
+					</tr>
+				</table>
+				<table style="margin: 0 auto;">
+					<tr>
+						<td>Balance:</td>
+						<td style="text-align: right;">Px<sub>total</sub> =</td>
+						<td id="PyTotOut"></td>
+						<td style="text-align: left;">(lb)</td>
+						<td style="text-align: right;">Py<sub>total</sub> =</td>
+						<td id="PzTotOut"></td>
+						<td style="text-align: left;">(lb)</td>
+						<td style="text-align: right;">Mz<sub>total</sub> =</td>
+						<td id="MxTotOut"></td>
+						<td style="text-align: left;">(in-lb)</td>
+					</tr>
+				</table>
+			</div>
+			<script>
+					let BGNumFast = 0;
+					function BGAddFast() {
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
+						inTab.appendChild(tRow);
+						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
+						outTab.appendChild(tRowOut);
+					}
+					function BGRmFast() {
+						if (BGNumFast < 2) return;
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						inTab.lastElementChild.remove();
+						outTab.lastElementChild.remove();
+						BGNumFast--;
+						boltgroupCalcs();
+					}
+					for (let i=0; i<4; i++) {
+						BGAddFast();
+					}
+			</script>
+		</div>
+		<div class="analForm" id="LJDForm"> <!-- Full functionality implemented, but alot was hidden for simplicity -->
+			<template id="LJDinTabInTemplate">
+				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
+			</template>
+			<template id="LJDinTabBorRTemplate">
+				<select style="width: 100%; background-color: transparent;">
+					<option value="B">Bolt</option>
+					<option value="R">Rivet</option>
+				</select>
+			</template>
+			<template id="LJDinTabFastTypeTemplate">
+			<div class="CSContainer">
+				Fastener
+				<select style="width: 100%; background-color: transparent; display: none;">
+					<option value="1">Single</option>
+					<option value="2">Double</option>
+					<option value="N">N-group</option>
+					<option value="SW">Spot Weld</option>
+					<option value="0">None</option>
+				</select>
+				<dialog>
+					<h2>Enter number of Fasteners</h2>
+					<input type="number" autofocus style="text-align: center;"><br>
+					<div class="dialog-buttons" style="margin: 0 auto;">
+						<button id="cnlBtn">Cancel</button>
+						<button id="okBtn">OK</button>
+					</div>
+				</dialog>
+			</div>
+			</template>
+			<header><h2>Lap Joint Doubler</h2></header>
+			<div class="formIO" style="text-align: center;">
+			<h3>Instructions</h3>
+			<p style="text-align: center; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
+				<br>Then press "Prepare" to generate the input tables.<br><br>
+				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
+				<!--<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.--><br><br>
+				Once everything has been inputted, press "Compute" to calculate loads.<br><br>
+				Hover over certain fields for more information.
+			</p>
+			<h3>Setup</h3>
+			<table class="inTab">
+				<tr>
+					<td># of Plates High</td>
+					<td># of Plates Long</td>
+					<td style="width: 15%; display:none;"></td>
+					<td style="display:none;">Fast Flex H - Huth</td>
+					<td style="display:none;">Spotweld K</td>
+					<td>Total Applied Load</td>
+					<td style="display:none;">Matrix Output</td>
+				</tr>
+				<tr>
+					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
+					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
+					<td style="display:none;"></td>
+					<td style="display:none;"><select id="FastFlexIn" name="FastFlexIn" onchange="">
+						<option value="H">Huth</option>
+						<option value="NotH">Other</option>
+					</select></td>
+					<td style="display:none;"><input id="SWKIn" type="number" placeholder="Enter K"></td>
+					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
+					<td style="display:none;"><select id="matrixIn" name="matrixIn" onchange="">
+						<option value="1">True</option>
+						<option value="0" selected="1">False</option>
+					</select></td>
+				</tr>
+			</table>
+			<br>
+			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
+			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
+			<br>
+			</div>
+			<h2 style="text-align: center;">Input</h2>
+			<table class="inTab2" id="inTab1"></table>
+			<br>
+			<table class="inTab2" id="inTab2"></table>
+			<h2 style="text-align: center;">Output</h2>
+			<table class="inTab2" id="outTab"></table>
+			<br>
+			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
 		</div>
 		<div class="analForm" id="lugForm">
 			<header><h2>Lug Analysis (WIP)</h2></header>
@@ -3035,287 +3574,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="analForm" id="boltgroupForm">
-			<header><h2>Boltgroup 2D</h2></header>
-			<div class="formIO" style="float: left; width: 270px;">
-				<h3>Applied Load</h3>
-				<table>
-					<tr>
-						<td>Location X</td>
-						<td>Location Y</td>
-						<td>Fx (lb)</td>
-						<td>Fy (lb)</td>
-					</tr>
-					<tr>
-						<td><input id="locyIn" type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
-						<td><input id="loczIn" type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
-						<td><input id="FyIn" type="number" placeholder="Enter Fx" onchange="boltgroupCalcs()"></td>
-						<td><input id="FzIn" type="number" placeholder="Enter Fy" onchange="boltgroupCalcs()"></td>
-					</tr>
-					<tr>
-						<td>Mz (in*lb)</td>
-						<td>Load Case</td>
-					</tr>
-					<tr>
-						<td><input id="MxIn" type="number" placeholder="Enter Mz" onchange="boltgroupCalcs()"></td>
-						<td><input id="loadCaseIn" type="number" placeholder="Enter Case" onchange="boltgroupCalcs()"></td>
-					</tr>
-				</table>
-				<template id="bgInRowTemplate">
-					<tr>
-						<td></td>
-						<td><input type="number" placeholder="Enter X" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Y" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Xeff" onchange="boltgroupCalcs()"></td>
-						<td><input type="number" placeholder="Enter Yeff" onchange="boltgroupCalcs()"></td>
-					</tr>
-				</template>
-				<template id="bgOutRowTemplate">
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</template>
-				<table id="inTab">
-					<tr>
-						<td>Fastener</td>
-						<td>X (in)</td>
-						<td>Y (in)</td>
-						<td title="X efficiency">X<sub>eff</sub></td>
-						<td title="Y efficiency">Y<sub>eff</sub></td>
-					</tr>
-				</table>
-				<br>
-				<button onclick="BGAddFast()" style="margin-left: 0px;">Add Fastener</button>
-				<button onclick="BGRmFast()" style="margin-left: 0px;">Remove Fastener</button>
-			</div>
-			<div style="text-align: center;">
-				<h2>Output</h2>
-				<table style="margin: 0 auto; border-collapse: collapse;">
-					<tr>
-						<td style="border: 1px solid black;">Xcg</td>
-						<td style="border: 1px solid black;">Ycg</td>
-						<td style="border: 1px solid black;">Mz_cg</td>
-						<td style="border: 1px solid black;">Iz</td>
-					</tr>
-					<tr>
-						<td id="YcgOut" style="border: 1px solid black;"></td>
-						<td id="ZcgOut" style="border: 1px solid black;"></td>
-						<td id="MxcgOut" style="border: 1px solid black;"></td>
-						<td id="IxOut" style="border: 1px solid black;"></td>
-					</tr>
-				</table>
-				<br>
-				<canvas id="bgChart" style="margin: 0 auto; width: 500px;"></canvas>
-				<br>
-				<table id="outTab" class="outTable">
-					<tr>
-						<td>Fastener</td>
-						<td>X (in)</td>
-						<td>Y (in)</td>
-						<td>Px_Fx (lb)</td>
-						<td>Py_Fy (lb)</td>
-						<td>Px_Mz (lb)</td>
-						<td>Py_Mz (lb)</td>
-						<td>Px (lb)</td>
-						<td>Py (lb)</td>
-						<td>P (lb)</td>
-					</tr>
-				</table>
-				<table style="margin: 0 auto;">
-					<tr>
-						<td>Balance:</td>
-						<td style="text-align: right;">Px<sub>total</sub> =</td>
-						<td id="PyTotOut"></td>
-						<td style="text-align: left;">(lb)</td>
-						<td style="text-align: right;">Py<sub>total</sub> =</td>
-						<td id="PzTotOut"></td>
-						<td style="text-align: left;">(lb)</td>
-						<td style="text-align: right;">Mz<sub>total</sub> =</td>
-						<td id="MxTotOut"></td>
-						<td style="text-align: left;">(in-lb)</td>
-					</tr>
-				</table>
-			</div>
-			<script>
-					let BGNumFast = 0;
-					function BGAddFast() {
-						let inTab = GEBID("boltgroupForm", "inTab").children[0];
-						let outTab = GEBID("boltgroupForm", "outTab").children[0];
-						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
-						inTab.appendChild(tRow);
-						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
-						outTab.appendChild(tRowOut);
-					}
-					function BGRmFast() {
-						if (BGNumFast < 2) return;
-						let inTab = GEBID("boltgroupForm", "inTab").children[0];
-						let outTab = GEBID("boltgroupForm", "outTab").children[0];
-						inTab.lastElementChild.remove();
-						outTab.lastElementChild.remove();
-						BGNumFast--;
-						boltgroupCalcs();
-					}
-					for (let i=0; i<4; i++) {
-						BGAddFast();
-					}
-			</script>
-		</div>
-		<div class="analForm" id="LJDForm"> <!-- Full functionality implemented, but alot was hidden for simplicity -->
-			<template id="LJDinTabInTemplate">
-				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
-			</template>
-			<template id="LJDinTabBorRTemplate">
-				<select style="width: 100%; background-color: transparent;">
-					<option value="B">Bolt</option>
-					<option value="R">Rivet</option>
-				</select>
-			</template>
-			<template id="LJDinTabFastTypeTemplate">
-			<div class="CSContainer">
-				Fastener
-				<select style="width: 100%; background-color: transparent; display: none;">
-					<option value="1">Single</option>
-					<option value="2">Double</option>
-					<option value="N">N-group</option>
-					<option value="SW">Spot Weld</option>
-					<option value="0">None</option>
-				</select>
-				<dialog>
-					<h2>Enter number of Fasteners</h2>
-					<input type="number" autofocus style="text-align: center;"><br>
-					<div class="dialog-buttons" style="margin: 0 auto;">
-						<button id="cnlBtn">Cancel</button>
-						<button id="okBtn">OK</button>
-					</div>
-				</dialog>
-			</div>
-			</template>
-			<header><h2>Lap Joint Doubler</h2></header>
-			<div class="formIO" style="text-align: center;">
-			<h3>Instructions</h3>
-			<p style="text-align: center; padding: 5px;">Enter the number of stacked layers (# of Plates High) and the number of fasteners + 1 (# of Plates Long).
-				<br>Then press "Prepare" to generate the input tables.<br><br>
-				Enter all properties for the doubler configuration.<br>Note the thickness can be 0 (blank) for a region where the plate does not extend.
-				<!--<br>In the "FEM Parameters" table, set the shear flow and fastener type for joint idealization.--><br><br>
-				Once everything has been inputted, press "Compute" to calculate loads.<br><br>
-				Hover over certain fields for more information.
-			</p>
-			<h3>Setup</h3>
-			<table class="inTab">
-				<tr>
-					<td># of Plates High</td>
-					<td># of Plates Long</td>
-					<td style="width: 15%; display:none;"></td>
-					<td style="display:none;">Fast Flex H - Huth</td>
-					<td style="display:none;">Spotweld K</td>
-					<td>Total Applied Load</td>
-					<td style="display:none;">Matrix Output</td>
-				</tr>
-				<tr>
-					<td><input id="platesHighIn" type="number" placeholder="Enter #"></td>
-					<td><input id="platesLongIn" type="number" placeholder="Enter #"></td>
-					<td style="display:none;"></td>
-					<td style="display:none;"><select id="FastFlexIn" name="FastFlexIn" onchange="">
-						<option value="H">Huth</option>
-						<option value="NotH">Other</option>
-					</select></td>
-					<td style="display:none;"><input id="SWKIn" type="number" placeholder="Enter K"></td>
-					<td><input id="TAppLoadIn" type="number" placeholder="Enter Load"></td>
-					<td style="display:none;"><select id="matrixIn" name="matrixIn" onchange="">
-						<option value="1">True</option>
-						<option value="0" selected="1">False</option>
-					</select></td>
-				</tr>
-			</table>
-			<br>
-			<button style="width: 15%;" onclick="LJDPrepIns()">Prepare</button>
-			<button style="width: 15%;" onclick="LJDCalcs()">Compute</button>
-			<br>
-			</div>
-			<h2 style="text-align: center;">Input</h2>
-			<table class="inTab2" id="inTab1"></table>
-			<br>
-			<table class="inTab2" id="inTab2"></table>
-			<h2 style="text-align: center;">Output</h2>
-			<table class="inTab2" id="outTab"></table>
-			<br>
-			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
-		</div>
-		<div class="analForm" id="IRBForm">
-			<style>
-				#IRBForm input {
-					width: 75px;
-				}
-			</style>
-			<template id="IRBInRowTemplate">
-				<tr>
-					<td></td>
-					<td><input type="number" placeholder="Enter Material" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter Ec" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter Fcy" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter nc" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter Pitch" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter c" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td><input type="number" placeholder="Enter tsheet" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
-					<td></td>
-					<td></td>
-				</tr>
-			</template>
-			<header><h2>Inter Rivet Buckling</h2></header>
-			<div class="formIO">
-			<!--<h3>Information</h3>
-			<p style="text-align: center; padding: 5px;">
-				lol
-			</p>-->
-			<table class="inTab" id="IOTab">
-				<colgroup>
-					<col span="1" style="border-right: 1px solid black">
-				</colgroup>
-				<tr style="border-bottom: 1px solid black;">
-					<th>Section</th>
-					<th>Material</th>
-					<th>E<sub>c</sub> (Msi)</th>
-					<th>F<sub>cy</sub> (ksi)</th>
-					<th>nc</th>
-					<th>Pitch (in)</th>
-					<th>c</th>
-					<th>t<sub>sheet</sub> (in)</th>
-					<th>E<sub>t</sub> (psi)</th>
-					<th>F<sub>ir</sub> (psi)</th>
-				</tr>
-			</table>
-			<br>
-			<button onclick="IRBAddSect()" style="margin-left: 0px;">Add Section</button>
-			<button onclick="IRBRmSect()" style="margin-left: 0px;">Remove Section</button>
-			</div>
-			<script>
-				let IRBNumSect = 0;
-				function IRBAddSect() {
-					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
-					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
-					Tab.appendChild(tRow);
-				}
-				function IRBRmSect() {
-					if (IRBNumSect <= 1) return;
-					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
-					Tab.lastElementChild.remove();
-					IRBNumSect--;
-				}
-				IRBAddSect();
-			</script>
-		</div>
 		<div class="analForm" id="SPForm">
 			<template id="SPInRowTemplate">
 				<tr>
@@ -3458,264 +3716,6 @@
 					grid.appendChild(tab);
 				}
 			</script>
-		</div>
-		<div class="analForm" id="NACA_TNForm">
-			<template id="TNDataRowTemplate">
-				<tr>
-					<td title="Stringer #"></td>
-					<td title="Actual fuselage radius"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Skin pocket thickness"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Stringer only area"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Stringer center of gravity"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Stringer only inertia"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Bay width"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Max bay size on either side of stringer"></td>
-					<td title="Frame area INCLUDING sheartie"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Frame factor"><input type="number" placeholder="Enter" onchange="TNCalcs()"></td>
-					<td title="Factored Afr"></td>
-					<td title="NACA Load"></td>
-				</tr>
-			</template>
-			<style>
-				#NACA_TNForm input {
-					width: 60px;
-				}
-				#NACA_TNForm .outTab {
-					align-self: center;
-					padding: 10px;
-				}
-				#NACA_TNForm .outTab th {
-					text-align: right;
-				}
-				#NACA_TNForm .outTab td:nth-child(2) {
-					text-align: center;
-					background-color: #ccffcc;
-					width: 100px;
-				}
-				#NACA_TNForm .outTab td:nth-child(3) {
-					text-align: left;
-				}
-			</style>
-			<header><h2>NACA Technical Note</h2></header>
-			<div id="formContainer" style="display: flex; flex-direction: column;">
-			<div class="formIO" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-			<!--<h3>Information</h3>
-			<p style="text-align: center; padding: 5px;">
-				lol
-			</p>-->
-			<div>
-			<h3>Data</h3>
-			<table class="inTab" id="LPETab" style="margin: 0 auto">
-				<tr>
-					<th>&mu;</th>
-					<th>L</th>
-					<th>P</th>
-					<th>E (psi)</th>
-					<th>Intercostal ending</th>
-				</tr>
-				<tr>
-					<td title="Poisson's ratio"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Frame pitch"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Pressure applied"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Young's modulus"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
-					<td title="Determines amount of support at ends of stringer. (100% for stringers or intercostals of constant section, 0% for Intercostals ending)">
-						<select style="width: 100%;">
-						<option value="0">True</option>
-						<option value="1">False</option>
-					</select></td>
-				</tr>
-			</table>
-			<br>
-			<table class="inTab" id="dataTab">
-				<tr>
-					<th>Stringer</th>
-					<th>Radius (in)</th>
-					<th>t<sub>skin</sub> (in)</th>
-					<th>A<sub>str</sub> (in<sup>2</sup>)</th>
-					<th>Y<sub>str</sub> (in)</th>
-					<th>I<sub>str</sub> (in<sup>4</sup>)</th>
-					<th>Bay width (in)</th>
-					<th>b<sub>ave</sub> (in)</th>
-					<th>A<sub>frame</sub> (in<sup>2</sup>)</th>
-					<th>Frame Factor</th>
-					<th>Factored Afr (in<sup>2</sup>)</th>
-					<th>NACA Load</th>
-				</tr>
-			</table>
-			<br>
-			<button onclick="TNAddStr(); TNCalcs();" style="margin-left: 0px;">Add Stringer</button>
-			<button onclick="TNRmStr(); if (SPNumPt>1) TNCalcs();" style="margin-left: 0px;">Remove Stringer</button>
-			<br>
-			</div>
-			</div>
-			<div style="text-align: center;">
-				<h3>Diagrams</h3>
-				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; max-width: 800px; margin: 0 auto;">
-					<img src="images/TN/TN1.png" style="width: 100%;">
-					<img src="images/TN/TN2.png" style="width: 100%;">
-					<div style="display: flex; flex-direction: column;">
-						<img src="images/TN/TN3.png" style="width: 100%;">
-						<img src="images/TN/TN4.png" style="width: 100%;">
-					</div>
-				</div>
-				<h3>Output</h3>
-				<p id="TNWarning" style="display: none;">Note that most properties are calculated with respect to the last stringer added</p>
-				<div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
-				<table class="outTab" id="outTab1">
-					<tr title="# stringers assuming b pitch">
-						<th>s</th>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr title="">
-						<th>I<sub>seg</sub></th>
-						<td></td>
-						<td>in<sup>4</sup></td>
-					</tr>
-					<tr title="">
-						<th>YNA</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr title="Istr / Iseg">
-						<th>Ratio</th>
-						<td></td>
-						<td></td>
-					</tr>
-				</table>
-				<table class="outTab" id="outTab2">
-					<tr>
-						<th>&alpha;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&rho;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&phi;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&beta;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&theta;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&psi;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>&upsilon;</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>% of 2 dp</th>
-						<td></td>
-					</tr>
-					<tr>
-						<th>V</th>
-						<td></td>
-					</tr>
-				</table>
-				<table class="outTab" id="outTab3">
-					<tr>
-						<th>y</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>u</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>v</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>w</th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>w</th>
-						<td></td>
-						<td>lbs/in</td>
-					</tr>
-					<tr>
-						<th>p</th>
-						<td></td>
-						<td>psi</td>
-					</tr>
-					<tr>
-						<th>M<sub>max</sub></th>
-						<td></td>
-						<td>in&middot;lbs</td>
-					</tr>
-					<tr>
-						<th>M<sub>center</sub></th>
-						<td></td>
-						<td>in&middot;lbs</td>
-					</tr>
-				</table>
-				<table class="outTab" id="outTab4">
-					<tr>
-						<th>Hoop</th>
-						<td></td>
-						<td>psi</td>
-					</tr>
-					<tr>
-						<th>PR/t</th>
-						<td></td>
-						<td>psi</td>
-					</tr>
-					<tr>
-						<th>%<sub>pure hoop</sub></th>
-						<td></td>
-					</tr>
-					<tr><td><br></td><td></td></tr>
-					<tr>
-						<th>u<sub>no frame</sub></th>
-						<td></td>
-						<td>in</td>
-					</tr>
-					<tr>
-						<th>%<sub>press</sub></th>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<th>V<sub>ST</sub></th>
-						<td></td>
-						<td>lbs</td>
-					</tr>
-				</table>
-				</div>
-			</div>
-			<script>
-				let TNNumStr = 0;
-				function TNAddStr() {
-					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
-					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
-					Tab.appendChild(tRow);
-					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
-				}
-				function TNRmStr() {
-					if (TNNumStr <= 1) return;
-					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
-					Tab.lastElementChild.remove();
-					TNNumStr--;
-					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
-				}
-				TNAddStr();
-			</script>
-			</div>
 		</div>
 		<div class="analForm" id="frameCapCompForm">
 			<header><h2>Cap Compression</h2></header>
