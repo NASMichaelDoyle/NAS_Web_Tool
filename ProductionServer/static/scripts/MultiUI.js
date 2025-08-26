@@ -65,6 +65,8 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "NACA TN";
 		case "rPack":
 			return "Radius Packer";
+		case "MatLib":
+			return "Material Library";
 		default:
 			return "Unknown";
 	}
@@ -81,11 +83,11 @@ function toggleForm(box, form) {
 		element.setAttribute('class', "sortable-item");
 		element.setAttribute("id", box.id.replace("Box", "") + "Sort");
 		element.innerHTML = analDic(box);
-		GEBID("docOrderList").appendChild(element);
+		if (analDic(box) != "Material Library") GEBID("docOrderList").appendChild(element);
 	} else {
 		form.style.display = 'none';
 		if (box.classList.contains("ParaBox")) break ifelse1;
-		GEBID("docOrderList").removeChild(GEBID(box.id.replace("Box", "") + "Sort"));
+		if (analDic(box) != "Material Library") GEBID("docOrderList").removeChild(GEBID(box.id.replace("Box", "") + "Sort"));
 	}
 	break1:
 	for (const omnibox of [...document.getElementsByClassName("analBox")]) 
@@ -131,13 +133,4 @@ function rmPara(paraSort) {
 			return;
 		}
 	GEBID("nullForm").style.display = 'block'
-}
-
-// Material Library
-function addMatSel() {
-	/* for (const form of []) {
-		
-	} */
-	const matTemplate = GEBID("matSelectTemplate").content.cloneNode(true);
-	GEBID("ellForm", "Inputs").prepend(matTemplate);
 }

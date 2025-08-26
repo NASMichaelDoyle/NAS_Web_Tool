@@ -93,12 +93,13 @@
 		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Section Properties</h4>
 		<input id="SPBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Section Properties<br>
-		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">WIP</h4>
-		<input id="frameCapCompBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapCompForm'))"> Cap Compression<br>
-		<input id="frameCapTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameCapTensForm'))"> Cap Tension<br><br>
+		
+		<h2 style="text-align: center;">Options</h2>
+		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Input Data</h4>
+		<input id="MatLibBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Material Library<br><br>
 		<span style="display: flex;">
-			<button class="button" style="width: 45%;" onclick="downloadInput()">Download Inputs</button>
-			<button class="button" style="width: 45%;" onclick="GEBID('UpIns').click()">Upload Inputs</button>
+			<button class="button" style="width: 45%;" onclick="downloadInput()" title="Download a CSV file containing all inputted data">Download Inputs</button>
+			<button class="button" style="width: 45%;" onclick="GEBID('UpIns').click()" title="Upload a CSV to re-apply inputted data across sessions">Upload Inputs</button>
 			<input type="file" id="UpIns" accept=".csv" oninput="const reader = new FileReader(); reader.onload = function(event) {const csv = event.target.result; uploadInput(csv);}; reader.readAsText(this.files[0]);" style="display:none;">
 		</span>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Reports</h4>
@@ -121,8 +122,8 @@
 		</div>
 		<button class="button" onclick="addPara()" style="margin: 0 0; width: 25px; display: inline-block;">&plus;</button>
 		<span>Add Paragraph</span><br><br>
-		<button class="button" style="margin-bottom: 3px;" onclick="downloadTexFile()">Download TeX</button>
-		<button class="button" id="pdfButton" onclick="downloadPDF(true)">Download PDF</button>
+		<button class="button" style="margin-bottom: 3px;" onclick="downloadTexFile()" title="Download the report template as a .tex file">Download TeX</button>
+		<button class="button" id="pdfButton" onclick="downloadPDF(true)" title="Download the report template as a PDF">Download PDF</button>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Disclaimer</h4>
 		Not every tool fits every application, inputs and results need to be verified by a qualified engineer.
 	</div>
@@ -1396,6 +1397,7 @@
 					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
 					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
 					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
+					if (TNNumStr > 1) for (let i=1; i<10; i++) if (i!=7) childSeq(tRow, [i, 0]).value = childSeq(Tab, [TNNumStr-1, i, 0]).value;
 					Tab.appendChild(tRow);
 					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
 				}
@@ -1412,19 +1414,27 @@
 		</div>
 		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
 			<header><h2>Ellipse Analysis (BETA)</h2></header>
+			<style>
+				#ellForm input {
+					width: 120px;
+				}
+				#ellForm #Inputs:nth-child(2) {
+					text-align: left;
+				}
+			</style>
 			<div id="ellContainer">
 			<div id="Inputs" class="formIO">
 				<h2>Inputs</h2>
 				<span>Fx</span>
-				<input type="text" id="Fx" placeholder="Enter Fx"><br>
+				<input type="text" id="Fx" placeholder="Enter Fx"><span>(lbs/in)</span><br>
 				<span>Fy</span>
-				<input type="text" id="Fy" placeholder="Enter Fy"><br>
+				<input type="text" id="Fy" placeholder="Enter Fy"><span>(lbs/in)</span><br>
 				<span>Fxy</span>
-				<input type="text" id="Fxy" placeholder="Enter Fxy"><br>
+				<input type="text" id="Fxy" placeholder="Enter Fxy"><span>(lbs/in)</span><br>
 				<span>Long r</span>
-				<input type="text" id="LONG_DIA" placeholder="Enter Long Radius"><br>
+				<input type="text" id="LONG_DIA" placeholder="Enter Long Radius"><span>(in)</span><br>
 				<span>Short r</span>
-				<input type="text" id="SHORT_DIA" placeholder="Enter Short Radius"><br><br>
+				<input type="text" id="SHORT_DIA" placeholder="Enter Short Radius"><span>(in)</span><br><br>
 				<button onclick="ellCalcs()">Run</button>
 			</div>
 			<div id="Outputs">
@@ -3714,13 +3724,101 @@
 				}
 			</script>
 		</div>
-		<div class="analForm" id="frameCapCompForm">
-			<header><h2>Cap Compression</h2></header>
-			<h3 style="text-align: center;">wip</h3>
-		</div>
-		<div class="analForm" id="frameCapTensForm">
-			<header><h2>Cap Tension</h2></header>
-			<h3 style="text-align: center;">wip</h3>
+		<div class="analForm" id="MatLibForm">
+			<style>
+				#MatLibForm input {
+					width: 75px;
+				}
+				#MatLibForm th {
+					width: 75px;
+				}
+			</style>
+			<template id="MatLibRowTemplate">
+				<tr>
+					<td><input placeholder="Enter Material" onchange="updateMatLib()" title="Material name" style="width: 140px;"></td>
+					<td><input type="number" placeholder="Enter Ec" onchange="updateMatLib()" title="Young's modulus"></td>
+					<td><input type="number" placeholder="Enter Fcy" onchange="updateMatLib()" title="Fcy"></td>
+				</tr>
+			</template>
+			<header><h2>Material Library</h2></header>
+			<div class="formIO">
+			<!--<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				lol
+			</p>-->
+			<table class="inTab" id="IOTab" style="margin: 0 auto;">
+				<tr>
+					<th style="width: 150px;">Material</th>
+					<th>E<sub>c</sub> (Msi)</th>
+					<th>F<sub>cy</sub> (ksi)</th>
+				</tr>
+				<tr>
+					<td>7075-T6</td>
+					<td>12345</td>
+					<td>12345</td>
+				</tr>
+				<tr>
+					<td>2024-T3</td>
+					<td>1234</td>
+					<td>1234</td>
+				</tr>
+				<tr>
+					<td>7050-T7451</td>
+					<td>123</td>
+					<td>123</td>
+				</tr>
+			</table>
+			<br>
+			<button onclick="AddMat()" style="margin-left: 0px;">Add Material</button>
+			<button onclick="RmMat()" style="margin-left: 0px;">Remove Material</button>
+			<br><br>
+			<select class="MatLibSel"></select>
+			</div>
+			<template id="MatLibSelectTemplate">
+
+			</template>
+			<script>
+				let NMatFixed = GEBID("MatLibForm", "IOTab").children[0].children.length - 1, NMat = NMatFixed;
+				let MatLib = [];
+				function AddMat() {
+					let Tab = GEBID("MatLibForm", "IOTab");
+					const tRow = GEBID("MatLibForm", "MatLibRowTemplate").content.cloneNode(true).firstElementChild;
+					Tab.appendChild(tRow);
+					NMat++;
+				}
+				function RmMat() {
+					if (NMat <= NMatFixed) return;
+					let Tab = GEBID("MatLibForm", "IOTab");
+					Tab.lastElementChild.remove();
+					NMat--;
+					updateMatLib();
+				}
+				function updateMatLib() {
+					let MLTemp = GEBID("MatLibSelectTemplate");
+					let Tab = GEBID("MatLibForm", "IOTab");
+					MLTemp.textContent = "";
+					MatLib = [];
+					for (let i=0; i<NMat; i++) {
+						// Update template
+						let opt = document.createElement("option");
+						opt.value = i;
+						opt.innerHTML = i<NMatFixed?childSeq(Tab, [0, i+1, 0]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 0, 0]).value;
+						MLTemp.appendChild(opt);
+						// Update actual variables
+						MatLib[i] = new Object();
+						MatLib[i].name = i<NMatFixed?childSeq(Tab, [0, i+1, 0]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 0, 0]).value;
+						MatLib[i].Ec = i<NMatFixed?childSeq(Tab, [0, i+1, 1]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 1, 0]).value;
+						MatLib[i].Fcy = i<NMatFixed?childSeq(Tab, [0, i+1, 2]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 2, 0]).value;
+					}
+					// Update select objects
+					for (let sel of document.querySelectorAll(".MatLibSel")) {
+						sel.innerHTML = "";
+						sel.appendChild(MLTemp.content.cloneNode(true));
+					}
+					console.log(MatLib);
+				}
+				updateMatLib();
+			</script>
 		</div>
 	</div>
 </div>
