@@ -78,16 +78,17 @@ function toggleForm(box, form) {
 	if (!form) form = GEBID(box.id.replace("Box", "Form"));
 	ifelse1: if (box.checked) {
 		form.style.display = 'block';
-		if (box.classList.contains("ParaBox")) break ifelse1;
+		form.focus();
+		if (box.classList.contains("ParaBox") || box.id =="MatLibBox") break ifelse1;
 		const element = document.createElement('div');
 		element.setAttribute('class', "sortable-item");
 		element.setAttribute("id", box.id.replace("Box", "") + "Sort");
 		element.innerHTML = analDic(box);
-		if (analDic(box) != "Material Library") GEBID("docOrderList").appendChild(element);
+		GEBID("docOrderList").appendChild(element);
 	} else {
 		form.style.display = 'none';
-		if (box.classList.contains("ParaBox")) break ifelse1;
-		if (analDic(box) != "Material Library") GEBID("docOrderList").removeChild(GEBID(box.id.replace("Box", "") + "Sort"));
+		if (box.classList.contains("ParaBox") || box.id =="MatLibBox") break ifelse1;
+		GEBID("docOrderList").removeChild(GEBID(box.id.replace("Box", "") + "Sort"));
 	}
 	break1:
 	for (const omnibox of [...document.getElementsByClassName("analBox")]) 

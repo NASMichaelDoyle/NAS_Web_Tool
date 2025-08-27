@@ -51,7 +51,7 @@ function downloadInput() {
 	for (let i=0; i<ids.length; i++) bCripData[i] = GEBID("bCripForm", ids[i]).value;
 	// OFB
 	OFBData[0] = GEBID("OFBForm", "ASSIn").checked;
-	ids = ["materialIn", "EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
+	ids = ["EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
 	for (let i=1; i<ids.length+1; i++) OFBData[i] = GEBID("OFBForm", ids[i-1]).value;
 	// FPB
 	ids = ["ETIn", "fsIn", "aIn", "bIn", "tIn", "EcIn", "nuIn", "f1In", "f2In"];
@@ -61,13 +61,13 @@ function downloadInput() {
 		if (childSeq(GEBID("lugForm", "inTab1"), [0, i, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab1"), [0, i, 1, 0]).value;// console.log(lugData);}
 		else lugData[i] = "skip";
 	for (let i=22; i<44; i++)
-		if (childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1, 0]).value;
+		if (childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1,]) !== undefined && i!=23) lugData[i] = childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1, 0]).value;
 		else lugData[i] = "skip";
-	for (let i=44; i<48; i++)
-		if (childSeq(GEBID("lugForm", "inTab3"), [0, i-44, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab3"), [0, i-44, 1, 0]).value;
+	for (let i=44; i<46; i++)
+		if (childSeq(GEBID("lugForm", "inTab3"), [0, i-43, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab3"), [0, i-43, 1, 0]).value;
 		else lugData[i] = "skip";
-	for (let i=48; i<56; i++)
-		if (childSeq(GEBID("lugForm", "inTab4"), [0, i-48, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab4"), [0, i-48, 1, 0]).value;
+	for (let i=46; i<51; i++)
+		if (childSeq(GEBID("lugForm", "inTab4"), [0, i-44, 1,]) !== undefined) lugData[i] = childSeq(GEBID("lugForm", "inTab4"), [0, i-44, 1, 0]).value;
 		else lugData[i] = "skip";
 	// Boltgroup
 	ids = ["locyIn", "loczIn", "FyIn", "FzIn", "MxIn", "loadCaseIn"];
@@ -100,8 +100,8 @@ function downloadInput() {
 	}
 	// IRB
 	for (let i=0; i<IRBNumSect; i++)
-		for (let j=0; j<7; j++)
-			IRBData[7*i+j] = childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1, 0]).value;
+		for (let j=0; j<6; j++)
+			IRBData[6*i+j] = childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+2, 0]).value;
 	// Sect prop
 	SPData[0] = SPNumPt;
 	for (let i=0; i<3*SPNumPt; i++) SPData[i+1] = childSeq(GEBID("SPForm", "IOTab"), [parseInt(i/3+2), parseInt(i%3+1), 0]).value;
@@ -120,7 +120,7 @@ function downloadInput() {
 	rPackData[20] = childSeq(GEBID("rPackForm", "BMarginTab"), [0, 0, 1, 0]).value;
 	// TN
 	tabIQ = GEBID("NACA_TNForm", "LPETab");
-	for (let i=0; i<5; i++) TNData[i] = childSeq(tabIQ, [0, 1, i, 0]).value;
+	for (let i=0; i<5; i++) TNData[i] = childSeq(tabIQ, [0, 1, i+1, 0]).value;
 	TNData[5] = TNNumStr;
 	tabIQ = GEBID("NACA_TNForm", "dataTab");
 	for (let i=0; i<TNNumStr; i++)
@@ -173,7 +173,7 @@ function uploadInput(ins) {
 	try {cripCalcs(true);} catch (err) {console.error("It broked lol:\n", err)}
 	// OFB
 	GEBID("OFBForm", "ASSIn").checked = OFBData[0];
-	ids = ["materialIn", "EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
+	ids = ["EcIn", "FcyIn", "muIn", "ncIn", "tIn", "bIn", "F0In", "FfIn", "twebIn", "HfrIn", "LPRIn"];
 	for (let i=1; i<OFBData.length-1; i++) GEBID("OFBForm", ids[i-1]).value = OFBData[i];
 	try {OFBcalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// FPB
@@ -185,10 +185,10 @@ function uploadInput(ins) {
 		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab1"), [0, i, 1, 0]).value = lugData[i];
 	for (let i=22; i<44; i++)
 		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab2"), [0, i-22, 1, 0]).value = lugData[i];
-	for (let i=44; i<48; i++)
-		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab3"), [0, i-44, 1, 0]).value = lugData[i];
-	for (let i=48; i<56; i++)
-		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab4"), [0, i-48, 1, 0]).value = lugData[i];
+	for (let i=44; i<46; i++)
+		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab3"), [0, i-43, 1, 0]).value = lugData[i];
+	for (let i=46; i<51; i++)
+		if (lugData[i] != "skip") childSeq(GEBID("lugForm", "inTab4"), [0, i-44, 1, 0]).value = lugData[i];
 	try {lugCalcs();} catch (err) {console.error("It broked lol:\n", err)}
 	// Boltgroup
 	ids = ["locyIn", "loczIn", "FyIn", "FzIn", "MxIn", "loadCaseIn"];
@@ -240,12 +240,12 @@ function uploadInput(ins) {
 	}
 	// IRB
 	{
-		let newNSect = IRBData.length/7;
+		let newNSect = IRBData.length/6;
 		if (newNSect<IRBNumSect) for (let i=IRBNumSect; i>newNSect; i--) IRBRmSect();
 		else for (let i=IRBNumSect; i<newNSect; i++) IRBAddSect();
 		for (let i=0; i<IRBNumSect; i++)
-			for (let j=0; j<7; j++)
-				childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1, 0]).value = IRBData[7*i+j];
+			for (let j=0; j<6; j++)
+				childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+2, 0]).value = IRBData[6*i+j];
 	}
 	// Sect prop
 	{
@@ -273,7 +273,7 @@ function uploadInput(ins) {
 
 		// TN
 		tabIQ = GEBID("NACA_TNForm", "LPETab");
-		for (let i=0; i<5; i++) childSeq(tabIQ, [0, 1, i, 0]).value = TNData[i];
+		for (let i=0; i<5; i++) childSeq(tabIQ, [0, 1, i+1, 0]).value = TNData[i];
 		let newNStr = TNData[5];
 		if (newNStr<TNNumStr) for (let i=TNNumStr; i>newNStr; i--) TNRmStr();
 		else for (let i=TNNumStr; i<newNStr; i++) TNAddStr();

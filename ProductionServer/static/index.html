@@ -138,6 +138,153 @@
 			<h2>No Analyses Selected</h2>
 			<p>Select an analysis from the menu on the left</p>
 		</div>
+		<div class="analForm" id="MatLibForm">
+			<style>
+				#MatLibForm input {
+					width: 75px;
+				}
+				#MatLibForm table {
+					border-collapse: collapse;
+				}
+				#MatLibForm th, #MatLibForm td {
+					width: 75px;
+					border-bottom: 1px solid white;
+				}
+			</style>
+			<template id="MatLibRowTemplate">
+				<tr>
+					<td><input placeholder="Enter Material" onchange="updateMatLib()" title="Material name" style="width: 190px;"></td>
+					<td><input type="number" placeholder="Enter Ec" onchange="updateMatLib()" title="Young's modulus"></td>
+					<td><input type="number" placeholder="Enter &mu;" onchange="updateMatLib()" title="&mu;"></td>
+					<td><input type="number" placeholder="Enter Ftu" onchange="updateMatLib()" title="Ftu"></td>
+					<td><input type="number" placeholder="Enter Fty" onchange="updateMatLib()" title="Fty"></td>
+					<td><input type="number" placeholder="Enter Fcy" onchange="updateMatLib()" title="Fcy"></td>
+					<td><input type="number" placeholder="Enter Fsu" onchange="updateMatLib()" title="Fsu"></td>
+					<td><input type="number" placeholder="Enter Fbru" onchange="updateMatLib()" title="Fbru"></td>
+					<td><input type="number" placeholder="Enter Fbry" onchange="updateMatLib()" title="Fbry"></td>
+				</tr>
+			</template>
+			<header><h2>Material Library</h2></header>
+			<div class="formIO">
+			<h3>Information</h3>
+			<p style="text-align: center; padding: 5px;">
+				This is a collection of materials and their relevant properties. <br>
+				Several analyses allow for the selection of a material, <br>
+				which will automatically populate relevant fields when selected.<br>
+				Custom materials can be added to the library.
+				<br><br>
+				Please note that values assume the most conservative stock thickness, <br>severe deviations in thickness may result in inaccuracy.
+			</p>
+			<h3>Library</h3>
+			<table class="inTab" id="IOTab" style="margin: 0 auto;">
+				<tr>
+					<th style="width: 200px;">Material</th>
+					<th>E<sub>c</sub> (Msi)</th>
+					<th>&mu;</th>
+					<th>F<sub>tu</sub> (ksi)</th>
+					<th>F<sub>ty</sub> (ksi)</th>
+					<th>F<sub>cy</sub> (ksi)</th>
+					<th>F<sub>su</sub> (ksi)</th>
+					<th>F<sub>bru</sub> (ksi)</th>
+					<th>F<sub>bry</sub> (ksi)</th>
+				</tr>
+				<tr>
+					<td>Aluminum 7075-T6</td>
+					<td>10.7</td>
+					<td>0.33</td>
+					<td>75</td>
+					<td>66</td>
+					<td>70</td>
+					<td>41</td>
+					<td>111</td>
+					<td>92</td>
+				</tr>
+				<tr>
+					<td>Aluminum 2024-T3</td>
+					<td>11</td>
+					<td>0.33</td>
+					<td>54</td>
+					<td>37</td>
+					<td>34</td>
+					<td>29</td>
+					<td>84</td>
+					<td>61</td>
+				</tr>
+				<tr>
+					<td>Aluminum 7050-T7451</td>
+					<td>10.7</td>
+					<td>0.33</td>
+					<td>64</td>
+					<td>53</td>
+					<td>56</td>
+					<td>37</td>
+					<td>90</td>
+					<td>75</td>
+				</tr>
+				<tr>
+					<td>Steel 15-5PH</td>
+					<td>29.2</td>
+					<td>0.27</td>
+					<td>154</td>
+					<td>143</td>
+					<td>146</td>
+					<td>96</td>
+					<td>257</td>
+					<td>211</td>
+				</tr>
+			</table>
+			<br>
+			<button onclick="AddMat()" style="margin-left: 0px;">Add Material</button>
+			<button onclick="RmMat()" style="margin-left: 0px;">Remove Material</button>
+			<br><br>
+			</div>
+			<script>
+				let NMatFixed = GEBID("MatLibForm", "IOTab").children[0].children.length - 1, NMat = NMatFixed;
+				let MatLib = [];
+				function AddMat() {
+					let Tab = GEBID("MatLibForm", "IOTab");
+					const tRow = GEBID("MatLibForm", "MatLibRowTemplate").content.cloneNode(true).firstElementChild;
+					Tab.appendChild(tRow);
+					NMat++;
+				}
+				function RmMat() {
+					if (NMat <= NMatFixed) return;
+					let Tab = GEBID("MatLibForm", "IOTab");
+					Tab.lastElementChild.remove();
+					NMat--;
+					updateMatLib();
+				}
+				function updateMatLib() {
+					const Tab = GEBID("MatLibForm", "IOTab");
+					const optFrag = document.createDocumentFragment();
+					MatLib = [];
+					for (let i=0; i<NMat; i++) {
+						// Update template
+						let opt = document.createElement("option");
+						opt.value = i;
+						opt.innerHTML = i<NMatFixed?childSeq(Tab, [0, i+1, 0]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 0, 0]).value;
+						optFrag.appendChild(opt);
+						// Update actual variables
+						MatLib[i] = new Object();
+						MatLib[i].name = i<NMatFixed?childSeq(Tab, [0, i+1, 0]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 0, 0]).value;
+						MatLib[i].Ec = i<NMatFixed?childSeq(Tab, [0, i+1, 1]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 1, 0]).value;
+						MatLib[i].mu = i<NMatFixed?childSeq(Tab, [0, i+1, 2]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 2, 0]).value;
+						MatLib[i].Ftu = i<NMatFixed?childSeq(Tab, [0, i+1, 3]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 3, 0]).value;
+						MatLib[i].Fty = i<NMatFixed?childSeq(Tab, [0, i+1, 4]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 4, 0]).value;
+						MatLib[i].Fcy = i<NMatFixed?childSeq(Tab, [0, i+1, 5]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 5, 0]).value;
+						MatLib[i].Fsu = i<NMatFixed?childSeq(Tab, [0, i+1, 6]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 6, 0]).value;
+						MatLib[i].Fbru = i<NMatFixed?childSeq(Tab, [0, i+1, 7]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 7, 0]).value;
+						MatLib[i].Fbry = i<NMatFixed?childSeq(Tab, [0, i+1, 8]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 8, 0]).value;
+					}
+					// Update select objects
+					for (let sel of document.querySelectorAll(".MatLibSel")) {
+						sel.innerHTML = "";
+						sel.appendChild(optFrag.cloneNode(true));
+					}
+				}
+				window.onload = updateMatLib;
+			</script>
+		</div>
 		<div class="analForm" id="TCForm">
 			<header><h2>Tension Clip</h2></header>
 			<div class="container">
@@ -317,6 +464,8 @@
 			</table>
 			<h4 style="border-bottom: 1px solid white; text-align: left;">Material Properties</h4>
 			<h4>Fitting</h4>
+			<div>Material <select class="MatLibSel" onchange="rPackMatLib(this.value, 'fit')"></select></div>
+			<br>
 			<table class="inTab" id="fPropTab">
 				<colgroup>
 					<col span="1" style="text-align:right">
@@ -345,6 +494,8 @@
 				</tr>
 			</table>
 			<h4>Packer</h4>
+			<div>Material <select class="MatLibSel" onchange="rPackMatLib(this.value, 'pack')"></select></div>
+			<br>
 			<table class="inTab" id="pPropTab">
 				<colgroup>
 					<col span="1" style="text-align:right">
@@ -1201,6 +1352,7 @@
 			<h3>Data</h3>
 			<table class="inTab" id="LPETab" style="margin: 0 auto">
 				<tr>
+					<th>Material</th>
 					<th>&mu;</th>
 					<th>L</th>
 					<th>P</th>
@@ -1208,6 +1360,7 @@
 					<th>Intercostal ending</th>
 				</tr>
 				<tr>
+					<td><select class="MatLibSel" onchange="TNMatLib(this.value)"></select></td>
 					<td title="Poisson's ratio"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
 					<td title="Frame pitch"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
 					<td title="Pressure applied"><input placeholder="Enter" type="number" onchange="TNCalcs()"></td>
@@ -1666,8 +1819,7 @@
 		<tbody>
 			<tr>
 			<td>1</td>
-			<td><select id="materialIn" onchange="OFBcalcs()">
-				<option value="7475_T7351">7475-T7351</option>
+			<td><select class="MatLibSel" id="MatIn" onchange="OFBMatLib()">
 			</select></td>
 			<td><input type="number" id="EcIn" placeholder="Enter Ec" onchange="OFBcalcs()"></td>
 			<td><input type="number" id="FcyIn" placeholder="Enter Fcy" onchange="OFBcalcs()"></td>
@@ -1908,7 +2060,7 @@
 			<template id="IRBInRowTemplate">
 				<tr>
 					<td></td>
-					<td><input type="number" placeholder="Enter Material" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
+					<td><select class="MatLibSel" onchange="IRBMatSel(this.parentElement.parentElement)"></select></td>
 					<td><input type="number" placeholder="Enter Ec" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
 					<td><input type="number" placeholder="Enter Fcy" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
 					<td><input type="number" placeholder="Enter nc" onchange="IRBCalcs(this.parentElement.parentElement)"></td>
@@ -1952,6 +2104,17 @@
 					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
 					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
 					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
+					const optFrag = document.createDocumentFragment();
+					for (let i=0; i<NMat; i++) {
+						// Update template
+						let opt = document.createElement("option");
+						opt.value = i;
+						opt.innerHTML = i<NMatFixed?childSeq(GEBID("MatLibForm", "IOTab"), [0, i+1, 0]).innerHTML:childSeq(GEBID("MatLibForm", "IOTab"), [i-NMatFixed+1, 0, 0]).value;
+						optFrag.appendChild(opt);
+						
+					}
+					tRow.querySelector(".MatLibSel").innerHTML = "";
+					tRow.querySelector(".MatLibSel").appendChild(optFrag.cloneNode(true));
 					Tab.appendChild(tRow);
 				}
 				function IRBRmSect() {
@@ -1968,6 +2131,7 @@
 			<div class="formContainer">
 			<div class="formIO">
 				<h3>Properties</h3>
+				<div>Material<br><select class="MatLibSel" onchange="WDTMatLib(this.value)" style="width: 195px;"></select></div>
 				<table id="inPropTab" style="margin-left: -5px;">
 						<tr title="">
 							<td style="text-align: right;">E</td>
@@ -2422,6 +2586,7 @@
 			<div class="container">
 				<div id="crippling" class="formIO">
 					<h2>Input/Output</h2>
+					<div>Material = <select class="MatLibSel" onchange="cripMatLib(this.value, false)" style="width: 150px;"></select></div>
 					<span>Fcy =</span>
 					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(false)" title="(ksi)">
 					<span>Ec =</span>
@@ -2482,6 +2647,7 @@
 			<div class="container">
 				<div id="bendingCrippling" class="formIO">
 					<h2>Input/Output</h2>
+					<div>Material = <select class="MatLibSel" onchange="cripMatLib(this.value, true)" style="width: 150px;"></select></div>
 					<span>Fcy =</span>
 					<input id="FcyIn" placeholder="Enter" onchange="cripCalcs(true)"  title="(ksi)">
 					<span>Ec =</span>
@@ -2908,9 +3074,7 @@
 						</tr>
 						<tr title="">
 							<td style="text-align: right;">Material</td>
-							<td><select id="lugMatIn" style="width: 100%;">
-								<option value="7076-T7651">7076-T7651</option>
-							</select></td>
+							<td><select id="matLugIn" class="MatLibSel" style="width: 100%;" onchange="lugMatLib(this.value, 'lug')"></select></td>
 							<td style="text-align: left"></td>
 						</tr>
 						<tr><td><br></td></tr>
@@ -3013,17 +3177,8 @@
 					<h4>Pin</h4>
 					<table id="inTab3" style="margin-left: 5px;">
 						<tr title="">
-							<td style="text-align: right;">Spec</td>
-							<td><select id="specPinIn" style="width: 100%;">
-								<option value="NAS6606">NAS6606</option>
-							</select></td>
-							<td style="text-align: left"></td>
-						</tr>
-						<tr title="">
 							<td style="text-align: right;">Material</td>
-							<td><select id="matPinIn" style="width: 100%;">
-								<option value="A286-160ksi">A286 - 160 ksi</option>
-							</select></td>
+							<td><select id="matPinIn" class="MatLibSel" style="width: 100%;" onchange="lugMatLib(this.value, 'pin')"></select></td>
 							<td style="text-align: left"></td>
 						</tr>
 						<tr title="">
@@ -3040,17 +3195,8 @@
 					<h4>Bushing</h4>
 					<table id="inTab4" style="margin-left: 5px;">
 						<tr title="">
-							<td style="text-align: right;">Spec</td>
-							<td><select id="specBushIn" style="width: 100%;">
-								<option value="NAS75C6">NAS75C6</option>
-							</select></td>
-							<td style="text-align: left"></td>
-						</tr>
-						<tr title="">
 							<td style="text-align: right;">Material</td>
-							<td><select id="matBushIn" style="width: 100%;">
-								<option value="AMS4640">AMS 4640</option>
-							</select></td>
+							<td><select id="matBushIn" class="MatLibSel" style="width: 100%;" onchange="lugMatLib(this.value, 'bush')"></select></td>
 							<td style="text-align: left"></td>
 						</tr>
 						<tr><td><br></td></tr>
@@ -3722,102 +3868,6 @@
 					childSeq(tab, [2, 0, 3, 0]).innerHTML = "I<sub>"+(i<2?"xx":"yy")+"</sub> = ";
 					grid.appendChild(tab);
 				}
-			</script>
-		</div>
-		<div class="analForm" id="MatLibForm">
-			<style>
-				#MatLibForm input {
-					width: 75px;
-				}
-				#MatLibForm th {
-					width: 75px;
-				}
-			</style>
-			<template id="MatLibRowTemplate">
-				<tr>
-					<td><input placeholder="Enter Material" onchange="updateMatLib()" title="Material name" style="width: 140px;"></td>
-					<td><input type="number" placeholder="Enter Ec" onchange="updateMatLib()" title="Young's modulus"></td>
-					<td><input type="number" placeholder="Enter Fcy" onchange="updateMatLib()" title="Fcy"></td>
-				</tr>
-			</template>
-			<header><h2>Material Library</h2></header>
-			<div class="formIO">
-			<!--<h3>Information</h3>
-			<p style="text-align: center; padding: 5px;">
-				lol
-			</p>-->
-			<table class="inTab" id="IOTab" style="margin: 0 auto;">
-				<tr>
-					<th style="width: 150px;">Material</th>
-					<th>E<sub>c</sub> (Msi)</th>
-					<th>F<sub>cy</sub> (ksi)</th>
-				</tr>
-				<tr>
-					<td>7075-T6</td>
-					<td>12345</td>
-					<td>12345</td>
-				</tr>
-				<tr>
-					<td>2024-T3</td>
-					<td>1234</td>
-					<td>1234</td>
-				</tr>
-				<tr>
-					<td>7050-T7451</td>
-					<td>123</td>
-					<td>123</td>
-				</tr>
-			</table>
-			<br>
-			<button onclick="AddMat()" style="margin-left: 0px;">Add Material</button>
-			<button onclick="RmMat()" style="margin-left: 0px;">Remove Material</button>
-			<br><br>
-			<select class="MatLibSel"></select>
-			</div>
-			<template id="MatLibSelectTemplate">
-
-			</template>
-			<script>
-				let NMatFixed = GEBID("MatLibForm", "IOTab").children[0].children.length - 1, NMat = NMatFixed;
-				let MatLib = [];
-				function AddMat() {
-					let Tab = GEBID("MatLibForm", "IOTab");
-					const tRow = GEBID("MatLibForm", "MatLibRowTemplate").content.cloneNode(true).firstElementChild;
-					Tab.appendChild(tRow);
-					NMat++;
-				}
-				function RmMat() {
-					if (NMat <= NMatFixed) return;
-					let Tab = GEBID("MatLibForm", "IOTab");
-					Tab.lastElementChild.remove();
-					NMat--;
-					updateMatLib();
-				}
-				function updateMatLib() {
-					let MLTemp = GEBID("MatLibSelectTemplate");
-					let Tab = GEBID("MatLibForm", "IOTab");
-					MLTemp.textContent = "";
-					MatLib = [];
-					for (let i=0; i<NMat; i++) {
-						// Update template
-						let opt = document.createElement("option");
-						opt.value = i;
-						opt.innerHTML = i<NMatFixed?childSeq(Tab, [0, i+1, 0]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 0, 0]).value;
-						MLTemp.appendChild(opt);
-						// Update actual variables
-						MatLib[i] = new Object();
-						MatLib[i].name = i<NMatFixed?childSeq(Tab, [0, i+1, 0]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 0, 0]).value;
-						MatLib[i].Ec = i<NMatFixed?childSeq(Tab, [0, i+1, 1]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 1, 0]).value;
-						MatLib[i].Fcy = i<NMatFixed?childSeq(Tab, [0, i+1, 2]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 2, 0]).value;
-					}
-					// Update select objects
-					for (let sel of document.querySelectorAll(".MatLibSel")) {
-						sel.innerHTML = "";
-						sel.appendChild(MLTemp.content.cloneNode(true));
-					}
-					console.log(MatLib);
-				}
-				updateMatLib();
 			</script>
 		</div>
 	</div>
