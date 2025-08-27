@@ -136,9 +136,9 @@ Ellipse analysis in Table \\ref{tab:EA1}:
 Graph seen in Figure \\ref{fig:EA1}:
 
 \\begin{figure}[]
-\\label{fig:EA1}
 \\includegraphics[width=1\\linewidth]{temp/ellipse_chart_b64png.png}
 \\caption{Ellipse Graph}
+\\label{fig:EA1}
 \\end{figure}
 ;`
 
@@ -284,7 +284,7 @@ Outstanding flange buckling analysis within. Input data in Table \\ref{tab:OFB1}
 \\begin{table}[h]
     \\centering
     \\makebox[\\textwidth]{
-    \\scalebox{0.9}{ % Scale down to 70%
+    \\scalebox{0.8}{ % Scale down to 70%
     \\begin{tabular}{|c|cccccccccccc|}
       \\hline \\textbf{Section} & \\textbf{Material} & \\textbf{$E_C$ (msi)} & \\textbf{$F_{CY}$ (ksi)} & \\textbf{$\\mu$} & \\textbf{$nc$} & \\textbf{$t$ (in)} & \\textbf{$b$ (in)} & \\textbf{$F_0$ (psi)} & \\textbf{$F_f$ (psi)} & \\textbf{$t_{web}$ (in)} & \\textbf{$H_{fr}$ (in)} & \\textbf{Lst/Pitch Ratio}\\\\\\hline
         1 & {\\%Mater} & {\\%Ec} & {\\%Fcy} & {\\%mu} & {\\%nc} & {\\%t} & {\\%b} & {\\%F0} & {\\%Ff} & {\\%tweb} & {\\%Hfr} & {\\%LPR}\\\\\\hline
@@ -438,8 +438,8 @@ Lug loading and properties defined in table \\ref{tab:lug2}.
 \\subsubsection{Pin \\& Bushing Properties}
 
 \\begin{table}[ht]
-    \\begin{tabular}{|c|c|c|c|}
-      \\hline Spec & Material & $M_{allow}$ (in$\\cdot$lbs) & $E$ (Msi)\\\\\\hline
+    \\begin{tabular}{|c|c|c|}
+      \\hline Material & $M_{allow}$ (in$\\cdot$lbs) & $E$ (Msi)\\\\\\hline
       <inRow8>\\\\\\hline
     \\end{tabular}
     \\caption{Pin properties}
@@ -447,8 +447,8 @@ Lug loading and properties defined in table \\ref{tab:lug2}.
 \\end{table}
 
 \\begin{table}[ht]
-    \\begin{tabular}{|c|c|c|c|c|c|c|}
-      \\hline Spec & Material & $P_{rad}$ (lbs) & $Fbry$ (ksi) & $Fbru$ (ksi) & $E$ (Msi) & $\\mu$\\\\\\hline
+    \\begin{tabular}{|c|c|c|c|c|c|}
+      \\hline Material & $P_{rad}$ (lbs) & $Fbry$ (ksi) & $Fbru$ (ksi) & $E$ (Msi) & $\\mu$\\\\\\hline
       <inRow9>\\\\\\hline
     \\end{tabular}
     \\caption{Bushing properties}

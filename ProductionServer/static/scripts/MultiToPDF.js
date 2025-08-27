@@ -138,8 +138,7 @@ function texBCrip(tex) {
 }
 function texOFB(tex) {
 		let ASS = document.getElementById("OFBForm").querySelector("#ASSIn").checked;
-		let Mater = document.getElementById("OFBForm").querySelector("#materialIn").value;
-		Mater = Mater.replace("_", "\\_");
+		let Mater = document.getElementById("OFBForm").querySelector("#MatIn").value;
 		let Ec = +document.getElementById("OFBForm").querySelector("#EcIn").value;
 		let Fcy = +document.getElementById("OFBForm").querySelector("#FcyIn").value;
 		let mu = +document.getElementById("OFBForm").querySelector("#muIn").value;
@@ -162,7 +161,7 @@ function texOFB(tex) {
 
 		return tex
 		.replace("{\\%ASS}", ASS ? "Note that the structure was assumed to be simply supported (rotational stiffness and web rigidity were neglected)." : "")
-		.replace("{\\%Mater}", Mater)
+		.replace("{\\%Mater}", MatLib[Mater].name)
 		.replace("{\\%Ec}", Ec)
 		.replace("{\\%Fcy}", Fcy)
 		.replace("{\\%mu}", mu)
@@ -408,22 +407,22 @@ function texLug() {
 	let dumRow = [];
 	// Inputs
 	let dummy = [];
-	let ids = ["LorCIn", "DholeIn", "DpinIn", "DIbushIn", "DObushIn", "WIn", "toIn", "gIn", "loadIDIn", "UFacIn", "FFacIn", "PaxialIn", "PtransIn", "tlugIn", "tiIn", "tcontactIn", "aIn", "cIn", "s1In", "s2In", "alloyIn", "lugMatIn", "FtuLIn", "FtuLTIn", "FtuSTIn", "FtyLIn", "FtyLTIn", "FtySTIn", "Fbry15In", "Fbry20In", "Fbru15In", "Fbru20In", "FcorroIn", "EIn", "muIn", "eIn", "tstockIn", "ALDirIn", "lugPlaneIn", "specPinIn", "matPinIn", "MallowIn", "E2In", "specBushIn", "matBushIn", "PradIn", "FbryIn", "FbruIn", "EBushIn", "muBushIn"];
+	let ids = ["LorCIn", "DholeIn", "DpinIn", "DIbushIn", "DObushIn", "WIn", "toIn", "gIn", "loadIDIn", "UFacIn", "FFacIn", "PaxialIn", "PtransIn", "tlugIn", "tiIn", "tcontactIn", "aIn", "cIn", "s1In", "s2In", "alloyIn", "matLugIn", "FtuLIn", "FtuLTIn", "FtuSTIn", "FtyLIn", "FtyLTIn", "FtySTIn", "Fbry15In", "Fbry20In", "Fbru15In", "Fbru20In", "FcorroIn", "EIn", "muIn", "eIn", "tstockIn", "ALDirIn", "lugPlaneIn", "matPinIn", "MallowIn", "E2In", "matBushIn", "PradIn", "FbryIn", "FbruIn", "EBushIn", "muBushIn"];
 	for (let i=0; i < ids.length; i++)
 		dummy[i] = GEBID("lugForm", ids[i]).value;
-	let [LorC, Dhole, Dpin, DIbush, DObush, W, to, g, loadID, UFac, FFac, Paxial, Ptrans, tlug, ti, tcontact, a, c, s1, s2, alloy, lugMat, FtuL, FtuLT, FtuST, FtyL, FtyLT, FtyST, Fbry15, Fbry20, Fbru15, Fbru20, Fcorro, Elug, mu, e, tstock, ALDir, lugPlane, specPin, matPin, Mallow, Epin, specBush, matBush, Prad, Fbry, Fbru, EBush, muBush] = dummy;
+	let [LorC, Dhole, Dpin, DIbush, DObush, W, to, g, loadID, UFac, FFac, Paxial, Ptrans, tlug, ti, tcontact, a, c, s1, s2, alloy, matlug, FtuL, FtuLT, FtuST, FtyL, FtyLT, FtyST, Fbry15, Fbry20, Fbru15, Fbru20, Fcorro, Elug, mu, e, tstock, ALDir, lugPlane, matPin, Mallow, Epin, matBush, Prad, Fbry, Fbru, EBush, muBush] = dummy;
 	let PlugA = GEBID("lugForm", "PlugAOut").innerHTML, PlugT = GEBID("lugForm", "PlugTOut").innerHTML;
 	tex = tex.replace("<LorC>", LorC);
 	// Build row
 	dumRow[0] = Dhole+"&"+Dpin+"&"+DIbush+"&"+DObush+"&"+W+"&"+to+"&"+g;
 	dumRow[1] = tlug+"&"+ti+"&"+tcontact+"&"+a+"&"+c+"&"+s1+"&"+s2;
 	dumRow[2] = loadID+"&"+UFac+"&"+FFac+"&"+Paxial+"&"+Ptrans+"&"+PlugA+"&"+PlugT;
-	dumRow[3] = alloy+"&"+lugMat;
+	dumRow[3] = alloy+"&"+MatLib[matlug].name;
 	dumRow[4] = FtuL+"&"+FtuLT+"&"+FtuST+"&"+FtyL+"&"+FtyLT+"&"+FtyST;
 	dumRow[5] = Fbry15+"&"+Fbry20+"&"+Fbru15+"&"+Fbru20+"&"+Fcorro;
 	dumRow[6] = Elug+"&"+mu+"&"+e+"&"+tstock+"&"+ALDir+"&"+lugPlane;
-	dumRow[7] = specPin+"&"+matPin+"&"+Mallow+"&"+Epin;
-	dumRow[8] = specBush+"&"+matBush+"&"+Prad+"&"+Fbry+"&"+Fbru+"&"+EBush+"&"+muBush;
+	dumRow[7] = MatLib[matPin].name+"&"+Mallow+"&"+Epin;
+	dumRow[8] = MatLib[matBush].name+"&"+Prad+"&"+Fbry+"&"+Fbru+"&"+EBush+"&"+muBush;
 	
 	for (let i=0; i< dumRow.length; i++) tex = tex.replace("<inRow"+(i+1)+">", dumRow[i]);
 	dumRow = [];
@@ -618,7 +617,8 @@ function texIRB() {
 		let dumRow = ""+(i+1);
 		for (let j=0; j<9; j++) {
 			let cell = childSeq(GEBID("IRBForm", "IOTab"), [i+2, j+1]);
-			dumRow += "&"+(j<7?cell.children[0].value:cell.innerHTML);
+			if (j!=0) dumRow += "&"+(j<7?cell.children[0].value:cell.innerHTML);
+			else dumRow += "&" + MatLib[cell.children[0].value].name;
 		}
 		tex = tex.replace("<trow>", dumRow+(i==IRBNumSect-1?"":"\\\\\\hline\n<trow>"));
 	}
@@ -691,9 +691,9 @@ function texRPack() {
 function texTN() {
 	let tex = NACA_TNTemplate;
 	let tabIQ = GEBID("NACA_TNForm", "LPETab");
-	let dumRow = "" + childSeq(tabIQ, [0, 1, 0, 0]).value;
-	for (let i=1; i<4; i++) dumRow += "&" + childSeq(tabIQ, [0, 1, i, 0]).value;
-	dumRow += "&" + (+childSeq(tabIQ, [0, 1, 4, 0]).value * 100) + "\\%";
+	let dumRow = "" + childSeq(tabIQ, [0, 1, 1, 0]).value;
+	for (let i=1; i<4; i++) dumRow += "&" + childSeq(tabIQ, [0, 1, i+1, 0]).value;
+	dumRow += "&" + (+childSeq(tabIQ, [0, 1, 5, 0]).value * 100) + "\\%";
 	tex = tex.replace("<UniProps>", dumRow)
 	.replace("<numStr>", TNNumStr + (TNNumStr==1?" stringer was":" stringers were"))
 	.replace("<TNWarning>", TNNumStr>1?"Please note that most properties are calculated with respect to the last stringer added.":"");

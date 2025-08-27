@@ -65,6 +65,8 @@ function analDic(boxOrForm) { // Analysis Dictionary FTLOG
 			return "NACA TN";
 		case "rPack":
 			return "Radius Packer";
+		case "MatLib":
+			return "Material Library";
 		default:
 			return "Unknown";
 	}
@@ -76,7 +78,8 @@ function toggleForm(box, form) {
 	if (!form) form = GEBID(box.id.replace("Box", "Form"));
 	ifelse1: if (box.checked) {
 		form.style.display = 'block';
-		if (box.classList.contains("ParaBox")) break ifelse1;
+		form.focus();
+		if (box.classList.contains("ParaBox") || box.id =="MatLibBox") break ifelse1;
 		const element = document.createElement('div');
 		element.setAttribute('class', "sortable-item");
 		element.setAttribute("id", box.id.replace("Box", "") + "Sort");
@@ -84,7 +87,7 @@ function toggleForm(box, form) {
 		GEBID("docOrderList").appendChild(element);
 	} else {
 		form.style.display = 'none';
-		if (box.classList.contains("ParaBox")) break ifelse1;
+		if (box.classList.contains("ParaBox") || box.id =="MatLibBox") break ifelse1;
 		GEBID("docOrderList").removeChild(GEBID(box.id.replace("Box", "") + "Sort"));
 	}
 	break1:
@@ -131,13 +134,4 @@ function rmPara(paraSort) {
 			return;
 		}
 	GEBID("nullForm").style.display = 'block'
-}
-
-// Material Library
-function addMatSel() {
-	/* for (const form of []) {
-		
-	} */
-	const matTemplate = GEBID("matSelectTemplate").content.cloneNode(true);
-	GEBID("ellForm", "Inputs").prepend(matTemplate);
 }

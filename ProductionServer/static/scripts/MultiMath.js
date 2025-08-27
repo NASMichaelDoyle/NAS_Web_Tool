@@ -21,7 +21,6 @@ function startup() {
 		
 	// Setup OFB
 	document.getElementById("OFBForm").querySelector("#ASSIn").checked = false;
-	document.getElementById("OFBForm").querySelector("#materialIn").value = "7475_T7351";
 	document.getElementById("OFBForm").querySelector("#EcIn").value = 11.5;
 	document.getElementById("OFBForm").querySelector("#FcyIn").value = 71;
 	document.getElementById("OFBForm").querySelector("#muIn").value = 0.31;
@@ -453,12 +452,18 @@ function cripCalcs(bending) {
 		parent.querySelector("#MAMOut").innerHTML = MAM.toFixed(0);
 	}
 }
+function cripMatLib(ind, bend) {
+	let mat = MatLib[ind];
+	let parent = GEBID(bend?"bCripForm":"cripForm");
+	parent.querySelector("#FcyIn").value = mat.Fcy;
+	parent.querySelector("#EcIn").value = mat.Ec;
+	cripCalcs(bend);
+}
 
 // OFB funcs
 function OFBcalcs() {
 	// Get input
 	let ASS = document.getElementById("OFBForm").querySelector("#ASSIn").checked;
-	let mater = document.getElementById("OFBForm").querySelector("#materialIn").value;
 	let Ec = +document.getElementById("OFBForm").querySelector("#EcIn").value;
 	let Fcy = +document.getElementById("OFBForm").querySelector("#FcyIn").value;
 	let mu = +document.getElementById("OFBForm").querySelector("#muIn").value;
@@ -486,11 +491,11 @@ function OFBcalcs() {
 	
 	document.getElementById("OFBForm").querySelector("#FoFfOut").innerHTML = !isNaN(F0_Ff) ? F0_Ff.toFixed(2) : F0_Ff;
 	document.getElementById("OFBForm").querySelector("#KOut").innerHTML = !isNaN(K) ? K.toFixed(3) : K;
-	document.getElementById("OFBForm").querySelector("#EtOut").innerHTML = !isNaN(Et) ? Et.toFixed(0) : Et;
-	document.getElementById("OFBForm").querySelector("#EsOut").innerHTML = !isNaN(Es) ? Es.toFixed(0) : Es;
+	document.getElementById("OFBForm").querySelector("#EtOut").innerHTML = !isNaN(Et) ? Et.toFixed(3) : Et;
+	document.getElementById("OFBForm").querySelector("#EsOut").innerHTML = !isNaN(Es) ? Es.toFixed(3) : Es;
 	document.getElementById("OFBForm").querySelector("#etaOut").innerHTML = !isNaN(eta) ? eta.toFixed(3) : eta;
 	document.getElementById("OFBForm").querySelector("#mu_cOut").innerHTML = !isNaN(mu_c) ? mu_c.toFixed(3) : mu_c;
-	document.getElementById("OFBForm").querySelector("#FofbOut").innerHTML = !isNaN(Fofb) ? Fofb.toFixed(0) : Fofb;
+	document.getElementById("OFBForm").querySelector("#FofbOut").innerHTML = !isNaN(Fofb) ? Fofb.toFixed(3) : Fofb;
 	document.getElementById("OFBForm").querySelector("#MSOut").innerHTML = !isNaN(MS) ? MS.toFixed(2) : MS;
 }
 function fofb(b, t, E, nc, mu_e, Fcy, fo, Ff, t_web, H_fr, L_ratio, check) {
@@ -594,6 +599,13 @@ function kreduc(F0, Ff, mu_c) {
 	} catch {
 		console.log("kreduc Error!");
 	} 
+}
+function OFBMatLib() {
+	let mat = MatLib[+GEBID("OFBForm", "MatIn").value];
+	GEBID("OFBForm", "EcIn").value = mat.Ec;
+	GEBID("OFBForm", "FcyIn").value = mat.Fcy;
+	GEBID("OFBForm", "muIn").value = mat.mu;
+	OFBcalcs();
 }
 
 // FPB funcs
@@ -1041,10 +1053,10 @@ function FPBSetCharts(ET) {
 function lugCalcs() {
 	// Acquisition
 	let dummy = [];
-	let ids = ["LorCIn", "DholeIn", "DpinIn", "DIbushIn", "DObushIn", "WIn", "toIn", "gIn", "loadIDIn", "UFacIn", "FFacIn", "PaxialIn", "PtransIn", "tlugIn", "tiIn", "tcontactIn", "aIn", "cIn", "s1In", "s2In", "alloyIn", "lugMatIn", "FtuLIn", "FtuLTIn", "FtuSTIn", "FtyLIn", "FtyLTIn", "FtySTIn", "Fbry15In", "Fbry20In", "Fbru15In", "Fbru20In", "FcorroIn", "EIn", "muIn", "eIn", "tstockIn", "ALDirIn", "lugPlaneIn", "specPinIn", "matPinIn", "MallowIn", "E2In", "specBushIn", "matBushIn", "PradIn", "FbryIn", "FbruIn", "EBushIn", "muBushIn"];
+	let ids = ["LorCIn", "DholeIn", "DpinIn", "DIbushIn", "DObushIn", "WIn", "toIn", "gIn", "loadIDIn", "UFacIn", "FFacIn", "PaxialIn", "PtransIn", "tlugIn", "tiIn", "tcontactIn", "aIn", "cIn", "s1In", "s2In", "alloyIn", "FtuLIn", "FtuLTIn", "FtuSTIn", "FtyLIn", "FtyLTIn", "FtySTIn", "Fbry15In", "Fbry20In", "Fbru15In", "Fbru20In", "FcorroIn", "EIn", "muIn", "eIn", "tstockIn", "ALDirIn", "lugPlaneIn", "MallowIn", "E2In", "PradIn", "FbryIn", "FbruIn", "EBushIn", "muBushIn"];
 	for (let i=0; i < ids.length; i++)
 		dummy[i] = GEBID("lugForm", ids[i]).value;
-	let [LorC, Dhole, Dpin, DIbush, DObush, W, to, g, loadID, UFac, FFac, Paxial, Ptrans, tlug, ti, tcontact, a, c, s1, s2, alloy, lugMat, FtuL, FtuLT, FtuST, FtyL, FtyLT, FtyST, Fbry15, Fbry20, Fbru15, Fbru20, Fcorro, Elug, mu, e, tstock, ALDir, lugPlane, specPin, matPin, Mallow, Epin, specBush, matBush, Prad, Fbry, Fbru, EBush, muBush] = dummy;
+	let [LorC, Dhole, Dpin, DIbush, DObush, W, to, g, loadID, UFac, FFac, Paxial, Ptrans, tlug, ti, tcontact, a, c, s1, s2, alloy, FtuL, FtuLT, FtuST, FtyL, FtyLT, FtyST, Fbry15, Fbry20, Fbru15, Fbru20, Fcorro, Elug, mu, e, tstock, ALDir, lugPlane, Mallow, Epin, Prad, Fbry, Fbru, EBush, muBush] = dummy;
 	to = +to;
 	ti = +ti;
 	
@@ -1666,6 +1678,27 @@ function gamma_fctn(ct, bottom) {
 	else
 		y = 0.5014 * x - 0.0028;
 return y;
+}
+function lugMatLib(ind, part) {
+	let mat = MatLib[ind];
+	if (part === "lug") {
+		for (let id of ["FtuLIn", "FtuLTIn", "FtuSTIn"]) GEBID("lugForm", id).value = mat.Ftu;
+		for (let id of ["FtyLIn", "FtyLTIn", "FtySTIn"]) GEBID("lugForm", id).value = mat.Fty;
+		for (let id of ["Fbry15In", "Fbry20In"]) GEBID("lugForm", id).value = mat.Fbry;
+		for (let id of ["Fbru15In", "Fbru20In"]) GEBID("lugForm", id).value = mat.Fbru;
+		GEBID("lugForm", "EIn").value = mat.Ec;
+		GEBID("lugForm", "muIn").value = mat.mu;
+	}
+	if (part === "pin") {
+		GEBID("lugForm", "E2In").value = mat.Ec;
+	}
+	if (part === "bush") {
+		GEBID("lugForm", "FbryIn").value = mat.Fbry;
+		GEBID("lugForm", "FbruIn").value = mat.Fbru;
+		GEBID("lugForm", "EBushIn").value = mat.Ec;
+		GEBID("lugForm", "muBushIn").value = mat.mu;
+	}
+	lugCalcs();
 }
 
 // boltgroup funcs
@@ -2930,7 +2963,6 @@ function M_Mult(IPM) { // Takes an array of matrices, and multiplies them in ord
 
 // Inter Rivet Buckling funcs
 function IRBCalcs(row) {
-	let mat = childSeq(row, [1, 0]).value;
 	let Ec = childSeq(row, [2, 0]).value;
 	let Fcy = childSeq(row, [3, 0]).value;
 	let nc = childSeq(row, [4, 0]).value;
@@ -2999,6 +3031,12 @@ function interrivet(E, Fcy, nc, pitch, fixity, t) {
 	if (Fir > Fcy) Fir = Fcy;
 	Et = ETangent(Fir, Fcy, E, nc);
 	return [Et/1000000, Fir/1000];
+}
+function IRBMatSel(row) {
+	const index = +childSeq(row, [1, 0]).value;
+	childSeq(row, [2, 0]).value = MatLib[index].Ec;
+	childSeq(row, [3, 0]).value = MatLib[index].Fcy;
+	IRBCalcs(row);
 }
 
 // Section Properties funcs
@@ -3482,13 +3520,24 @@ function rPackCalcs() {
 	childSeq(tabIQ, [0, 5, 1]).style.backgroundColor = (MS_B>0)?"lightgreen":"red";
 
 }
+function rPackMatLib(ind, part) {
+	const mat = MatLib[ind];
+	let tab;
+	if (part === "fit") tab = GEBID("rPackForm", "fPropTab");
+	else if (part === "pack") tab = GEBID("rPackForm", "pPropTab");
+	childSeq(tab, [1, 0, 1, 0]).value = mat.Ftu;
+	childSeq(tab, [1, 1, 1, 0]).value = mat.Fty;
+	childSeq(tab, [1, 2, 1, 0]).value = mat.Fsu;
+	childSeq(tab, [1, 3, 1, 0]).value = mat.Ec;
+	rPackCalcs();
+}
 
 // NACA TN funcs
 function TNCalcs() {
-	let mu = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 0, 0]).value;
-	let L = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 1, 0]).value;
-	let P = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 2, 0]).value;
-	let E = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 3, 0]).value * 1000000;
+	let mu = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 1, 0]).value;
+	let L = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 2, 0]).value;
+	let P = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 3, 0]).value;
+	let E = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 4, 0]).value * 1000000;
 	let percent_clamped = +childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 4, 0]).value;
 	let dataTab = GEBID("NACA_TNForm", "dataTab");
 	for (let Nstr = 1; Nstr <= TNNumStr; Nstr++) {
@@ -3577,6 +3626,11 @@ function press(mu, t_sk, A_str, I_str, A_fr, b, L, R, P, E) {
 	let w = w_top / u_bot;
 
 	return [u, v, w];
+}
+function TNMatLib(ind) {
+	let mat = MatLib[ind];
+	childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 1, 0]).value = mat.mu;
+	childSeq(GEBID("NACA_TNForm", "LPETab"), [0, 1, 4, 0]).value = mat.Ec;
 }
 
 // Frame funcs
@@ -3950,6 +4004,16 @@ function WDTSPCalcs(table, table2) {
 	
 	return [Azt/At, Iyot+Az2t-Math.pow(Azt/At, 2)*At, At];
 }
+function WDTMatLib(ind) {
+	let mat = MatLib[ind];
+	let tab = GEBID("frameDiagTensForm", "inPropTab");
+	childSeq(tab, [0, 0, 1, 0]).value = mat.Ec;
+	childSeq(tab, [0, 1, 1, 0]).value = mat.Ec;
+	childSeq(tab, [0, 2, 1, 0]).value = mat.Ftu;
+	childSeq(tab, [0, 3, 1, 0]).value = mat.Fcy;
+	childSeq(tab, [0, 4, 1, 0]).value = mat.Fsu;
+	frameWDTCalcs();
+}
 
 function dbgSetAll() {
 
@@ -4001,7 +4065,6 @@ function dbgSetAll() {
 	
 	// Set OFB
 	document.getElementById("OFBForm").querySelector("#ASSIn").checked = false;
-	document.getElementById("OFBForm").querySelector("#materialIn").value = "7475_T7351";
 	document.getElementById("OFBForm").querySelector("#EcIn").value = 11.5;
 	document.getElementById("OFBForm").querySelector("#FcyIn").value = 71;
 	document.getElementById("OFBForm").querySelector("#muIn").value = 0.31;
@@ -4031,13 +4094,13 @@ function dbgSetAll() {
 	dummy = ["lug", 0.5015, 0.374, 0.375, 0.501, 1.25, 0.375, 0, "skip", 0, 1.5, 1.15, 2295, 1541, "skip", 0.375, 0.375, 0.375, 0.63, 0.37, 45, 45];
 	for (let i=0; i<dummy.length; i++)
 		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab1"), [0, i, 1, 0]).value = dummy[i];
-	dummy = ["aluminum", "7076-T7651", "skip", 71, 72, 66, 63, 61, 56, "skip", 94, 109, 108, 134, 22.05, "skip", 10.6, 0.33, 10.6, 3, "ST", "LT-ST"];
+	dummy = ["aluminum", "skip", "skip", 71, 72, 66, 63, 61, 56, "skip", 94, 109, 108, 134, 22.05, "skip", 10.6, 0.33, 10.6, 3, "ST", "LT-ST"];
 	for (let i=0; i<dummy.length; i++)
 		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab2"), [0, i, 1, 0]).value = dummy[i];
-	dummy = ["skip", "skip", 1261, 29];
+	dummy = ["skip", 1261, 29];
 	for (let i=0; i<dummy.length; i++)
 		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab3"), [0, i, 1, 0]).value = dummy[i];
-	dummy = ["skip", "skip", "skip", "N/A", 104, 198, 29, 0.33];
+	dummy = ["skip", "skip", "N/A", 104, 198, 29, 0.33];
 	for (let i=0; i<dummy.length; i++)
 		if (dummy[i] != "skip") childSeq(GEBID("lugForm", "inTab4"), [0, i, 1, 0]).value = dummy[i];
 	lugCalcs();
