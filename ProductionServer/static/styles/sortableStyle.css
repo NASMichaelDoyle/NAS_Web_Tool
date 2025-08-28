@@ -12,6 +12,7 @@
 .sortable-item {
     padding: 12px 15px;
     border-bottom: 1px solid #eee;
+    border-radius: 5px;
     background-color: #fff;
     cursor: grab; /* Indicate it's draggable */
 }
