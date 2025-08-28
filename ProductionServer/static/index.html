@@ -275,11 +275,24 @@
 						MatLib[i].Fbru = i<NMatFixed?childSeq(Tab, [0, i+1, 7]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 7, 0]).value;
 						MatLib[i].Fbry = i<NMatFixed?childSeq(Tab, [0, i+1, 8]).innerHTML:childSeq(Tab, [i-NMatFixed+1, 8, 0]).value;
 					}
+					MatLib[-1] = {name: "Not Specified"}; // Unspecified
+					
 					// Update select objects
+					 
 					for (let sel of document.querySelectorAll(".MatLibSel")) {
 						sel.innerHTML = "";
 						sel.appendChild(optFrag.cloneNode(true));
+						sel.appendChild(MatLibPlaceholder());
 					}
+				}
+				function MatLibPlaceholder() {
+					const placeholderOption = document.createElement('option');
+   					placeholderOption.value = "-1";          // No value will be submitted
+    				placeholderOption.innerHTML = "Select Material"; // The text the user sees
+    				placeholderOption.disabled = true;     // Prevents user from selecting it again
+    				placeholderOption.selected = true;     // Makes it the default selected option
+    				placeholderOption.hidden = true;
+					return placeholderOption;
 				}
 				window.onload = updateMatLib;
 			</script>
@@ -2114,6 +2127,7 @@
 					}
 					tRow.querySelector(".MatLibSel").innerHTML = "";
 					tRow.querySelector(".MatLibSel").appendChild(optFrag.cloneNode(true));
+    				tRow.querySelector(".MatLibSel").appendChild(MatLibPlaceholder());
 					Tab.appendChild(tRow);
 				}
 				function IRBRmSect() {

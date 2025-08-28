@@ -78,7 +78,7 @@ function toggleForm(box, form) {
 	if (!form) form = GEBID(box.id.replace("Box", "Form"));
 	ifelse1: if (box.checked) {
 		form.style.display = 'block';
-		form.focus();
+		form.scrollIntoView();
 		if (box.classList.contains("ParaBox") || box.id =="MatLibBox") break ifelse1;
 		const element = document.createElement('div');
 		element.setAttribute('class', "sortable-item");
