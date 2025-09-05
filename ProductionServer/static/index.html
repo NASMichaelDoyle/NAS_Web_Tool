@@ -127,7 +127,7 @@
 		<h2 style="text-align: center;">Options</h2>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Input Data</h4>
 		<input id="MatLibBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Material Library<br><br>
-		<span style="display: flex;">
+		<span style="display: none;"> <!-- These functions are extremely broken with the new "Add forms" system, so they will be omitted -->
 			<button class="button" style="width: 45%;" onclick="downloadInput()" title="Download a CSV file containing all inputted data">Download Inputs</button>
 			<button class="button" style="width: 45%;" onclick="GEBID('UpIns').click()" title="Upload a CSV to re-apply inputted data across sessions">Upload Inputs</button>
 			<input type="file" id="UpIns" accept=".csv" oninput="const reader = new FileReader(); reader.onload = function(event) {const csv = event.target.result; uploadInput(csv);}; reader.readAsText(this.files[0]);" style="display:none;">
@@ -1348,7 +1348,7 @@
 				</div>
 			</div>
 		</div></template>
-		<template id="NACA_TNFormTemp"><div class="analForm NACA_TNForm" id="NACA_TNFormUnfocused" onclick="focusForm(this); TNAddStr();">
+		<template id="NACA_TNFormTemp"><div class="analForm NACA_TNForm" id="NACA_TNFormUnfocused" onclick="focusForm(this);">
 			<template id="TNDataRowTemplate">
 				<tr>
 					<td title="Stringer #"></td>
@@ -2083,7 +2083,7 @@
 				</div>
 			</div>
 		</div></template>
-		<template id="IRBFormTemp"><div class="analForm IRBForm" id="IRBFormUnfocused" onclick="focusForm(this); IRBAddSect();">
+		<template id="IRBFormTemp"><div class="analForm IRBForm" id="IRBFormUnfocused" onclick="focusForm(this);">
 			<style>
 				#IRBForm input {
 					width: 75px;
@@ -2721,9 +2721,7 @@
 				<img src="images/bCripDia.png" alt="Bending Crippling Diagram" style="width:50%;">
 			</div>
 		</div></template>
-		<template id="boltgroupFormTemp"><div class="analForm boltgroupForm" id="boltgroupFormUnfocused" onclick="focusForm(this); for (let i=0; i<4; i++) {
-						BGAddFast();
-					}">
+		<template id="boltgroupFormTemp"><div class="analForm boltgroupForm" id="boltgroupFormUnfocused" onclick="focusForm(this);">
 			<header><h2>Boltgroup 2D</h2></header>
 			<div class="formIO" style="float: left; width: 270px;">
 				<h3>Applied Load</h3>
@@ -3751,7 +3749,7 @@
 			</table>
 			<br>
 			<button onclick="SPAddPt(); SPCalcs();" style="margin-left: 0px;">Add Point</button>
-			<button onclick="SPRmPt(); if (SPNumPt>1) SPCalcs();" style="margin-left: 0px;">Remove Point</button>
+			<button onclick="SPRmPt();" style="margin-left: 0px;">Remove Point</button>
 			<br><br>
 			<table>
 				<tr>
@@ -3842,29 +3840,32 @@
 </div>
 <!-- Scripts -->
  <script>
-				let TNNumStr = 0;
+				let TNNumStr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 				function TNAddStr() {
+					let J = GEBID("NACA_TNForm").getAttribute("index");
 					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
 					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
-					if (TNNumStr > 1) for (let i=1; i<10; i++) if (i!=7) childSeq(tRow, [i, 0]).value = childSeq(Tab, [TNNumStr-1, i, 0]).value;
+					childSeq(tRow, [0]).innerHTML = (++TNNumStr[J]);
+					if (TNNumStr[J] > 1) for (let i=1; i<10; i++) if (i!=7) childSeq(tRow, [i, 0]).value = childSeq(Tab, [TNNumStr-1, i, 0]).value;
 					Tab.appendChild(tRow);
-					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
+					if (TNNumStr[J] > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
 				}
 				function TNRmStr() {
-					if (TNNumStr <= 1) return;
+					let J = GEBID("NACA_TNForm").getAttribute("index");
+					if (TNNumStr[J] <= 1) return;
 					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
 					Tab.lastElementChild.remove();
-					TNNumStr--;
-					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
+					TNNumStr[J]--;
+					if (TNNumStr[J] < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
 				}
 			</script>
 <script>
-				let IRBNumSect = 0;
+				let IRBNumSect = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 				function IRBAddSect() {
+					let J = GEBID("IRBForm").getAttribute("index");
 					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
 					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
+					childSeq(tRow, [0]).innerHTML = (++IRBNumSect[J]);
 					const optFrag = document.createDocumentFragment();
 					for (let i=0; i<NMat; i++) {
 						// Update template
@@ -3880,47 +3881,52 @@
 					Tab.appendChild(tRow);
 				}
 				function IRBRmSect() {
-					if (IRBNumSect <= 1) return;
+					let J = GEBID("IRBForm").getAttribute("index");
+					if (IRBNumSect[J] <= 1) return;
 					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
 					Tab.lastElementChild.remove();
-					IRBNumSect--;
+					IRBNumSect[J]--;
 				}
 			</script>
 <script>
-					let BGNumFast = 0;
+					let BGNumFast = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 					function BGAddFast() {
+						let J = GEBID("boltgroupForm").getAttribute("index");
 						let inTab = GEBID("boltgroupForm", "inTab").children[0];
 						let outTab = GEBID("boltgroupForm", "outTab").children[0];
 						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
+						childSeq(tRow, [0]).innerHTML = (++BGNumFast[J]);
 						inTab.appendChild(tRow);
 						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
+						childSeq(tRowOut, [0]).innerHTML = (BGNumFast[J]);
 						outTab.appendChild(tRowOut);
 					}
 					function BGRmFast() {
-						if (BGNumFast < 2) return;
+						let J = GEBID("boltgroupForm").getAttribute("index");
+						if (BGNumFast[J] < 2) return;
 						let inTab = GEBID("boltgroupForm", "inTab").children[0];
 						let outTab = GEBID("boltgroupForm", "outTab").children[0];
 						inTab.lastElementChild.remove();
 						outTab.lastElementChild.remove();
-						BGNumFast--;
+						BGNumFast[J]--;
 						boltgroupCalcs();
 					}
 			</script>
 <script>
-				let SPNumPt = 0;
+				let SPNumPt = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 				function SPAddPt() {
+					let J = GEBID("SPForm").getAttribute("index");
 					let Tab = GEBID("SPForm", "IOTab");//.children[0];
 					const tRow = GEBID("SPForm", "SPInRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++SPNumPt);
+					childSeq(tRow, [0]).innerHTML = (++SPNumPt[J]);
 					Tab.appendChild(tRow);
 				}
 				function SPRmPt() {
-					if (SPNumPt <= 1) return;
+					let J = GEBID("SPForm").getAttribute("index");
+					if (SPNumPt[J] <= 1) return;
 					let Tab = GEBID("SPForm", "IOTab");//.children[0];
 					Tab.lastElementChild.remove();
-					SPNumPt--;
+					SPNumPt[J]--;
 				}
 			</script>
 <script src="scripts/MultiUI.js"></script>

@@ -22,7 +22,7 @@ function texPara(n) {
 	let paragraph = GEBID("paraForm" + n, "paraText").value;
 	return (heading.toLowerCase() == "conclusion" ? "\\clearpage\n\\section{" : heading == "" ? "%" : "\\subsection{") + heading + "}\n\n" + paragraph + "\n\n";
 }
-function texEllipse(tex) {
+function texEllipse(tex, index) {
 		for (let eta_deg = 0; eta_deg <=360; eta_deg += 15) {
 			let htmlRow = document.getElementById("ellForm").querySelector("#eta" + eta_deg);
 			let eta = +htmlRow.children[1].innerHTML;
@@ -35,6 +35,7 @@ function texEllipse(tex) {
 			if (eta_deg < 360) tRow += "\n{\\%ellTLH}";
 			tex = tex.replace("{\\%ellTLH}", tRow);
 		}
+		tex = tex.replace("ellipse_chart_b64png", "ellipse_chart" + index +"_b64png");
 		return tex;
 }
 function texTC(tex) {
@@ -487,6 +488,8 @@ function texBoltgroup() {
 		for (let j=0; j<10; j++)
 			dumRow += childSeq(outTab, [0,i+1,j]).innerHTML + (j<9?"&":"\\\\\\hline\n");
 	tex = tex.replace("<outRow>", dumRow);
+
+	tex = tex.replace("boltgroup_chart_b64png", "boltgroup_chart" + index +"_b64png");
 	return tex;
 }
 function texLJD() {
@@ -656,6 +659,8 @@ function texSP() {
 		for (let j=1; j<5; j++) propRow += "&" + sProps[i][j];
 		tex = tex.replace(ids[i], propRow);
 	}
+
+	tex = tex.replace("sectpropdia_b64png", "sectpropdia" + index +"_b64png");
 	return tex;
 }
 function texRPack() {
@@ -860,7 +865,7 @@ function writeTeX() { // Build TeX document in order from inputs
 			if (form.getAttribute("index") == index) focusForm(form);
 		switch (type) {
 			case "ell":
-				tex += texEllipse(ellTemplate);
+				tex += texEllipse(ellTemplate, index);
 				break;
 			case "TC":
 				tex += texTC(tcTemplate);
@@ -893,7 +898,7 @@ function writeTeX() { // Build TeX document in order from inputs
 				tex += texFrameCT();
 				break;
 			case "boltgroup":
-				tex += texBoltgroup();
+				tex += texBoltgroup(index);
 				break;
 			case "LJD":
 				try {tex += texLJD();}
@@ -903,7 +908,7 @@ function writeTeX() { // Build TeX document in order from inputs
 				tex += texIRB();
 				break;
 			case "SP":
-				tex += texSP();
+				tex += texSP(index);
 				break;
 			case "rPack":
 				tex += texRPack();
@@ -945,7 +950,7 @@ function downloadPDF(debugMode = false) { // Requires a server to convert .tex t
 	//console.log(tex); // Debug
 	const formData = new FormData(); // Stores data to send in key-value pairs
 	formData.append('latex_code', tex);
-	if (document.getElementById("ellBox").checked) {
+	/* if (document.getElementById("ellBox").checked) {
 		const ellChartCont = document.getElementById("ellForm").querySelector("#myChart").toDataURL("image/png");
 		formData.append('ellipse_chart_b64png', ellChartCont);
 	}
@@ -963,6 +968,28 @@ function downloadPDF(debugMode = false) { // Requires a server to convert .tex t
 	}
 	if (GEBID("SPBox").checked) {
 		formData.append("sectpropdia_b64png", GEBID("SPForm", "diaCanv").toDataURL("image/png"));
+	} */
+	for (let form of document.querySelectorAll(".ellForm")) {
+		focusForm(form);
+		const ellChartCont = document.getElementById("ellForm").querySelector("#myChart").toDataURL("image/png");
+		formData.append('ellipse_chart' + form.getAttribute("index") + '_b64png', ellChartCont);
+	}
+	for (let form of document.querySelectorAll(".FPBForm")) {
+		focusForm(form);
+		const FPBC1 = GEBID("hiddenChart1").toDataURL("image/png");
+		const FPBC2 = GEBID("hiddenChart2").toDataURL("image/png");
+		const FPBC3 = GEBID("hiddenChart3").toDataURL("image/png");
+		formData.append("FPB_chart1_b64png", FPBC1);
+		formData.append("FPB_chart2_b64png", FPBC2);
+		formData.append("FPB_chart3_b64png", FPBC3);
+	}
+	for (let form of document.querySelectorAll(".boltgroupForm")) {
+		focusForm(form);
+		formData.append("boltgroup_chart" + form.getAttribute("index") + "_b64png", GEBID("boltgroupForm", "bgChart").toDataURL("image/png"));
+	}
+	for (let form of document.querySelectorAll(".SPForm")) {
+		focusForm(form);
+		formData.append("sectpropdia" + form.getAttribute("index") + "_b64png", GEBID("SPForm", "diaCanv").toDataURL("image/png"));
 	}
 	fetch((debugMode ? 'http://localhost:5000': '') + '/get_multi_latex', { // Server address (localhost for development)
 		method: 'POST',

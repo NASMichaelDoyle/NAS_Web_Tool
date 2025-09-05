@@ -97,7 +97,7 @@ function toggleForm(box, form) {
 			GEBID("nullForm").style.display = 'none';
 			return;
 		}
-	GEBID("nullForm").style.display = 'block'
+	//GEBID("nullForm").style.display = 'block'
 }
 // Cover page collapse
 let CPcollapse = true;
