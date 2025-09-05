@@ -853,8 +853,12 @@ function replaceFromEnd(str, exp, repl) {
 
 function writeTeX() { // Build TeX document in order from inputs
 	let tex = texTitle(); // Handle cover page
-	for (let step of DOL.toArray()) // Handle all contents in order
-		switch (step.replace("Sort", "").replace(/\d/g, "")) {
+	for (let step of DOL.toArray()) {// Handle all contents in order
+		let index = step.split("Sort")[1];
+		let type = step.split("Sort")[0];
+		for (let form of document.querySelectorAll("." + type + "Form"))
+			if (form.getAttribute("index") == index) focusForm(form);
+		switch (type) {
 			case "ell":
 				tex += texEllipse(ellTemplate);
 				break;
@@ -915,7 +919,7 @@ function writeTeX() { // Build TeX document in order from inputs
 
 				break;
 		}
-
+	}
 	// Handle conclusion
 	tex += "\n\\end{document}"
 	return tex;
@@ -923,7 +927,6 @@ function writeTeX() { // Build TeX document in order from inputs
 function downloadTexFile() {
 	const filename = "analysis.tex"; // Specify the .tex extension
 	let tex = writeTeX();
-	for (const func of [texEllipse, texTC, texCrip, texBCrip, texOFB, texFPB]) tex = func(tex);
 	//console.log(tex); // Debugging
 	const element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(tex));

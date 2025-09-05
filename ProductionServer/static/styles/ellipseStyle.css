@@ -1,46 +1,46 @@
 /* Ellipse form */
-#ellContainer {
+.ellContainer {
 	background-color: lightgray;
 	display: grid;
  	grid-template-columns: 300px auto;
 	grid-template-rows: auto;
 }
-#ellForm #Inputs button {
+.ellForm #Inputs button {
 	display: block;
 	width: 150px;
 	margin: 0 auto;
 }
-#ellForm h2 {
+.ellForm h2 {
 	text-align:center
 }
-#ellForm nput {
+.ellForm nput {
 	width: 115px;
 }
-#ellForm #Inputs span {
+.ellForm #Inputs span {
 	display: inline-block;
 	width: 50px;
 	/*border: 1px solid #ccc;*/
 	text-align: right;
 }
-#ellForm #Inputs {
+.ellForm #Inputs {
 	padding:20px;
 }
-#ellForm table {
+.ellForm table {
   border-collapse: collapse;
   width: 80%;
   margin: auto;
 }
 
-#ellForm th, #ellForm td {
+.ellForm th, .ellForm td {
   text-align: left;
   width: 80px;
   border: 1px solid black;
   border-collapse: collapse;
 }
-#ellForm tr:nth-child(odd) {
+.ellForm tr:nth-child(odd) {
   background-color: #D6EEEE;
 }
-#ellForm #Outputs {
+.ellForm #Outputs {
 	margin-left: 0px;
 	background-color: white;
 }

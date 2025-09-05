@@ -1,40 +1,40 @@
-#OFBForm .container {
+.OFBForm .container {
 	display:flex;
 	align-items:flex-start;
 
 	width: 70vw;
 }
-#OFBForm #IO {
+.OFBForm #IO {
 	text-align: center;
 	padding: 10px;
 }
-#OFBForm .container h2 {
+.OFBForm .container h2 {
 	text-align: center;
 }
-#OFBForm .container input {
+.OFBForm .container input {
 	width:60px;
 }
-#OFBForm #units {
+.OFBForm #units {
 	display: inline-block;
 	text-align:left;
 	width:20px;
 }
-#OFBForm .container button {
+.OFBForm .container button {
 	display: block;
 	width: 150px;
 	margin: 0 auto;
 }
-#OFBForm table {
+.OFBForm table {
   text-align: center;
   border: 1px solid #000000;
   border-collapse: collapse;
   background-color: white;
 }
-#OFBForm td, #OFBForm th {
+.OFBForm td, .OFBForm th {
 	width: 80px;
 	border-bottom: 1px solid black;
 	color: black;
 }
-#OFBForm .container td select {
+.OFBForm .container td select {
 	width: 100%;
 }

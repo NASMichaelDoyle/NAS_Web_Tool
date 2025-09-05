@@ -1,45 +1,45 @@
-#cripForm .container, #bCripForm .container {
+.cripForm .container, .bCripForm .container {
 	display:flex;
 	align-items:flex-start;
 
 }
-#cripForm #crippling {
+.cripForm #crippling {
 	width: 500px;
 	text-align: center;
 	padding: 10px;
 }
-#bCripForm #bendingCrippling {
+.bCripForm #bendingCrippling {
 	width: 600px;
 	text-align: center;
 	padding: 10px;
 }
-#cripForm .container h2, #bCripForm .container h2 {
+.cripForm .container h2, .bCripForm .container h2 {
 	text-align: center;
 }
-#cripForm .container select, #bCripForm .container select {
+.cripForm .container select, .bCripForm .container select {
 	width: 60px;
 }
-#cripForm .container input, #bCripForm .container input {
+.cripForm .container input, .bCripForm .container input {
 	width:60px;
 }
-#cripForm .outTable, #bCripForm .outTable {
+.cripForm .outTable, .bCripForm .outTable {
   border: 1px solid #000000;
   margin: 0 auto;
   background-color: #ffffff;
 }
-#cripForm .outTable td, #bCripForm .outTable td {
+.cripForm .outTable td, .bCripForm .outTable td {
 	text-align: right;
 	color: #993366;
 	border: none;
 }
-#cripForm table, #bCripForm table {
+.cripForm table, .bCripForm table {
   text-align: center;
   border-collapse: collapse;
 }
-#cripForm table td, #cripForm table th, #cripForm table td, #bCripForm table th {
+.cripForm table td, .cripForm table th, .cripForm table td, .bCripForm table th {
 	padding: 2px 5px;
 }
-#cripForm table thead th, #bCripForm table thead th {
+.cripForm table thead th, .bCripForm table thead th {
     border-bottom: 2px solid white;
 	color: white;
 	text-align: center;

@@ -29,7 +29,8 @@ let DOL = new Sortable(document.getElementById('docOrderList'), { // Document Or
 });
 
 function analDic(boxOrForm) { // Analysis Dictionary FTLOG
-	exp = boxOrForm.id.replace("Box", "").replace("Form", "");
+	if (boxOrForm.id) exp = boxOrForm.id.replace("Box", "").replace("Form", "");
+	else exp = boxOrForm;
 	switch (exp) {
 		case "ell":
 			return "Ellipse";
@@ -134,4 +135,67 @@ function rmPara(paraSort) {
 			return;
 		}
 	GEBID("nullForm").style.display = 'block'
+}
+
+// Forms controller
+let numForms = {
+	"TC": 0,
+	"rPack": 0,
+	"frameSTA": 0,
+	"NACA_TN": 0,
+	"ell": 0,
+	"OFB": 0,
+	"FPB": 0,
+	"IRB": 0,
+	"frameDiagTens": 0,
+	"crip": 0,
+	"bCrip": 0,
+	"boltgroup": 0,
+	"LJD": 0,
+	"lug": 0,
+	"SP": 0
+};
+
+function addForm(button) {
+	let type = button.id.split("Add")[0];
+	let form = GEBID(type + "FormTemp").content.cloneNode(true).firstElementChild;
+	form.setAttribute("index", ++numForms[type]);
+	form.style.display = "block";
+	form.querySelector("h2").innerHTML += " " + numForms[type];
+	GEBID("FormParent").appendChild(form);
+	form.scrollIntoView();
+	GEBID("nullForm").style.display = 'none';
+	// Sortable
+	const element = document.createElement('div');
+	element.setAttribute('class', "sortable-item");
+	element.setAttribute("id", type + "Sort" + numForms[type]);
+	element.setAttribute("index", numForms[type]);
+	element.innerHTML = analDic(type) + " " + numForms[type];
+	GEBID("docOrderList").appendChild(element);
+	// Focus
+	focusForm(form);
+}
+
+function rmForm(button) {
+	let type = button.id.split("Rm")[0];
+	let index = numForms[type];
+	if (index < 1) return;
+	if (GEBID(type + "Form")) {
+	if (GEBID(type + "Form").getAttribute("index") == index) {
+		GEBID(type + "Form").remove();
+	}}
+	for (let form of document.querySelectorAll("#" + type + "FormUnfocused"))
+		if (form.getAttribute("index") == index)
+			form.remove();
+	numForms[type]--;
+	// Sortable
+	let sort = GEBID(type + "Sort" + (numForms[type]+1));
+	GEBID("docOrderList").removeChild(sort);
+}
+
+function focusForm(form) {
+	let type = form.id.split("Form")[0];
+	for (let other of document.querySelectorAll("#" + type + "Form")) other.id = type + "FormUnfocused";
+	form.id = type + "Form";
+	updateMatLib();
 }

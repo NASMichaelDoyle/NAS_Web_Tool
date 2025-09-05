@@ -71,28 +71,58 @@
 	<div id="sidebarContent">
 		<h2 style="text-align: center;">Analyses</h2>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Tension Clip</h4>
-		<input id="TCBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('TCForm'))"> Tension Clip <br>
-		<input id="rPackBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Radius Packer<br>
+		<button id="TCAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="TCRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Tension Clip <br>
+		<button id="rPackAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="rPackRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Radius Packer<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Fuselage Analysis</h4>
-		<input id="frameSTABox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameSTAForm'))"> Frame STA Loads<br>
-		<input id="NACA_TNBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> NACA Technical Note<br>
+		<button id="frameSTAAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="frameSTARm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Frame STA Loads<br>
+		<button id="NACA_TNAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="NACA_TNRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		NACA Technical Note<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Stress Distributions</h4>
-		<input id="ellBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Ellipse <br>
+		<button id="ellAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="ellRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Ellipse <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Compressive Stability</h4>
-		<input id="OFBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('OFBForm'))"> Outstanding Flange Buckling<br>
-		<input id="FPBBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('FPBForm'))"> Flat Plate Buckling<br>
-		<input id="IRBBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Inter Rivet Buckling <br>
-		<input id="frameDiagTensBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('frameDiagTensForm'))"> Web Diagonal Tension<br>
+		<button id="OFBAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="OFBRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Outstanding Flange Buckling<br>
+		<button id="FPBAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="FPBRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Flat Plate Buckling<br>
+		<button id="IRBAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="IRBRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Inter Rivet Buckling <br>
+		<button id="frameDiagTensAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="frameDiagTensRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Web Diagonal Tension<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Crippling</h4>
-		<input id="cripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('cripForm'))"> Crippling <br>
-		<input id="bCripBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('bCripForm'))"> Bending Crippling <br>
+		<button id="cripAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="cripRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Crippling <br>
+		<button id="bCripAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="bCripRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Bending Crippling <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Fastener Load Distributions</h4>
-		<input id="boltgroupBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Boltgroup <br>
-		<input id="LJDBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Lap Joint Doubler <br>
+		<button id="boltgroupAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="boltgroupRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Boltgroup <br>
+		<button id="LJDAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="LJDRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Lap Joint Doubler <br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Lug Analysis</h4>
-		<input id="lugBox" class="analBox" type="checkbox" onchange="toggleForm(this, document.getElementById('lugForm'))"> Lug Analysis<br>
+		<button id="lugAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="lugRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Lug Analysis<br>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Section Properties</h4>
-		<input id="SPBox" class="analBox" type="checkbox" onchange="toggleForm(this)"> Section Properties<br>
+		<button id="SPAdd" class="button" onclick="addForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&plus;</button>
+		<button id="SPRm" class="button" onclick="rmForm(this)" style="margin: 0 0; width: 22px; display: inline-block;">&minus;</button>
+		Section Properties<br>
 		
 		<h2 style="text-align: center;">Options</h2>
 		<h4 style="border-bottom: 1px solid #116a75; margin: 10px 5px; width: 95%;">Input Data</h4>
@@ -298,7 +328,7 @@
 				window.onload = updateMatLib;
 			</script>
 		</div>
-		<div class="analForm" id="TCForm">
+		<template id="TCFormTemp"><div class="analForm TCForm" onclick="focusForm(this)" id="TCFormUnfocused">
 			<header><h2>Tension Clip</h2></header>
 			<div class="container">
 				<div id="Inputs" class="formIO">
@@ -369,8 +399,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="analForm" id="rPackForm">
+		</div></template>
+		<template id="rPackFormTemp"><div class="analForm rPackForm" id="rPackFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Radius Packer</h2></header>
 			<div id="formContainer" style="display: flex;">
 				<style>
@@ -680,12 +710,13 @@
 			</div>
 			</div>
 			<script>
-				GEBID("rPackForm").querySelectorAll("input").forEach(element => {
- 					element.setAttribute('onchange', 'rPackCalcs()');
-				});
+				for (let elem of document.querySelectorAll("rPackFormUnfocused"))
+					elem.querySelectorAll("input").forEach(element => {
+ 						element.setAttribute('onchange', 'rPackCalcs()');
+					});
 			</script>
-		</div>
-		<div class="analForm" id="frameSTAForm">
+		</div></template>
+		<template id="frameSTAFormTemp"><div class="analForm frameSTAForm" id="frameSTAFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Frame STA Loads</h2></header>
 			<div class="formContainer">
 				<div class="formIO" style="width: 200px; height: auto;">
@@ -1316,8 +1347,8 @@
 				</div>
 				</div>
 			</div>
-		</div>
-		<div class="analForm" id="NACA_TNForm">
+		</div></template>
+		<template id="NACA_TNFormTemp"><div class="analForm NACA_TNForm" id="NACA_TNFormUnfocused" onclick="focusForm(this); TNAddStr();">
 			<template id="TNDataRowTemplate">
 				<tr>
 					<td title="Stringer #"></td>
@@ -1557,28 +1588,9 @@
 				</table>
 				</div>
 			</div>
-			<script>
-				let TNNumStr = 0;
-				function TNAddStr() {
-					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
-					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
-					if (TNNumStr > 1) for (let i=1; i<10; i++) if (i!=7) childSeq(tRow, [i, 0]).value = childSeq(Tab, [TNNumStr-1, i, 0]).value;
-					Tab.appendChild(tRow);
-					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
-				}
-				function TNRmStr() {
-					if (TNNumStr <= 1) return;
-					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
-					Tab.lastElementChild.remove();
-					TNNumStr--;
-					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
-				}
-				TNAddStr();
-			</script>
 			</div>
-		</div>
-		<div class="analForm" id="ellForm"> <!-- analysis form, ya dirty minded fool -->
+		</div></template>
+		<template id="ellFormTemp"><div class="analForm ellForm" id="ellFormUnfocused" onclick="focusForm(this)"> <!-- analysis form, ya dirty minded fool -->
 			<header><h2>Ellipse Analysis (BETA)</h2></header>
 			<style>
 				#ellForm input {
@@ -1588,7 +1600,7 @@
 					text-align: left;
 				}
 			</style>
-			<div id="ellContainer">
+			<div class="ellContainer">
 			<div id="Inputs" class="formIO">
 				<h2>Inputs</h2>
 				<span>Fx</span>
@@ -1792,8 +1804,15 @@
 		</table>
 			</div>
 			</div>
-		</div>
-		<div class="analForm" id="OFBForm">
+			<script>
+				for (let elem of document.querySelectorAll("ellFormUnfocused"))
+					for (let i=0; i <= 360; i += 15) {
+						elem.querySelector("#eta" + i).children[0].innerHTML = i;
+						elem.querySelector("#eta" + i).children[1].innerHTML = (i*Math.PI/180).toFixed(3);
+					}
+			</script>
+		</div></template>
+		<template id="OFBFormTemp"><div class="analForm OFBForm" id="OFBFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Outstanding Flange Buckling</h2></header>
 <div class="container">
 	<div id="IO" class="formIO">
@@ -1887,8 +1906,8 @@
  -->	</div>
 	<img src="images/OFB_diagram.png" alt="OFB diagram">
 </div>
-		</div>
-		<div class="analForm" id="FPBForm">
+		</div></template>
+		<template id="FPBFormTemp"><div class="analForm FPBForm" id="FPBFormUnfocused" onclick="focusForm(this); FPBSetCharts(document.getElementById('FPBForm').querySelector('#ETIn').value);">
 			<header><h2>Flat Plate Buckling</h2></header>
 			<div class="formContainer" id="FPBContainer">
 				<div class="formIO" style="width: 300px;">
@@ -2063,8 +2082,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="analForm" id="IRBForm">
+		</div></template>
+		<template id="IRBFormTemp"><div class="analForm IRBForm" id="IRBFormUnfocused" onclick="focusForm(this); IRBAddSect();">
 			<style>
 				#IRBForm input {
 					width: 75px;
@@ -2111,36 +2130,9 @@
 			<button onclick="IRBAddSect()" style="margin-left: 0px;">Add Section</button>
 			<button onclick="IRBRmSect()" style="margin-left: 0px;">Remove Section</button>
 			</div>
-			<script>
-				let IRBNumSect = 0;
-				function IRBAddSect() {
-					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
-					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
-					const optFrag = document.createDocumentFragment();
-					for (let i=0; i<NMat; i++) {
-						// Update template
-						let opt = document.createElement("option");
-						opt.value = i;
-						opt.innerHTML = i<NMatFixed?childSeq(GEBID("MatLibForm", "IOTab"), [0, i+1, 0]).innerHTML:childSeq(GEBID("MatLibForm", "IOTab"), [i-NMatFixed+1, 0, 0]).value;
-						optFrag.appendChild(opt);
-						
-					}
-					tRow.querySelector(".MatLibSel").innerHTML = "";
-					tRow.querySelector(".MatLibSel").appendChild(optFrag.cloneNode(true));
-    				tRow.querySelector(".MatLibSel").appendChild(MatLibPlaceholder());
-					Tab.appendChild(tRow);
-				}
-				function IRBRmSect() {
-					if (IRBNumSect <= 1) return;
-					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
-					Tab.lastElementChild.remove();
-					IRBNumSect--;
-				}
-				IRBAddSect();
-			</script>
-		</div>
-		<div class="analForm" id="frameDiagTensForm">
+			
+		</div></template>
+		<template id="frameDiagTensFormTemp"><div class="analForm frameDiagTensForm" id="frameDiagTensFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Web Diagonal Tension</h2></header>
 			<div class="formContainer">
 			<div class="formIO">
@@ -2594,8 +2586,8 @@
 				</div>
 			</div>
 			</div>
-		</div>
-		<div class="analForm" id="cripForm">
+		</div></template>
+		<template id="cripFormTemp"><div class="analForm cripForm" id="cripFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Crippling</h2></header>
 			<div class="container">
 				<div id="crippling" class="formIO">
@@ -2655,8 +2647,8 @@
 				</div>
 				<img src="images/cripCurve.png" alt="Crippling Curve" style="margin: 0 auto;">
 			</div>
-		</div>
-		<div class="analForm" id="bCripForm">
+		</div></template>
+		<template id="bCripFormTemp"><div class="analForm bCripForm" id="bCripFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Bending Crippling</h2></header>
 			<div class="container">
 				<div id="bendingCrippling" class="formIO">
@@ -2728,8 +2720,10 @@
 				</div>
 				<img src="images/bCripDia.png" alt="Bending Crippling Diagram" style="width:50%;">
 			</div>
-		</div>
-		<div class="analForm" id="boltgroupForm">
+		</div></template>
+		<template id="boltgroupFormTemp"><div class="analForm boltgroupForm" id="boltgroupFormUnfocused" onclick="focusForm(this); for (let i=0; i<4; i++) {
+						BGAddFast();
+					}">
 			<header><h2>Boltgroup 2D</h2></header>
 			<div class="formIO" style="float: left; width: 270px;">
 				<h3>Applied Load</h3>
@@ -2839,33 +2833,9 @@
 					</tr>
 				</table>
 			</div>
-			<script>
-					let BGNumFast = 0;
-					function BGAddFast() {
-						let inTab = GEBID("boltgroupForm", "inTab").children[0];
-						let outTab = GEBID("boltgroupForm", "outTab").children[0];
-						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
-						inTab.appendChild(tRow);
-						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
-						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
-						outTab.appendChild(tRowOut);
-					}
-					function BGRmFast() {
-						if (BGNumFast < 2) return;
-						let inTab = GEBID("boltgroupForm", "inTab").children[0];
-						let outTab = GEBID("boltgroupForm", "outTab").children[0];
-						inTab.lastElementChild.remove();
-						outTab.lastElementChild.remove();
-						BGNumFast--;
-						boltgroupCalcs();
-					}
-					for (let i=0; i<4; i++) {
-						BGAddFast();
-					}
-			</script>
-		</div>
-		<div class="analForm" id="LJDForm"> <!-- Full functionality implemented, but alot was hidden for simplicity -->
+			
+		</div></template>
+		<template id="LJDFormTemp"><div class="analForm LJDForm" id="LJDFormUnfocused" onclick="focusForm(this)"> <!-- Full functionality implemented, but alot was hidden for simplicity -->
 			<template id="LJDinTabInTemplate">
 				<input type="number" placeholder="Enter" style="border: 1px solid black; border-radius: 5px;">
 			</template>
@@ -2945,8 +2915,8 @@
 			<table class="inTab2" id="outTab"></table>
 			<br>
 			<!-- <canvas id="LJDSketch" width="500" height="300"></canvas>  Not necessary -->
-		</div>
-		<div class="analForm" id="lugForm">
+		</div></template>
+		<template id="lugFormTemp"><div class="analForm lugForm" id="lugFormUnfocused" onclick="focusForm(this)">
 			<header><h2>Lug Analysis (WIP)</h2></header>
 			<div class="formContainer" id="FPBContainer">
 				<div class="formIO" style="width: 300px;">
@@ -3740,8 +3710,17 @@
 					
 				</div>
 			</div>
-		</div>
-		<div class="analForm" id="SPForm">
+		</div></template>
+		<template id="SPFormTemp"><div class="analForm SPForm" id="SPFormUnfocused" onclick='focusForm(this); {
+	let grid = GEBID("SPFormTemp").querySelector("SPOutGrid");
+	let tabTemp = GEBID("SPFormTemp").querySelector("SPOutTemplate");
+	for (let i=0; i<4; i++) {
+		let tab = tabTemp.content.cloneNode(true).children[0];
+		tab.children[0].innerHTML = ["Upper Section", "Lower Section", "Left Section", "Right Section"][i];
+		childSeq(tab, [2, 0, 3, 0]).innerHTML = "I<sub>"+(i<2?"xx":"yy")+"</sub> = ";
+		grid.appendChild(tab);
+	}
+ for (let i=0; i<4; i++) SPAddPt();}'>
 			<template id="SPInRowTemplate">
 				<tr>
 					<td></td>
@@ -3820,22 +3799,7 @@
 					<td style="text-align: left;" id="rhoyOut"></td>
 				</tr>
 			</table>
-			<script>
-				let SPNumPt = 0;
-				function SPAddPt() {
-					let Tab = GEBID("SPForm", "IOTab");//.children[0];
-					const tRow = GEBID("SPForm", "SPInRowTemplate").content.cloneNode(true).firstElementChild;
-					childSeq(tRow, [0]).innerHTML = (++SPNumPt);
-					Tab.appendChild(tRow);
-				}
-				function SPRmPt() {
-					if (SPNumPt <= 1) return;
-					let Tab = GEBID("SPForm", "IOTab");//.children[0];
-					Tab.lastElementChild.remove();
-					SPNumPt--;
-				}
-				for (let i=0; i<4; i++) SPAddPt();
-			</script>
+			
 			</div>
 			<div style="display: flex; justify-content: center; align-items: center;">
 			<canvas id="diaCanv" style="border: 1px solid black; margin: 0 auto; margin-top: 20px;" width="520" height="520">
@@ -3873,20 +3837,92 @@
 			<div id="SPOutGrid" style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;">
 
 			</div>
-			<script>
-				let grid = GEBID("SPForm", "SPOutGrid");
-				let tabTemp = GEBID("SPForm", "SPOutTemplate");
-				for (let i=0; i<4; i++) {
-					let tab = tabTemp.content.cloneNode(true).children[0];
-					tab.children[0].innerHTML = ["Upper Section", "Lower Section", "Left Section", "Right Section"][i];
-					childSeq(tab, [2, 0, 3, 0]).innerHTML = "I<sub>"+(i<2?"xx":"yy")+"</sub> = ";
-					grid.appendChild(tab);
-				}
-			</script>
-		</div>
+		</div></template>
 	</div>
 </div>
 <!-- Scripts -->
+ <script>
+				let TNNumStr = 0;
+				function TNAddStr() {
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
+					const tRow = GEBID("NACA_TNForm", "TNDataRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++TNNumStr);
+					if (TNNumStr > 1) for (let i=1; i<10; i++) if (i!=7) childSeq(tRow, [i, 0]).value = childSeq(Tab, [TNNumStr-1, i, 0]).value;
+					Tab.appendChild(tRow);
+					if (TNNumStr > 1) GEBID("NACA_TNForm", "TNWarning").style = "display: block";
+				}
+				function TNRmStr() {
+					if (TNNumStr <= 1) return;
+					let Tab = GEBID("NACA_TNForm", "dataTab");//.children[0];
+					Tab.lastElementChild.remove();
+					TNNumStr--;
+					if (TNNumStr < 2) GEBID("NACA_TNForm", "TNWarning").style = "display: none";
+				}
+			</script>
+<script>
+				let IRBNumSect = 0;
+				function IRBAddSect() {
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					const tRow = GEBID("IRBForm", "IRBInRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++IRBNumSect);
+					const optFrag = document.createDocumentFragment();
+					for (let i=0; i<NMat; i++) {
+						// Update template
+						let opt = document.createElement("option");
+						opt.value = i;
+						opt.innerHTML = i<NMatFixed?childSeq(GEBID("MatLibForm", "IOTab"), [0, i+1, 0]).innerHTML:childSeq(GEBID("MatLibForm", "IOTab"), [i-NMatFixed+1, 0, 0]).value;
+						optFrag.appendChild(opt);
+						
+					}
+					tRow.querySelector(".MatLibSel").innerHTML = "";
+					tRow.querySelector(".MatLibSel").appendChild(optFrag.cloneNode(true));
+    				tRow.querySelector(".MatLibSel").appendChild(MatLibPlaceholder());
+					Tab.appendChild(tRow);
+				}
+				function IRBRmSect() {
+					if (IRBNumSect <= 1) return;
+					let Tab = GEBID("IRBForm", "IOTab");//.children[0];
+					Tab.lastElementChild.remove();
+					IRBNumSect--;
+				}
+			</script>
+<script>
+					let BGNumFast = 0;
+					function BGAddFast() {
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						const tRow = GEBID("boltgroupForm", "bgInRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRow, [0]).innerHTML = (++BGNumFast);
+						inTab.appendChild(tRow);
+						const tRowOut = GEBID("boltgroupForm", "bgOutRowTemplate").content.cloneNode(true).firstElementChild;
+						childSeq(tRowOut, [0]).innerHTML = (BGNumFast);
+						outTab.appendChild(tRowOut);
+					}
+					function BGRmFast() {
+						if (BGNumFast < 2) return;
+						let inTab = GEBID("boltgroupForm", "inTab").children[0];
+						let outTab = GEBID("boltgroupForm", "outTab").children[0];
+						inTab.lastElementChild.remove();
+						outTab.lastElementChild.remove();
+						BGNumFast--;
+						boltgroupCalcs();
+					}
+			</script>
+<script>
+				let SPNumPt = 0;
+				function SPAddPt() {
+					let Tab = GEBID("SPForm", "IOTab");//.children[0];
+					const tRow = GEBID("SPForm", "SPInRowTemplate").content.cloneNode(true).firstElementChild;
+					childSeq(tRow, [0]).innerHTML = (++SPNumPt);
+					Tab.appendChild(tRow);
+				}
+				function SPRmPt() {
+					if (SPNumPt <= 1) return;
+					let Tab = GEBID("SPForm", "IOTab");//.children[0];
+					Tab.lastElementChild.remove();
+					SPNumPt--;
+				}
+			</script>
 <script src="scripts/MultiUI.js"></script>
 <script src="scripts/MultiMath.js"></script>
 <script src="scripts/texTemplates.js"></script>

@@ -1,69 +1,69 @@
 /* Tension Clip */
-#TCForm .container {
+.TCForm .container {
 	width: 100%;
 	display:grid;
 	grid-template-columns: 25% 75%;
 }
-#TCForm .container #Inputs {
+.TCForm .container #Inputs {
 	text-align: center;
 	padding: 10px;
 }
-#TCForm .container h2 {
+.TCForm .container h2 {
 	text-align: center;
 }
-#TCForm #Inputs select {
+.TCForm #Inputs select {
 	width: 152px;
 }
-#TCForm #Inputs input {
+.TCForm #Inputs input {
 	width:120px;
 }
-#TCForm #units {
+.TCForm #units {
 	display: inline-block;
 	text-align:left;
 	width:20px;
 }
-#TCForm #Inputs button {
+.TCForm #Inputs button {
 	display: block;
 	width: 150px;
 	margin: 0 auto;
 }
-#TCForm #CTGrid {
+.TCForm #CTGrid {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: auto;
 }
 @media (max-width: 1425px) {
-    #TCForm .container {
+    .TCForm .container {
 		width: 100%;
 		display:grid;
 		grid-template-columns: auto;
 		grid-template-rows: auto auto;
 	}
-	#TCForm #CTGrid {
+	.TCForm #CTGrid {
 		display: grid;
 		grid-template-columns: 50% 50%;
 		grid-template-rows: 1fr 1fr;
 	}
 }
-#TCForm .gridItem {
+.TCForm .gridItem {
 	text-align: center;
 }
-#TCForm .gridItem img {
+.TCForm .gridItem img {
 	width:100%;
 }
 /* Table Jazz */
-#TCForm table {
+.TCForm table {
 	display: inline-table;
   border-collapse: collapse;
 }
 
-#TCForm th, #TCForm td {
+.TCForm th, .TCForm td {
   text-align: right;
   width: 100px;
   border: 1px solid black;
   border-collapse: collapse;
 }
-#TCForm #OutputBox {
+.TCForm #OutputBox {
 	background-color: #ccccff;
 	color: black;
 }

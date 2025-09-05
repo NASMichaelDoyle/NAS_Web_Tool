@@ -1,6 +1,6 @@
-#FPBForm input {
+.FPBForm input {
 	width: 120px;
 }
-#FPBForm select {
+.FPBForm select {
 	width: 128px;
 }

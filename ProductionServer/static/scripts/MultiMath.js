@@ -10,32 +10,6 @@ let hiddenChart1 = null;
 let hiddenChart2 = null;
 let hiddenChart3 = null;
 
-startup();
-
-function startup() {
-	// Setup ellipse
-	for (let i=0; i <= 360; i += 15) {
-			document.getElementById("ellForm").querySelector("#eta" + i).children[0].innerHTML = i;
-			document.getElementById("ellForm").querySelector("#eta" + i).children[1].innerHTML = (i*Math.PI/180).toFixed(3);
-		}
-		
-	// Setup OFB
-	document.getElementById("OFBForm").querySelector("#ASSIn").checked = false;
-	document.getElementById("OFBForm").querySelector("#EcIn").value = 11.5;
-	document.getElementById("OFBForm").querySelector("#FcyIn").value = 71;
-	document.getElementById("OFBForm").querySelector("#muIn").value = 0.31;
-	document.getElementById("OFBForm").querySelector("#ncIn").value = 19;
-	document.getElementById("OFBForm").querySelector("#tIn").value = 0.06;
-	document.getElementById("OFBForm").querySelector("#bIn").value = 1;
-	document.getElementById("OFBForm").querySelector("#F0In").value = -1600;
-	document.getElementById("OFBForm").querySelector("#FfIn").value = -40;
-	document.getElementById("OFBForm").querySelector("#twebIn").value = 0.125;
-	document.getElementById("OFBForm").querySelector("#HfrIn").value = 0.3;
-	document.getElementById("OFBForm").querySelector("#LPRIn").value = 0.5;
-	OFBcalcs();
-	FPBSetCharts(document.getElementById("FPBForm").querySelector("#ETIn").value);
-	//console.log("dbgSet() to set valid values for testing")
-}
 function degToRad(degs) {return Math.PI * degs / 180;}
 function radToDeg(rads) {return 180 * rads / Math.PI;}
 function sRound(num, sig) { // "Smart Round": Rounds a number if it is a number
@@ -193,7 +167,7 @@ function TCCalcs() {
 	let n = +document.getElementById("TCForm").querySelector("#PCIn").value; // Point count
 	
 	const outBox = document.getElementById("OutputBox");
-	const rPackBox = childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]);
+	const rPackBox = (GEBID("rPackForm"))?childSeq(GEBID("rPackForm", "FBendingTab"), [0, 0, 1, 0]):false;
 	
 	// Check for NaN
 	if (isNaN(t) || isNaN(c) || isNaN(Fcy) || isNaN(s) || isNaN(w) || isNaN(n)) {
@@ -224,15 +198,15 @@ function TCCalcs() {
 	}
 	if (isNaN(P)) {
 		outBox.innerHTML = P;
-		rPackBox.value = P;
+		if (rPackBox) rPackBox.value = P;
 	}
 	else if (s <= 1) {
 		outBox.innerHTML = (P * w).toFixed(0);
-		rPackBox.value = (P * w).toFixed(0);
+		if (rPackBox) rPackBox.value = (P * w).toFixed(0);
 	}
 	else {
 		outBox.innerHTML = (P * n).toFixed(0);
-		rPackBox.value = (P * n).toFixed(0);
+		if (rPackBox) rPackBox.value = (P * n).toFixed(0);
 	}
 }
 function Fig4_1Data(t, c, Fcy) {
